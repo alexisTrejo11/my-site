@@ -1,0 +1,128 @@
+[
+  {
+    "projectId": "backend_drugstore_microservices",
+    "codeExamples": [
+      {
+        "id": "authentication",
+        "title": "JWT Authentication Middleware",
+        "description": "Secure authentication system with JWT tokens, refresh tokens, and role-based access control.",
+        "category": "Security",
+        "duration": "8 min",
+        "views": 245,
+        "tags": ["JWT", "Middleware", "Security", "Express", "Node.js"],
+        "files": [
+          {
+            "name": "auth.middleware.ts",
+            "path": "src/middleware/auth.middleware.ts",
+            "language": "typescript",
+            "content": "import { Request, Response, NextFunction } from 'express';\nimport jwt from 'jsonwebtoken';\nimport { User } from '../models/user.model';\n\ninterface AuthRequest extends Request {\n  user?: User;\n}\n\nexport const authenticate = async (\n  req: AuthRequest,\n  res: Response,\n  next: NextFunction\n) => {\n  try {\n    const token = req.headers.authorization?.split(' ')[1];\n\n    if (!token) {\n      return res.status(401).json({\n        error: 'Authentication required'\n      });\n    }\n\n    const decoded = jwt.verify(\n      token,\n      process.env.JWT_SECRET!\n    ) as { userId: string };\n\n    const user = await User.findById(decoded.userId);\n\n    if (!user) {\n      return res.status(401).json({\n        error: 'Invalid token'\n      });\n    }\n\n    req.user = user;\n    next();\n  } catch (error) {\n    return res.status(401).json({\n      error: 'Invalid or expired token'\n    });\n  }\n};\n\nexport const authorize = (...roles: string[]) => {\n  return (req: AuthRequest, res: Response, next: NextFunction) => {\n    if (!req.user || !roles.includes(req.user.role)) {\n      return res.status(403).json({\n        error: 'Insufficient permissions'\n      });\n    }\n    next();\n  };\n};",
+            "highlighted": true,
+            "explanation": "This middleware handles JWT authentication and authorization. It extracts the token from the Authorization header, verifies it, and attaches the user object to the request for downstream middleware/routes."
+          },
+          {
+            "name": "token.service.ts",
+            "path": "src/services/token.service.ts",
+            "language": "typescript",
+            "content": "import jwt from 'jsonwebtoken';\nimport { Redis } from 'ioredis';\n\nconst redis = new Redis(process.env.REDIS_URL);\n\nexport class TokenService {\n  static generateAccessToken(userId: string): string {\n    return jwt.sign(\n      { userId },\n      process.env.JWT_SECRET!,\n      { expiresIn: '15m' }\n    );\n  }\n\n  static generateRefreshToken(userId: string): string {\n    return jwt.sign(\n      { userId },\n      process.env.REFRESH_SECRET!,\n      { expiresIn: '7d' }\n    );\n  }\n\n  static async storeRefreshToken(\n    userId: string,\n    token: string\n  ): Promise<void> {\n    await redis.setex(\n      `refresh:${userId}`,\n      7 * 24 * 60 * 60,\n      token\n    );\n  }\n\n  static async revokeRefreshToken(userId: string): Promise<void> {\n    await redis.del(`refresh:${userId}`);\n  }\n}",
+            "explanation": "Token service responsible for generating and managing JWT tokens. It uses Redis for storing refresh tokens with automatic expiration for better security and scalability."
+          }
+        ]
+      },
+      {
+        "id": "caching",
+        "title": "Redis Caching Strategy",
+        "description": "Distributed caching implementation with cache invalidation and TTL management.",
+        "category": "Performance",
+        "duration": "6 min",
+        "views": 189,
+        "tags": ["Redis", "Caching", "Performance", "Distributed"],
+        "files": [
+          {
+            "name": "cache.service.ts",
+            "path": "src/services/cache.service.ts",
+            "language": "typescript",
+            "content": "import { Redis } from 'ioredis';\n\nexport class CacheService {\n  private redis: Redis;\n  private readonly DEFAULT_TTL = 3600; // 1 hour\n\n  constructor() {\n    this.redis = new Redis({\n      host: process.env.REDIS_HOST,\n      port: parseInt(process.env.REDIS_PORT || '6379'),\n      maxRetriesPerRequest: 3,\n      retryStrategy: (times) => Math.min(times * 50, 2000)\n    });\n  }\n\n  async get<T>(key: string): Promise<T | null> {\n    const cached = await this.redis.get(key);\n    return cached ? JSON.parse(cached) : null;\n  }\n\n  async set(\n    key: string,\n    value: any,\n    ttl: number = this.DEFAULT_TTL\n  ): Promise<void> {\n    await this.redis.setex(\n      key,\n      ttl,\n      JSON.stringify(value)\n    );\n  }\n\n  async invalidate(pattern: string): Promise<void> {\n    const keys = await this.redis.keys(pattern);\n    if (keys.length > 0) {\n      await this.redis.del(...keys);\n    }\n  }\n\n  async wrap<T>(\n    key: string,\n    fn: () => Promise<T>,\n    ttl?: number\n  ): Promise<T> {\n    const cached = await this.get<T>(key);\n\n    if (cached) {\n      return cached;\n    }\n\n    const result = await fn();\n    await this.set(key, result, ttl);\n    return result;\n  }\n}",
+            "highlighted": true,
+            "explanation": "A comprehensive caching service using Redis. The wrap() method provides a cache-aside pattern, while invalidate() allows for cache busting using pattern matching."
+          }
+        ]
+      },
+      {
+        "id": "error-handling",
+        "title": "Centralized Error Handler",
+        "description": "Robust error handling with custom error types and logging integration.",
+        "category": "Architecture",
+        "duration": "5 min",
+        "views": 156,
+        "tags": ["Error Handling", "Logging", "Middleware", "Best Practices"],
+        "files": [
+          {
+            "name": "error.handler.ts",
+            "path": "src/middleware/error.handler.ts",
+            "language": "typescript",
+            "content": "import { Request, Response, NextFunction } from 'express';\nimport { logger } from '../utils/logger';\n\nexport class AppError extends Error {\n  constructor(\n    public statusCode: number,\n    public message: string,\n    public isOperational = true\n  ) {\n    super(message);\n    Object.setPrototypeOf(this, AppError.prototype);\n  }\n}\n\nexport const errorHandler = (\n  err: Error,\n  req: Request,\n  res: Response,\n  next: NextFunction\n) => {\n  if (err instanceof AppError) {\n    logger.error({\n      message: err.message,\n      statusCode: err.statusCode,\n      path: req.path,\n      method: req.method\n    });\n\n    return res.status(err.statusCode).json({\n      status: 'error',\n      message: err.message\n    });\n  }\n\n  // Unexpected errors\n  logger.error({\n    message: err.message,\n    stack: err.stack,\n    path: req.path,\n    method: req.method\n  });\n\n  return res.status(500).json({\n    status: 'error',\n    message: 'Internal server error'\n  });\n};",
+            "highlighted": true,
+            "explanation": "Centralized error handling middleware that distinguishes between operational (expected) errors and unexpected errors. All errors are properly logged with context for debugging."
+          }
+        ]
+      },
+      {
+        "id": "database",
+        "title": "TypeORM Entity Design",
+        "description": "Database entity patterns with relationships, validation, and migrations.",
+        "category": "ORM",
+        "duration": "10 min",
+        "views": 312,
+        "tags": ["TypeORM", "PostgreSQL", "Entities", "Relations"],
+        "files": [
+          {
+            "name": "user.entity.ts",
+            "path": "src/entities/user.entity.ts",
+            "language": "typescript",
+            "content": "import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';\nimport { IsEmail, IsNotEmpty, MinLength } from 'class-validator';\nimport { Post } from './post.entity';\n\n@Entity('users')\nexport class User {\n  @PrimaryGeneratedColumn('uuid')\n  id: string;\n\n  @Column({ unique: true })\n  @IsEmail()\n  @IsNotEmpty()\n  email: string;\n\n  @Column()\n  @IsNotEmpty()\n  @MinLength(8)\n  password: string;\n\n  @Column()\n  @IsNotEmpty()\n  firstName: string;\n\n  @Column()\n  @IsNotEmpty()\n  lastName: string;\n\n  @Column({ default: 'user' })\n  role: string;\n\n  @Column({ default: true })\n  isActive: boolean;\n\n  @OneToMany(() => Post, (post) => post.author)\n  posts: Post[];\n\n  @CreateDateColumn()\n  createdAt: Date;\n\n  @UpdateDateColumn()\n  updatedAt: Date;\n\n  get fullName(): string {\n    return `${this.firstName} ${this.lastName}`;\n  }\n}",
+            "highlighted": true,
+            "explanation": "User entity with TypeORM decorators for database mapping, class-validator for input validation, and computed properties. Demonstrates one-to-many relationship with posts."
+          }
+        ]
+      },
+      {
+        "id": "api-design",
+        "title": "REST API Best Practices",
+        "description": "Clean API design with proper status codes, versioning, and documentation.",
+        "category": "API",
+        "duration": "7 min",
+        "views": 278,
+        "tags": ["REST", "API Design", "Swagger", "Best Practices"],
+        "files": [
+          {
+            "name": "users.controller.ts",
+            "path": "src/controllers/users.controller.ts",
+            "language": "typescript",
+            "content": "import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus } from '@nestjs/common';\nimport { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';\nimport { UserService } from '../services/user.service';\nimport { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';\n\n@ApiTags('users')\n@Controller('v1/users')\nexport class UsersController {\n  constructor(private readonly userService: UserService) {}\n\n  @Get()\n  @ApiOperation({ summary: 'Get all users' })\n  @ApiQuery({ name: 'page', required: false, type: Number })\n  @ApiQuery({ name: 'limit', required: false, type: Number })\n  @ApiResponse({ status: 200, description: 'List of users' })\n  async findAll(\n    @Query('page') page = 1,\n    @Query('limit') limit = 10\n  ) {\n    return this.userService.findAll({\n      page,\n      limit: limit > 100 ? 100 : limit,\n    });\n  }\n\n  @Get(':id')\n  @ApiOperation({ summary: 'Get user by ID' })\n  @ApiResponse({ status: 200, description: 'User found' })\n  @ApiResponse({ status: 404, description: 'User not found' })\n  async findOne(@Param('id') id: string) {\n    return this.userService.findOne(id);\n  }\n\n  @Post()\n  @HttpCode(HttpStatus.CREATED)\n  @ApiOperation({ summary: 'Create a new user' })\n  @ApiResponse({ status: 201, description: 'User created' })\n  @ApiResponse({ status: 400, description: 'Bad request' })\n  async create(@Body() createUserDto: CreateUserDto) {\n    return this.userService.create(createUserDto);\n  }\n\n  @Put(':id')\n  @ApiOperation({ summary: 'Update user' })\n  @ApiResponse({ status: 200, description: 'User updated' })\n  @ApiResponse({ status: 404, description: 'User not found' })\n  async update(\n    @Param('id') id: string,\n    @Body() updateUserDto: UpdateUserDto\n  ) {\n    return this.userService.update(id, updateUserDto);\n  }\n\n  @Delete(':id')\n  @HttpCode(HttpStatus.NO_CONTENT)\n  @ApiOperation({ summary: 'Delete user' })\n  @ApiResponse({ status: 204, description: 'User deleted' })\n  @ApiResponse({ status: 404, description: 'User not found' })\n  async delete(@Param('id') id: string) {\n    return this.userService.delete(id);\n  }\n}",
+            "highlighted": true,
+            "explanation": "NestJS controller demonstrating REST API best practices including proper HTTP status codes, versioning, pagination, and Swagger documentation decorators."
+          }
+        ]
+      },
+      {
+        "id": "business-logic",
+        "title": "Order Processing Service",
+        "description": "Domain-driven business logic with transaction management and validation.",
+        "category": "Business Logic",
+        "duration": "12 min",
+        "views": 421,
+        "tags": ["DDD", "Transactions", "Business Rules", "Validation"],
+        "files": [
+          {
+            "name": "order.service.ts",
+            "path": "src/services/order.service.ts",
+            "language": "typescript",
+            "content": "import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';\nimport { InjectRepository } from '@nestjs/typeorm';\nimport { DataSource, Repository } from 'typeorm';\nimport { Order } from '../entities/order.entity';\nimport { Product } from '../entities/product.entity';\nimport { User } from '../entities/user.entity';\nimport { CreateOrderDto, OrderItemDto } from '../dtos/order.dto';\n\n@Injectable()\nexport class OrderService {\n  constructor(\n    @InjectRepository(Order)\n    private orderRepository: Repository<Order>,\n    @InjectRepository(Product)\n    private productRepository: Repository<Product>,\n    private dataSource: DataSource\n  ) {}\n\n  async createOrder(\n    userId: string,\n    createOrderDto: CreateOrderDto\n  ): Promise<Order> {\n    const queryRunner = this.dataSource.createQueryRunner();\n    await queryRunner.connect();\n    await queryRunner.startTransaction();\n\n    try {\n      // Validate products and calculate total\n      const orderItems = await Promise.all(\n        createOrderDto.items.map(async (item: OrderItemDto) => {\n          const product = await this.productRepository.findOne({\n            where: { id: item.productId, stock: { $gte: item.quantity } }\n          });\n\n          if (!product) {\n            throw new ConflictException(\n              `Product ${item.productId} not available in requested quantity`\n            );\n          }\n\n          // Update stock\n          product.stock -= item.quantity;\n          await queryRunner.manager.save(product);\n\n          return {\n            product,\n            quantity: item.quantity,\n            price: product.price,\n            subtotal: product.price * item.quantity\n          };\n        })\n      );\n\n      const totalAmount = orderItems.reduce(\n        (sum, item) => sum + item.subtotal,\n        0\n      );\n\n      // Create order\n      const order = this.orderRepository.create({\n        user: { id: userId },\n        items: orderItems.map(item => ({\n          product: item.product,\n          quantity: item.quantity,\n          price: item.price\n        })),\n        totalAmount,\n        status: 'pending',\n        shippingAddress: createOrderDto.shippingAddress\n      });\n\n      const savedOrder = await queryRunner.manager.save(order);\n\n      // Commit transaction\n      await queryRunner.commitTransaction();\n\n      return savedOrder;\n    } catch (error) {\n      // Rollback on error\n      await queryRunner.rollbackTransaction();\n      throw error;\n    } finally {\n      await queryRunner.release();\n    }\n  }\n}",
+            "highlighted": true,
+            "explanation": "Business logic service for order processing. Demonstrates ACID transactions, stock validation, and proper error handling in a complex business scenario."
+          }
+        ]
+      }
+    ]
+  }
+]

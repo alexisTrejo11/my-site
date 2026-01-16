@@ -1,1 +1,360 @@
-<p>infrastructure works!</p>
+<div class="max-w-7xl mx-auto px-6 py-12 lg:py-16">
+  <!-- Header -->
+  <header class="mb-12">
+    <h1 class="section-title">Infrastructure & DevOps</h1>
+    <p class="section-subtitle">
+      Cloud architecture, containerization, CI/CD pipelines, and deployment strategies
+    </p>
+  </header>
+
+  <!-- DevOps Metrics -->
+  <section class="mb-16">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">
+      DevOps Performance Metrics
+    </h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div
+        *ngFor="let metric of metrics"
+        class="card p-6 hover:shadow-xl transition-all duration-300"
+      >
+        <div class="text-4xl mb-3">{{ metric.icon }}</div>
+        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+          {{ metric.value }}
+        </div>
+        <h3 class="font-bold text-gray-900 dark:text-white mb-1">
+          {{ metric.label }}
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+          {{ metric.description }}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deployment Diagram -->
+  <app-deployment-diagram />
+
+  <!-- Docker Configuration -->
+  <app-docker-config />
+
+  <!-- CI/CD Pipeline -->
+  <app-cicd-pipeline />
+
+  <!-- Cloud Services -->
+  <section class="mb-16">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">
+      Cloud Services & Infrastructure
+    </h2>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div
+        *ngFor="let service of cloudServices"
+        class="card p-6 hover:shadow-lg transition-all duration-300"
+      >
+        <div class="flex items-start justify-between mb-4">
+          <div class="text-4xl">{{ service.icon }}</div>
+          <span class="badge badge-primary">{{ service.cost }}</span>
+        </div>
+        <h3 class="font-bold text-gray-900 dark:text-white mb-2">
+          {{ service.name }}
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+          {{ service.purpose }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Cost Summary -->
+    <div
+      class="card p-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20"
+    >
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-gray-900 dark:text-white mb-1">
+            Total Monthly Infrastructure Cost
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            AWS cloud services and third-party tools
+          </p>
+        </div>
+        <div class="text-4xl font-bold text-blue-600 dark:text-blue-400">
+          ${{ totalMonthlyCost }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Monitoring & Observability -->
+  <section class="mb-16">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">
+      Monitoring & Observability
+    </h2>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="card p-6">
+        <div class="text-4xl mb-4">📊</div>
+        <h3 class="font-bold text-gray-900 dark:text-white mb-3">Metrics Collection</h3>
+        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+          <li class="flex items-start gap-2">
+            <span class="text-blue-600 dark:text-blue-400">•</span>
+            <span>Prometheus for metrics scraping</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-blue-600 dark:text-blue-400">•</span>
+            <span>Grafana for visualization</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-blue-600 dark:text-blue-400">•</span>
+            <span>Custom business metrics</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-blue-600 dark:text-blue-400">•</span>
+            <span>Real-time alerting via PagerDuty</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card p-6">
+        <div class="text-4xl mb-4">📝</div>
+        <h3 class="font-bold text-gray-900 dark:text-white mb-3">Centralized Logging</h3>
+        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+          <li class="flex items-start gap-2">
+            <span class="text-blue-600 dark:text-blue-400">•</span>
+            <span>ELK Stack (Elasticsearch, Logstash, Kibana)</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-blue-600 dark:text-blue-400">•</span>
+            <span>Structured JSON logging</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-blue-600 dark:text-blue-400">•</span>
+            <span>30-day log retention</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-blue-600 dark:text-blue-400">•</span>
+            <span>Full-text search capabilities</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card p-6">
+        <div class="text-4xl mb-4">🔍</div>
+        <h3 class="font-bold text-gray-900 dark:text-white mb-3">Distributed Tracing</h3>
+        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+          <li class="flex items-start gap-2">
+            <span class="text-blue-600 dark:text-blue-400">•</span>
+            <span>Jaeger for request tracing</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-blue-600 dark:text-blue-400">•</span>
+            <span>End-to-end request tracking</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-blue-600 dark:text-blue-400">•</span>
+            <span>Performance bottleneck identification</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-blue-600 dark:text-blue-400">•</span>
+            <span>Service dependency mapping</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Security & Compliance -->
+  <section
+    class="card p-8 bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-900/20 dark:to-teal-900/20"
+  >
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">Security & Compliance</h2>
+    <div class="grid md:grid-cols-2 gap-8">
+      <div>
+        <h3 class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <span class="text-2xl">🔒</span>
+          Security Measures
+        </h3>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span class="text-gray-600 dark:text-gray-400">SSL/TLS encryption for all traffic</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span class="text-gray-600 dark:text-gray-400"
+              >Secrets management with AWS Secrets Manager</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span class="text-gray-600 dark:text-gray-400"
+              >Network isolation with VPC and security groups</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span class="text-gray-600 dark:text-gray-400"
+              >Regular security scanning with Snyk</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span class="text-gray-600 dark:text-gray-400">Automated vulnerability patching</span>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <span class="text-2xl">📋</span>
+          Compliance & Best Practices
+        </h3>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span class="text-gray-600 dark:text-gray-400">GDPR compliant data handling</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span class="text-gray-600 dark:text-gray-400"
+              >SOC 2 Type II certified infrastructure</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span class="text-gray-600 dark:text-gray-400">Regular penetration testing</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span class="text-gray-600 dark:text-gray-400"
+              >Automated backup and disaster recovery</span
+            >
+          </li>
+          <li class="flex items-start gap-3">
+            <svg
+              class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span class="text-gray-600 dark:text-gray-400">Infrastructure as Code (Terraform)</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>

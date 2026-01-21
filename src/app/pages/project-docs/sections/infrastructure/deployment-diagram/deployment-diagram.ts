@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, input, OnInit } from '@angular/core';
+import { ProjectDocsService } from '../../../../../services/project-docs.service';
+import { DeploymentLayer } from '../../../../../core/models/docs/infrastructure';
 
 @Component({
   selector: 'app-deployment-diagram',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './deployment-diagram.html',
-  styleUrl: './deployment-diagram.scss',
 })
 export class DeploymentDiagram {
-
+  projectLayers = input.required<DeploymentLayer[]>();
 }

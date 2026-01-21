@@ -7,7 +7,7 @@ import { Contact } from './pages/contact/contact';
 import { Overview } from './pages/project-docs/sections/overview/overview';
 import { CodeShowcase } from './pages/project-docs/sections/code-showcase/code-showcase';
 import { ApiExplorer } from './pages/project-docs/sections/api-explorer/api-explorer';
-import { FeaturedProjects } from './pages/home/components/featured-projects/featured-projects';
+import { ProjectFeatures } from './pages/project-docs/sections/project-features/project-features';
 import { Infrastructure } from './pages/project-docs/sections/infrastructure/infrastructure';
 import { ProjectArchitecture } from './pages/project-docs/sections/project-architecture/project-architecture';
 
@@ -31,7 +31,7 @@ export const routes: Routes = [
           { path: 'architecture', component: ProjectArchitecture },
           { path: 'code', component: CodeShowcase },
           { path: 'api', component: ApiExplorer },
-          { path: 'features', component: FeaturedProjects },
+          { path: 'features', component: ProjectFeatures },
           { path: 'infrastructure', component: Infrastructure },
           { path: '', redirectTo: 'overview', pathMatch: 'full' },
         ],

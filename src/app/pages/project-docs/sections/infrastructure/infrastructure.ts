@@ -1,17 +1,27 @@
-import { Component } from '@angular/core';
-import { CloudService, InfrastructureMetric } from './infrastructure.models';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DeploymentDiagram } from './deployment-diagram/deployment-diagram';
 import { DockerConfig } from './docker-config/docker-config';
 import { CicdPipeline } from './cicd-pipeline/cicd-pipeline';
+import {
+  InfrastructureMetric,
+  CloudService,
+  DeploymentLayer,
+  DockerFile,
+} from '../../../../core/models/docs/infrastructure';
+import { ProjectDocsService } from '../../../../services/project-docs.service';
 
 @Component({
   selector: 'app-infrastructure',
   imports: [DeploymentDiagram, DockerConfig, CicdPipeline],
   templateUrl: './infrastructure.html',
 })
-export class Infrastructure {
+export class Infrastructure implements OnInit {
+  deploymentLayers: DeploymentLayer[] = [];
+  dockerFiles: DockerFile[] = [];
   projectId: string = '';
+
+  projectDocsService = inject(ProjectDocsService);
 
   metrics: InfrastructureMetric[] = [
     {
@@ -83,6 +93,14 @@ export class Infrastructure {
 
   ngOnInit() {
     this.projectId = this.route.parent?.snapshot.params['projectId'] || '';
+
+    this.projectDocsService.getDeploymentDiagramsForProject(this.projectId).subscribe((layers) => {
+      this.deploymentLayers = layers;
+    });
+
+    this.projectDocsService.getDockerFilesForProject(this.projectId).subscribe((files) => {
+      this.dockerFiles = files;
+    });
   }
 
   get totalMonthlyCost(): number {

@@ -1,0 +1,114 @@
+[
+  {
+    "projectId": "backend_drugstore_microservices",
+    "deploymentLayers": [
+      {
+        "name": "Load Balancing & CDN",
+        "color": "from-blue-500 to-blue-600",
+        "components": [
+          {
+            "name": "CloudFront CDN",
+            "icon": "🌐",
+            "description": "Global edge locations for static assets"
+          },
+          {
+            "name": "Application Load Balancer",
+            "icon": "⚖️",
+            "description": "Distributes traffic across instances"
+          }
+        ]
+      },
+      {
+        "name": "Container Orchestration",
+        "color": "from-purple-500 to-purple-600",
+        "components": [
+          {
+            "name": "Kubernetes Cluster (EKS)",
+            "icon": "☸️",
+            "description": "3 nodes across availability zones"
+          },
+          {
+            "name": "Horizontal Pod Autoscaler",
+            "icon": "📊",
+            "description": "Auto-scales based on CPU/memory"
+          }
+        ]
+      },
+      {
+        "name": "Application Services",
+        "color": "from-green-500 to-green-600",
+        "components": [
+          {
+            "name": "User Service Pods",
+            "icon": "👥",
+            "description": "Replicas: 3-10 based on load"
+          },
+          {
+            "name": "Product Service Pods",
+            "icon": "📦",
+            "description": "Replicas: 3-8 based on load"
+          },
+          {
+            "name": "Order Service Pods",
+            "icon": "🛒",
+            "description": "Replicas: 5-15 based on load"
+          }
+        ]
+      },
+      {
+        "name": "Data Layer",
+        "color": "from-orange-500 to-orange-600",
+        "components": [
+          {
+            "name": "RDS PostgreSQL",
+            "icon": "🗄️",
+            "description": "Primary + read replicas"
+          },
+          {
+            "name": "ElastiCache Redis",
+            "icon": "⚡",
+            "description": "Multi-AZ cluster mode"
+          },
+          {
+            "name": "S3 Buckets",
+            "icon": "📁",
+            "description": "User uploads and assets"
+          }
+        ]
+      },
+      {
+        "name": "Messaging & Queues",
+        "color": "from-pink-500 to-pink-600",
+        "components": [
+          {
+            "name": "RabbitMQ Cluster",
+            "icon": "📮",
+            "description": "Event-driven communication"
+          },
+          {
+            "name": "AWS SQS",
+            "icon": "📬",
+            "description": "Async job processing"
+          }
+        ]
+      }
+    ],
+    "dockerFiles": [
+      {
+        "service": "User Service",
+        "content": "FROM node:14-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nEXPOSE 3000\nCMD [\"npm\", \"start\"]",
+        "description": "Dockerfile for the User Service microservice"
+      },
+      {
+        "service": "Product Service",
+        "content": "FROM node:14-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nEXPOSE 3001\nCMD [\"npm\", \"start\"]",
+        "description": "Dockerfile for the Product Service microservice"
+      },
+      {
+        "service": "Order Service",
+        "content": "FROM node:14-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nEXPOSE 3002\nCMD [\"npm\", \"start\"]",
+        "description": "Dockerfile for the Order Service microservice"
+      }
+    ]
+  }
+]

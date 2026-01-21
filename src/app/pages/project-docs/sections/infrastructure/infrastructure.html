@@ -13,29 +13,28 @@
       DevOps Performance Metrics
     </h2>
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div
-        *ngFor="let metric of metrics"
-        class="card p-6 hover:shadow-xl transition-all duration-300"
-      >
-        <div class="text-4xl mb-3">{{ metric.icon }}</div>
-        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
-          {{ metric.value }}
+      @for (metric of metrics; track metric) {
+        <div class="card p-6 hover:shadow-xl transition-all duration-300">
+          <div class="text-4xl mb-3">{{ metric.icon }}</div>
+          <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+            {{ metric.value }}
+          </div>
+          <h3 class="font-bold text-gray-900 dark:text-white mb-1">
+            {{ metric.label }}
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            {{ metric.description }}
+          </p>
         </div>
-        <h3 class="font-bold text-gray-900 dark:text-white mb-1">
-          {{ metric.label }}
-        </h3>
-        <p class="text-sm text-gray-600 dark:text-gray-400">
-          {{ metric.description }}
-        </p>
-      </div>
+      }
     </div>
   </section>
 
   <!-- Deployment Diagram -->
-  <app-deployment-diagram />
+  <app-deployment-diagram [projectLayers]="deploymentLayers" />
 
   <!-- Docker Configuration -->
-  <app-docker-config />
+  <app-docker-config [dockerFiles]="dockerFiles" />
 
   <!-- CI/CD Pipeline -->
   <app-cicd-pipeline />
@@ -47,21 +46,20 @@
     </h2>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-      <div
-        *ngFor="let service of cloudServices"
-        class="card p-6 hover:shadow-lg transition-all duration-300"
-      >
-        <div class="flex items-start justify-between mb-4">
-          <div class="text-4xl">{{ service.icon }}</div>
-          <span class="badge badge-primary">{{ service.cost }}</span>
+      @for (service of cloudServices; track $index) {
+        <div class="card p-6 hover:shadow-lg transition-all duration-300">
+          <div class="flex items-start justify-between mb-4">
+            <div class="text-4xl">{{ service.icon }}</div>
+            <span class="badge badge-primary">{{ service.cost }}</span>
+          </div>
+          <h3 class="font-bold text-gray-900 dark:text-white mb-2">
+            {{ service.name }}
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            {{ service.purpose }}
+          </p>
         </div>
-        <h3 class="font-bold text-gray-900 dark:text-white mb-2">
-          {{ service.name }}
-        </h3>
-        <p class="text-sm text-gray-600 dark:text-gray-400">
-          {{ service.purpose }}
-        </p>
-      </div>
+      }
     </div>
 
     <!-- Cost Summary -->

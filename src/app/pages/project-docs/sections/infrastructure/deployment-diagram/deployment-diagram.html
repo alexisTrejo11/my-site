@@ -1,1 +1,132 @@
-<p>deployment-diagram works!</p>
+<section class="mb-16">
+  <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">Deployment Architecture</h2>
+
+  <!-- Layers List -->
+  <div class="space-y-6">
+    @for (layer of projectLayers(); track $index) {
+      <!-- Layer Card -->
+      <div class="card p-8">
+        <!-- Layer Header -->
+        <div class="flex items-center gap-4 mb-6">
+          <div
+            [ngClass]="'bg-gradient-to-br ' + layer.color"
+            class="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg"
+          >
+            {{ $index + 1 }}
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+              {{ layer.name }}
+            </h3>
+          </div>
+        </div>
+
+        <!-- Layer Components -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (component of layer.components; track $index) {
+            <div
+              class="p-6 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300"
+            >
+              <div class="text-4xl mb-3">{{ component.icon }}</div>
+              <h4 class="font-bold text-gray-900 dark:text-white mb-2">
+                {{ component.name }}
+              </h4>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {{ component.description }}
+              </p>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Deployment Flow -->
+  <div
+    class="mt-8 card p-8 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"
+  >
+    <h3 class="font-bold text-gray-900 dark:text-white mb-6">Traffic Flow</h3>
+    <div class="flex flex-wrap items-center gap-4 justify-center">
+      <div class="text-center">
+        <div
+          class="w-16 h-16 bg-blue-500 rounded-lg flex items-center justify-center text-white text-2xl mb-2"
+        >
+          👤
+        </div>
+        <div class="text-sm font-medium">User</div>
+      </div>
+
+      <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 7l5 5m0 0l-5 5m5-5H6"
+        />
+      </svg>
+
+      <div class="text-center">
+        <div
+          class="w-16 h-16 bg-purple-500 rounded-lg flex items-center justify-center text-white text-2xl mb-2"
+        >
+          🌐
+        </div>
+        <div class="text-sm font-medium">CDN</div>
+      </div>
+
+      <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 7l5 5m0 0l-5 5m5-5H6"
+        />
+      </svg>
+
+      <div class="text-center">
+        <div
+          class="w-16 h-16 bg-green-500 rounded-lg flex items-center justify-center text-white text-2xl mb-2"
+        >
+          ⚖️
+        </div>
+        <div class="text-sm font-medium">Load Balancer</div>
+      </div>
+
+      <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 7l5 5m0 0l-5 5m5-5H6"
+        />
+      </svg>
+
+      <div class="text-center">
+        <div
+          class="w-16 h-16 bg-orange-500 rounded-lg flex items-center justify-center text-white text-2xl mb-2"
+        >
+          ☸️
+        </div>
+        <div class="text-sm font-medium">Kubernetes</div>
+      </div>
+
+      <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 7l5 5m0 0l-5 5m5-5H6"
+        />
+      </svg>
+
+      <div class="text-center">
+        <div
+          class="w-16 h-16 bg-pink-500 rounded-lg flex items-center justify-center text-white text-2xl mb-2"
+        >
+          🗄️
+        </div>
+        <div class="text-sm font-medium">Database</div>
+      </div>
+    </div>
+  </div>
+</section>

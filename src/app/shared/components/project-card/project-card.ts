@@ -1,5 +1,4 @@
 import { Component, input } from '@angular/core';
-import { ProjectCategory } from '../../../core/models/project-docts';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Project } from '../../../core/models/project';
@@ -27,21 +26,21 @@ import { Project } from '../../../core/models/project';
 
         <!-- Featured Badge -->
         @if (featured()) {
-        <div
-          class="absolute top-4 right-4 px-3 py-1 bg-yellow-400 text-gray-900 text-xs font-bold rounded-full"
-        >
-          FEATURED
-        </div>
+          <div
+            class="absolute top-4 right-4 px-3 py-1 bg-yellow-400 text-gray-900 text-xs font-bold rounded-full"
+          >
+            FEATURED
+          </div>
         }
 
         <!-- Status Badge -->
         @if (project().status) {
-        <div
-          class="absolute top-4 left-4 px-3 py-1 text-xs font-medium rounded-full"
-          [ngClass]="getStatusClasses()"
-        >
-          {{ project().status }}
-        </div>
+          <div
+            class="absolute top-4 left-4 px-3 py-1 text-xs font-medium rounded-full"
+            [ngClass]="getStatusClasses()"
+          >
+            {{ project().status }}
+          </div>
         }
       </div>
 
@@ -51,39 +50,30 @@ import { Project } from '../../../core/models/project';
         <h3
           class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
         >
-          {{ project().title }}
+          {{ project().name }}
         </h3>
 
         <!-- Description -->
         <p class="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
-          {{ project().shortDescription }}
+          {{ project().description }}
         </p>
 
-        <!-- Tags -->
-        <div class="flex flex-wrap gap-2 mb-4">
-          @for (tag of displayTags; track tag) {
-          <span
-            class="px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full"
-          >
-            {{ tag }}
-          </span>
-          }
-        </div>
-
         <!-- Metrics -->
-        @if (showMetrics() && project().metrics) {
-        <div class="grid grid-cols-3 gap-4 mb-6 pt-4 border-t border-gray-200 dark:border-gray-800">
-          @for (metric of project().metrics; track metric.label) {
-          <div class="text-center">
-            <div class="text-lg font-bold text-blue-600 dark:text-blue-400">
-              {{ metric.value }}
-            </div>
-            <div class="text-xs text-gray-500 dark:text-gray-500">
-              {{ metric.label }}
-            </div>
+        @if (showMetrics() && project().docs.overview.metrics.length > 0) {
+          <div
+            class="grid grid-cols-3 gap-4 mb-6 pt-4 border-t border-gray-200 dark:border-gray-800"
+          >
+            @for (metric of project().docs.overview.metrics; track metric.label) {
+              <div class="text-center">
+                <div class="text-lg font-bold text-blue-600 dark:text-blue-400">
+                  {{ metric.value }}
+                </div>
+                <div class="text-xs text-gray-500 dark:text-gray-500">
+                  {{ metric.label }}
+                </div>
+              </div>
+            }
           </div>
-          }
-        </div>
         }
 
         <!-- View Details Button -->
@@ -117,10 +107,6 @@ export class ProjectCard {
   icon = input<string | null>(null);
   variant = input<'default' | 'compact' | 'detailed'>('default');
 
-  get displayTags(): string[] {
-    return this.project().tags.slice(0, this.maxTags());
-  }
-
   getHeaderClasses(): string {
     if (this.project().category === 'backend') {
       return 'bg-gradient-to-br from-blue-500 to-purple-600';
@@ -137,9 +123,9 @@ export class ProjectCard {
 
   getStatusClasses(): string {
     switch (this.project().status) {
-      case 'production':
+      case 'deployed':
         return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
-      case 'development':
+      case 'develop':
         return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
       case 'archived':
         return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';

@@ -1,0 +1,528 @@
+[
+  {
+    "id": "backend_drugstore_microservices",
+    "title": "Backend Drugstore Microservices",
+    "shortDescription": "Scalable microservices architecture for pharmaceutical management",
+    "fullDescription": "A complete microservices architecture for a drugstore application with inventory management, prescription processing, and customer management systems. Built with event-driven architecture and containerized deployment.",
+    "category": "backend",
+    "type": "microservices",
+    "status": "production",
+    "featured": true,
+    "year": 2024,
+    "technologies": [
+      "Java",
+      "Spring Boot",
+      "Docker",
+      "Kubernetes",
+      "PostgreSQL",
+      "Redis",
+      "MongoDB",
+      "RabbitMQ",
+      "AWS",
+      "Terraform"
+    ],
+    "tags": ["microservices", "event-driven", "scalable", "docker", "aws"],
+    "features": [
+      "Real-time inventory updates",
+      "Prescription validation system",
+      "Automated stock alerts",
+      "Multi-tenant architecture"
+    ],
+    "metrics": [
+      { "label": "Services", "value": "8", "icon": "layers" },
+      { "label": "APIs", "value": "24", "icon": "api" },
+      { "label": "Performance", "value": "99.9%", "icon": "zap" }
+    ],
+    "links": {
+      "github": "https://github.com/alexisTrejo11/backend_drugstore_microservices",
+      "demo": null,
+      "documentation": null,
+      "dockerHub": null
+    },
+    "images": {
+      "cover": "/assets/images/projects/drugstore/cover.jpg",
+      "screenshots": [],
+      "diagram": "/assets/images/projects/drugstore/architecture.svg"
+    },
+    "overview": {
+      "problemStatement": {
+        "problemTitle": "Inefficient Pharmaceutical Management",
+        "problemDescription": "Traditional drugstore systems struggle with real-time inventory tracking, prescription processing delays, and lack of scalability during peak hours.",
+        "problemList": [
+          "Manual inventory tracking leading to stock discrepancies",
+          "Slow prescription processing causing customer wait times",
+          "Inability to scale during seasonal demand spikes",
+          "Fragmented data across multiple standalone systems"
+        ]
+      },
+      "solution": {
+        "title": "Event-Driven Microservices Architecture",
+        "description": "Implemented a decoupled microservices system with real-time event processing and container orchestration.",
+        "keyFeatures": [
+          "Real-time inventory updates via event sourcing",
+          "Automated prescription validation workflow",
+          "Scalable containerized deployment on Kubernetes",
+          "CQRS pattern for optimized read/write operations"
+        ],
+        "architecture": "Event-driven microservices with message queue (RabbitMQ) for inter-service communication"
+      },
+      "keyMetrics": {
+        "title": "Performance Impact",
+        "description": "Key metrics showing the improvement after implementation",
+        "metrics": [
+          { "label": "Inventory Accuracy", "value": "99.8%", "change": "+15%" },
+          { "label": "Prescription Processing", "value": "<2 min", "change": "-70%" },
+          { "label": "System Uptime", "value": "99.95%", "change": "+2%" },
+          { "label": "Peak Load Capacity", "value": "10x", "change": "+400%" }
+        ]
+      }
+    }
+  },
+  {
+    "id": "backend_reading_tracker",
+    "title": "Reading Tracker API",
+    "shortDescription": "RESTful API for personal reading management",
+    "fullDescription": "A Go-based RESTful API for tracking reading progress across books, articles, and papers. Features include progress tracking, categorization, tagging, and reading statistics with JWT authentication.",
+    "category": "backend",
+    "type": "api",
+    "status": "production",
+    "featured": true,
+    "year": 2024,
+    "technologies": ["Go", "Gin", "MongoDB", "Docker", "JWT", "AWS ECS"],
+    "tags": ["go", "rest-api", "tracking", "docker", "authentication"],
+    "features": [
+      "Progress tracking with percentage",
+      "Category and tag system",
+      "Reading statistics dashboard",
+      "Export to PDF/CSV"
+    ],
+    "metrics": [
+      { "label": "Endpoints", "value": "12", "icon": "link" },
+      { "label": "Response Time", "value": "<100ms", "icon": "clock" },
+      { "label": "Uptime", "value": "99.8%", "icon": "activity" }
+    ],
+    "links": {
+      "github": "https://github.com/alexisTrejo11/backend_reading_tracker",
+      "demo": "https://reading-tracker.demo.com",
+      "documentation": "https://docs.reading-tracker.com",
+      "dockerHub": "alexistrejo/reading-tracker"
+    },
+    "images": {
+      "cover": "/assets/images/projects/reading/cover.jpg",
+      "screenshots": [],
+      "diagram": "/assets/images/projects/reading/architecture.svg"
+    },
+    "overview": {
+      "problemStatement": {
+        "problemTitle": "Disorganized Reading Habit Tracking",
+        "problemDescription": "Readers lack a centralized system to track progress across multiple books and articles, leading to abandoned reads and poor reading habits.",
+        "problemList": [
+          "No unified system to track multiple reading sources",
+          "Difficulty measuring reading progress and consistency",
+          "Inability to categorize and tag reading materials",
+          "Lack of insights into reading patterns and statistics"
+        ]
+      },
+      "solution": {
+        "title": "RESTful API with Progress Analytics",
+        "description": "Built a lightweight Go API with MongoDB for flexible document storage and JWT authentication.",
+        "keyFeatures": [
+          "Real-time progress tracking with visual indicators",
+          "Flexible tagging and categorization system",
+          "Reading streak and habit analytics",
+          "Data export functionality for personal records"
+        ],
+        "architecture": "Clean architecture with repository pattern, JWT authentication, and containerized deployment"
+      },
+      "keyMetrics": {
+        "title": "User Engagement Metrics",
+        "description": "Performance and usage statistics since launch",
+        "metrics": [
+          { "label": "Active Users", "value": "1.2k", "change": "+25%" },
+          { "label": "Avg. Books Tracked", "value": "8.5", "change": "+40%" },
+          { "label": "API Response Time", "value": "85ms", "change": "-15%" },
+          { "label": "Reading Consistency", "value": "3.2x", "change": "+220%" }
+        ]
+      }
+    }
+  },
+  {
+    "id": "backend_microservices_architecture_college",
+    "title": "College Management Microservices",
+    "shortDescription": "UNAM-inspired college system architecture",
+    "fullDescription": "Microservices architecture replicating UNAM's college management system. Includes student enrollment, course management, grading, notifications, and inter-service communication with event-driven patterns.",
+    "category": "backend",
+    "type": "microservices",
+    "status": "development",
+    "featured": true,
+    "year": 2024,
+    "technologies": [
+      "Java",
+      "Spring Boot",
+      "Docker",
+      "Kubernetes",
+      "PostgreSQL",
+      "Redis",
+      "MongoDB",
+      "RabbitMQ",
+      "AWS",
+      "Prometheus",
+      "Grafana"
+    ],
+    "tags": ["education", "microservices", "scalable", "monitoring", "aws"],
+    "features": [
+      "Student enrollment workflow",
+      "Course scheduling system",
+      "Grade management",
+      "Notification service"
+    ],
+    "metrics": [
+      { "label": "Services", "value": "10", "icon": "layers" },
+      { "label": "Students", "value": "5k+", "icon": "users" },
+      { "label": "Courses", "value": "200+", "icon": "book-open" }
+    ],
+    "links": {
+      "github": "https://github.com/alexisTrejo11/backend_microservices_architecture_college",
+      "demo": null,
+      "documentation": null,
+      "dockerHub": null
+    },
+    "images": {
+      "cover": "/assets/images/projects/college/cover.jpg",
+      "screenshots": [],
+      "diagram": "/assets/images/projects/college/architecture.svg"
+    },
+    "overview": {
+      "problemStatement": {
+        "problemTitle": "Monolithic University Systems",
+        "problemDescription": "Traditional university management systems are monolithic, difficult to scale, and suffer from single points of failure during enrollment periods.",
+        "problemList": [
+          "System crashes during peak enrollment periods",
+          "Slow performance with increasing student numbers",
+          "Difficult to implement new features or updates",
+          "Lack of real-time notifications and updates"
+        ]
+      },
+      "solution": {
+        "title": "Domain-Driven Microservices Architecture",
+        "description": "Designed a domain-driven microservices architecture with bounded contexts for each university domain.",
+        "keyFeatures": [
+          "Independent service scaling during enrollment peaks",
+          "Event-driven communication for real-time updates",
+          "Comprehensive monitoring with Prometheus/Grafana",
+          "Container orchestration for high availability"
+        ],
+        "architecture": "Domain-driven design with bounded contexts, CQRS, and event sourcing patterns"
+      },
+      "keyMetrics": {
+        "title": "System Performance Metrics",
+        "description": "Architecture performance and scalability metrics",
+        "metrics": [
+          { "label": "Enrollment Processing", "value": "5x faster", "change": "+400%" },
+          { "label": "System Availability", "value": "99.99%", "change": "+1.5%" },
+          { "label": "Peak Load Handling", "value": "15k req/s", "change": "+300%" },
+          { "label": "Deployment Frequency", "value": "Daily", "change": "+95%" }
+        ]
+      }
+    }
+  },
+  {
+    "id": "fullstack_cooking_receipt_web_app",
+    "title": "Cooking Recipe Platform",
+    "shortDescription": "Fullstack recipe sharing and management",
+    "fullDescription": "Complete web application for sharing and discovering recipes. Angular frontend with Python FastAPI backend featuring user authentication, recipe CRUD operations, search, filtering, and social features.",
+    "category": "fullstack",
+    "type": "web-app",
+    "status": "production",
+    "featured": true,
+    "year": 2024,
+    "technologies": [
+      "Angular",
+      "TypeScript",
+      "Python",
+      "FastAPI",
+      "Docker",
+      "PostgreSQL",
+      "AWS",
+      "Tailwind CSS",
+      "JWT"
+    ],
+    "tags": ["fullstack", "recipes", "angular", "fastapi", "docker"],
+    "features": [
+      "Recipe search with filters",
+      "User profiles and collections",
+      "Step-by-step cooking guide",
+      "Nutritional information"
+    ],
+    "metrics": [
+      { "label": "Recipes", "value": "500+", "icon": "utensils" },
+      { "label": "Users", "value": "1k+", "icon": "users" },
+      { "label": "Uptime", "value": "99.9%", "icon": "activity" }
+    ],
+    "links": {
+      "github": "https://github.com/alexisTrejo11/fullstack_cooking_receipt_web_app",
+      "demo": "https://cookbook.demo.com",
+      "documentation": "https://docs.cookbook.com",
+      "dockerHub": "alexistrejo/cookbook"
+    },
+    "images": {
+      "cover": "/assets/images/projects/cookbook/cover.jpg",
+      "screenshots": [],
+      "diagram": "/assets/images/projects/cookbook/architecture.svg"
+    },
+    "overview": {
+      "problemStatement": {
+        "problemTitle": "Fragmented Recipe Management",
+        "problemDescription": "Home cooks struggle with scattered recipes across websites, books, and notes, making meal planning and cooking inefficient.",
+        "problemList": [
+          "Recipes scattered across multiple platforms",
+          "No unified search and filtering system",
+          "Difficulty in meal planning and grocery list generation",
+          "Lack of nutritional information and dietary filtering"
+        ]
+      },
+      "solution": {
+        "title": "Modern Full-Stack Web Application",
+        "description": "Built a responsive Angular frontend with FastAPI backend for a seamless recipe management experience.",
+        "keyFeatures": [
+          "Advanced search with ingredient-based filtering",
+          "Interactive cooking mode with step timers",
+          "Grocery list generation from selected recipes",
+          "Nutritional calculator and dietary restriction filters"
+        ],
+        "architecture": "Client-server architecture with JWT authentication, PostgreSQL for data persistence, and containerized deployment"
+      },
+      "keyMetrics": {
+        "title": "Platform Engagement Metrics",
+        "description": "User adoption and platform performance metrics",
+        "metrics": [
+          { "label": "Monthly Active Users", "value": "2.5k", "change": "+180%" },
+          { "label": "Avg. Recipes Saved", "value": "12.3", "change": "+65%" },
+          { "label": "Page Load Time", "value": "1.2s", "change": "-40%" },
+          { "label": "Mobile Usage", "value": "68%", "change": "+25%" }
+        ]
+      }
+    }
+  },
+  {
+    "id": "backend_microservice_video-courses_platform",
+    "title": "Video Courses Platform",
+    "shortDescription": "Microservices-based e-learning platform",
+    "fullDescription": "Scalable video course platform with microservices architecture. Includes course management, user enrollment, video streaming, payment processing, and notification systems with Go Fiber framework.",
+    "category": "backend",
+    "type": "microservices",
+    "status": "development",
+    "featured": false,
+    "year": 2024,
+    "technologies": [
+      "Go",
+      "Fiber",
+      "Docker",
+      "Kubernetes",
+      "PostgreSQL",
+      "Redis",
+      "MongoDB",
+      "RabbitMQ",
+      "AWS S3",
+      "Stripe API"
+    ],
+    "tags": ["education", "video", "microservices", "go", "aws"],
+    "features": [
+      "Video streaming with HLS",
+      "Course progress tracking",
+      "Payment integration",
+      "Certificate generation"
+    ],
+    "metrics": [
+      { "label": "Courses", "value": "50+", "icon": "video" },
+      { "label": "Students", "value": "2k+", "icon": "users" },
+      { "label": "Videos", "value": "200+", "icon": "film" }
+    ],
+    "links": {
+      "github": "https://github.com/alexisTrejo11/backend_microservice_video-courses_platform",
+      "demo": null,
+      "documentation": null,
+      "dockerHub": null
+    },
+    "images": {
+      "cover": "/assets/images/projects/video-courses/cover.jpg",
+      "screenshots": [],
+      "diagram": "/assets/images/projects/video-courses/architecture.svg"
+    },
+    "overview": {
+      "problemStatement": {
+        "problemTitle": "Scalable Video Learning Infrastructure",
+        "problemDescription": "Existing e-learning platforms struggle with video streaming performance, course management scalability, and integrated payment systems.",
+        "problemList": [
+          "Poor video streaming quality and buffering issues",
+          "Limited scalability during course launch events",
+          "Fragmented payment and certificate systems",
+          "Lack of real-time progress tracking for students"
+        ]
+      },
+      "solution": {
+        "title": "Go-Based Microservices Platform",
+        "description": "Implemented a high-performance microservices architecture using Go Fiber for handling concurrent video streaming requests.",
+        "keyFeatures": [
+          "Adaptive bitrate streaming with HLS protocol",
+          "Real-time progress syncing across devices",
+          "Integrated payment processing with Stripe",
+          "Automated certificate generation upon course completion"
+        ],
+        "architecture": "Microservices with API Gateway pattern, S3 for video storage, Redis for caching, and Kubernetes for orchestration"
+      },
+      "keyMetrics": {
+        "title": "Streaming & Performance Metrics",
+        "description": "Video streaming performance and platform scalability metrics",
+        "metrics": [
+          { "label": "Video Startup Time", "value": "<2s", "change": "-60%" },
+          { "label": "Concurrent Streams", "value": "5k", "change": "+300%" },
+          { "label": "Video Quality Uptime", "value": "99.7%", "change": "+2.5%" },
+          { "label": "Payment Success Rate", "value": "98.5%", "change": "+3%" }
+        ]
+      }
+    }
+  },
+  {
+    "id": "backend_microservice_cinema_app",
+    "title": "Cinema Management System",
+    "shortDescription": "Microservices for cinema operations",
+    "fullDescription": "Complete cinema management system with microservices for movie catalog, showtime scheduling, ticket booking, payment processing, and notification services using Python FastAPI.",
+    "category": "backend",
+    "type": "microservices",
+    "status": "production",
+    "featured": true,
+    "year": 2024,
+    "technologies": [
+      "Python",
+      "FastAPI",
+      "Docker",
+      "Kubernetes",
+      "PostgreSQL",
+      "Redis",
+      "MongoDB",
+      "RabbitMQ",
+      "AWS",
+      "Stripe API"
+    ],
+    "tags": ["entertainment", "ticketing", "fastapi", "microservices", "docker"],
+    "features": [
+      "Real-time seat selection",
+      "Online payment processing",
+      "Email/SMS notifications",
+      "Analytics dashboard"
+    ],
+    "metrics": [
+      { "label": "Theaters", "value": "20+", "icon": "home" },
+      { "label": "Daily Tickets", "value": "5k+", "icon": "ticket" },
+      { "label": "Movies", "value": "500+", "icon": "film" }
+    ],
+    "links": {
+      "github": "https://github.com/alexisTrejo11/backend_microservice_cinema_app",
+      "demo": "https://cinema.demo.com",
+      "documentation": "https://docs.cinema-system.com",
+      "dockerHub": "alexistrejo/cinema-system"
+    },
+    "images": {
+      "cover": "/assets/images/projects/cinema/cover.jpg",
+      "screenshots": [],
+      "diagram": "/assets/images/projects/cinema/architecture.svg"
+    },
+    "overview": {
+      "problemStatement": {
+        "problemTitle": "Outdated Cinema Ticketing Systems",
+        "problemDescription": "Traditional cinema systems have poor real-time seat management, limited payment options, and no personalized customer experience.",
+        "problemList": [
+          "Double booking due to poor seat synchronization",
+          "Limited payment gateway integrations",
+          "No personalized recommendations or notifications",
+          "Manual reporting and analytics processes"
+        ]
+      },
+      "solution": {
+        "title": "Real-Time Microservices Ticketing Platform",
+        "description": "Built a distributed system with real-time seat locking, multiple payment gateways, and AI-powered recommendations.",
+        "keyFeatures": [
+          "WebSocket-based real-time seat reservation",
+          "Multi-provider payment gateway integration",
+          "Personalized movie recommendations engine",
+          "Automated reporting and analytics dashboard"
+        ],
+        "architecture": "Event-driven microservices with WebSocket for real-time updates, Redis for caching, and message queue for notifications"
+      },
+      "keyMetrics": {
+        "title": "Business Impact Metrics",
+        "description": "Key performance indicators showing business improvement",
+        "metrics": [
+          { "label": "Online Ticket Sales", "value": "85%", "change": "+45%" },
+          { "label": "Customer Satisfaction", "value": "4.8/5", "change": "+1.2" },
+          { "label": "Booking Abandonment", "value": "12%", "change": "-28%" },
+          { "label": "Operational Efficiency", "value": "3.5x", "change": "+250%" }
+        ]
+      }
+    }
+  },
+  {
+    "id": "frontend_cinema_app",
+    "title": "Cinema Frontend",
+    "shortDescription": "Angular UI for cinema booking",
+    "fullDescription": "Responsive Angular application for cinema ticket booking with real-time seat selection, movie browsing, showtime checking, and booking management using Angular Material and Tailwind CSS.",
+    "category": "frontend",
+    "type": "web-app",
+    "status": "production",
+    "featured": false,
+    "year": 2024,
+    "technologies": ["Angular", "TypeScript", "Tailwind CSS", "RxJS", "Angular Material"],
+    "tags": ["angular", "ui", "responsive", "cinema", "tailwind"],
+    "features": ["Real-time seat map", "Movie trailers", "User reviews", "Mobile-first design"],
+    "metrics": [
+      { "label": "Pages", "value": "8", "icon": "file" },
+      { "label": "Components", "value": "25+", "icon": "package" },
+      { "label": "Performance", "value": "95/100", "icon": "zap" }
+    ],
+    "links": {
+      "github": "https://github.com/alexisTrejo11/frontend_cinema_app",
+      "demo": "https://cinema-frontend.demo.com",
+      "documentation": null,
+      "dockerHub": null
+    },
+    "images": {
+      "cover": "/assets/images/projects/cinema-frontend/cover.jpg",
+      "screenshots": [],
+      "diagram": null
+    },
+    "overview": {
+      "problemStatement": {
+        "problemTitle": "Poor Cinema Booking User Experience",
+        "problemDescription": "Existing cinema booking interfaces are cluttered, slow, and not optimized for mobile devices, leading to abandoned bookings.",
+        "problemList": [
+          "Complex and confusing seat selection interface",
+          "Slow page loads and poor performance scores",
+          "Not responsive across different device sizes",
+          "Lack of engaging content like trailers and reviews"
+        ]
+      },
+      "solution": {
+        "title": "Modern Angular PWA with Real-Time Features",
+        "description": "Developed a Progressive Web App with real-time seat updates, engaging content, and mobile-first design.",
+        "keyFeatures": [
+          "Interactive SVG-based seat selection with visual feedback",
+          "Progressive Web App capabilities for offline functionality",
+          "Optimized performance with lazy loading and code splitting",
+          "Rich media integration with trailers and user reviews"
+        ],
+        "architecture": "Component-based Angular architecture with RxJS for state management, PWA capabilities, and optimized bundle delivery"
+      },
+      "keyMetrics": {
+        "title": "User Experience Metrics",
+        "description": "Frontend performance and user engagement metrics",
+        "metrics": [
+          { "label": "Mobile Conversion Rate", "value": "42%", "change": "+65%" },
+          { "label": "Page Load Performance", "value": "95/100", "change": "+35" },
+          { "label": "User Engagement Time", "value": "4.2min", "change": "+120%" },
+          { "label": "Booking Success Rate", "value": "78%", "change": "+28%" }
+        ]
+      }
+    }
+  }
+]

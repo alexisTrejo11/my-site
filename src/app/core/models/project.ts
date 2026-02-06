@@ -1,13 +1,9 @@
-import {
-  ProjectImages,
-  ProjectLinks,
-  ProjectMetric,
-  ProjectOverview,
-  ProjectMediaItem,
-} from './project-docts';
+import { ProjectDocsModel } from './project-docs.models';
 
-export interface Project {
+// Legacy
+export interface ProjectLegacy {
   id: string;
+
   // general info
   title: string;
   shortDescription: string;
@@ -17,42 +13,40 @@ export interface Project {
   status: 'production' | 'development' | 'archived';
   featured: boolean;
   year: number;
-  images: ProjectImages;
 
-  // detailed info
+  // Featured tags
   technologies: string[];
   tags: string[];
   features: string[];
-  metrics: ProjectMetric[];
-  links: ProjectLinks;
-
-  mediaGallery?: ProjectMediaItem[];
-  // Aggregated sections
-  overview: ProjectOverview;
 }
 
-export interface Technology {
+// MAKE CLASS?
+export interface Project {
+  id: string;
   name: string;
-  category: string;
-  usage: string;
-  icon: string;
-  version?: string;
+  language: string;
+  category: 'backend' | 'frontend' | 'fullstack' | 'devops';
+  framework: string;
+  version: string;
+  repositoryUrl: string;
+  liveDemoUrl: string | null;
+  description: string;
+  techStack: string[];
+  status: 'develop' | 'deployed' | 'archived';
+  createdAt: Date;
+  updatedAt: Date;
+  docs: ProjectDocsModel;
 }
 
-export interface MediaItem {
-  type: 'image' | 'video';
-  url: string;
-  thumbnail?: string;
-  title: string;
-  description: string;
-  alt?: string;
+export enum ProjectCategory {
+  BACKEND = 'Backend',
+  FRONTEND = 'Frontend',
+  FULLSTACK = 'Fullstack',
+  DEVOPS = 'DevOps',
 }
 
-export interface QuickLink {
-  title: string;
-  description: string;
-  url: string;
-  icon: string;
-  color: string;
-  external: boolean;
+export interface ProjectNavItem {
+  label: string;
+  path: string;
+  iconPath: string;
 }

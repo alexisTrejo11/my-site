@@ -1,6 +1,6 @@
 import { Component, input, EventEmitter, SimpleChanges } from '@angular/core';
-import { ProjectMediaItem } from '../../../../../../core/models/project-docts';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ProjectMediaItem } from '../../../../../../core/models/project-docs.models';
 
 @Component({
   selector: 'app-media-gallery',

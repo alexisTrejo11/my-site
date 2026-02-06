@@ -3,7 +3,7 @@
     <div>
       <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Technology Stack</h2>
       <p class="text-gray-600 dark:text-gray-400">
-        {{ project().technologies.length }} technologies powering this project
+        {{ project().techStack.length }} technologies powering this project
       </p>
     </div>
     <div class="text-sm text-gray-500 dark:text-gray-400">
@@ -13,87 +13,90 @@
   </div>
 
   <!-- Categories of technologies -->
-  @for (category of categories; track category.id) { @if (hasTechnologiesInCategory(category.id)) {
-  <div class="mb-10 last:mb-0">
-    <!-- Category Header -->
-    <div class="flex items-center gap-3 mb-6">
-      <div class="w-1 h-8 bg-gradient-to-b from-emerald-500 to-cyan-500 rounded-full"></div>
-      <h3 class="text-xl font-bold text-gray-900 dark:text-white">
-        {{ category.name }}
-      </h3>
-      <span class="text-sm text-gray-500 dark:text-gray-400">
-        ({{ getTechnologiesByCategory()[category.id].length }})
-      </span>
-    </div>
+  @for (category of categories; track category.id) {
+    @if (hasTechnologiesInCategory(category.id)) {
+      <div class="mb-10 last:mb-0">
+        <!-- Category Header -->
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-1 h-8 bg-gradient-to-b from-emerald-500 to-cyan-500 rounded-full"></div>
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+            {{ category.name }}
+          </h3>
+          <span class="text-sm text-gray-500 dark:text-gray-400">
+            ({{ getTechnologiesByCategory()[category.id].length }})
+          </span>
+        </div>
 
-    <!-- Tech Grid -->
-    <div class="grid md:grid-cols-2 gap-4">
-      @for (tech of getTechnologiesByCategory()[category.id]; track tech.name) {
-      <div
-        class="group p-5 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]"
-      >
-        <div class="flex items-start gap-4">
-          <!-- Space for SVG -->
-          <div class="flex-shrink-0">
+        <!-- Tech Grid -->
+        <div class="grid md:grid-cols-2 gap-4">
+          @for (tech of getTechnologiesByCategory()[category.id]; track tech.name) {
             <div
-              class="w-12 h-12 rounded-lg bg-emerald-200 dark:bg-emerald-800 flex items-center justify-center group-hover:bg-emerald-400 dark:group-hover:bg-emerald-500 transition-colors"
+              class="group p-5 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]"
             >
-              <!-- Initials
+              <div class="flex items-start gap-4">
+                <!-- Space for SVG -->
+                <div class="flex-shrink-0">
+                  <div
+                    class="w-12 h-12 rounded-lg bg-emerald-200 dark:bg-emerald-800 flex items-center justify-center group-hover:bg-emerald-400 dark:group-hover:bg-emerald-500 transition-colors"
+                  >
+                    <!-- Initials
               <div
                 class="text-lg font-bold text-gray-700 dark:text-gray-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400"
               >
                 {{ tech.name.substring(0, 2).toUpperCase() }}
               </div>
               -->
-              <!-- SVG Icon -->
-              <img [src]="tech.svgIcon" [alt]="tech.name" class="w-8 h-8 text-emerald-600" />
-            </div>
-          </div>
+                    <!-- SVG Icon -->
+                    <img [src]="tech.svgIcon" [alt]="tech.name" class="w-8 h-8 text-emerald-600" />
+                  </div>
+                </div>
 
-          <!-- Content -->
-          <div class="flex-1 min-w-0">
-            <div class="flex items-start justify-between mb-2">
-              <div>
-                <h4
-                  class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors"
-                >
-                  {{ tech.name }}
-                </h4>
-                <span class="text-xs text-gray-500 dark:text-gray-400">
-                  {{ tech.category }}
-                </span>
+                <!-- Content -->
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-start justify-between mb-2">
+                    <div>
+                      <h4
+                        class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors"
+                      >
+                        {{ tech.name }}
+                      </h4>
+                      <span class="text-xs text-gray-500 dark:text-gray-400">
+                        {{ tech.category }}
+                      </span>
+                    </div>
+                    @if (tech.experience) {
+                      <span
+                        class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full"
+                      >
+                        {{ tech.experience }}
+                      </span>
+                    }
+                  </div>
+
+                  @if (tech.usage) {
+                    <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                      {{ tech.usage }}
+                    </p>
+                  }
+
+                  <!-- Matching project tags -->
+                  @for (tag of project().techStack; track tag) {
+                    @if (tag.toLowerCase().includes(tech.name.toLowerCase())) {
+                      <span
+                        class="inline-block mt-2 px-2 py-1 text-xs bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded"
+                      >
+                        {{ tag }}
+                      </span>
+                    }
+                  }
+                </div>
               </div>
-              @if (tech.experience) {
-              <span
-                class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full"
-              >
-                {{ tech.experience }}
-              </span>
-              }
             </div>
-
-            @if (tech.usage) {
-            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-              {{ tech.usage }}
-            </p>
-            }
-
-            <!-- Matching project tags -->
-            @for (tag of project().tags; track tag) { @if
-            (tag.toLowerCase().includes(tech.name.toLowerCase())) {
-            <span
-              class="inline-block mt-2 px-2 py-1 text-xs bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded"
-            >
-              {{ tag }}
-            </span>
-            } }
-          </div>
+          }
         </div>
       </div>
-      }
-    </div>
-  </div>
-  } }
+    }
+  }
 
   <!-- Technologies Summary
   <div

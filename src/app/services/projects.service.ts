@@ -20,7 +20,7 @@ export class ProjectsService {
       map((projects) => {
         this.projectsCache = projects;
         return projects;
-      })
+      }),
     );
   }
 
@@ -29,23 +29,32 @@ export class ProjectsService {
   }
 
   getFeaturedProjects(): Observable<Project[]> {
-    return this.getAllProjects().pipe(map((projects) => projects.filter((p) => p.featured)));
+    return this.getAllProjects().pipe(
+      map((projects) =>
+        projects.filter(
+          (p) =>
+            p.framework === 'Angular' || p.framework === 'Django' || p.framework === 'Spring_Boot',
+        ),
+      ),
+    );
   }
 
   getProjectsByCategory(category: string): Observable<Project[]> {
     return this.getAllProjects().pipe(
-      map((projects) => projects.filter((p) => p.category === category))
+      map((projects) => projects.filter((p) => p.category === category)),
     );
   }
 
   getProjectsByStatus(status: string): Observable<Project[]> {
     return this.getAllProjects().pipe(
-      map((projects) => projects.filter((p) => p.status === status))
+      map((projects) => projects.filter((p) => p.status === status)),
     );
   }
 
-  getProjectsByType(type: string): Observable<Project[]> {
-    return this.getAllProjects().pipe(map((projects) => projects.filter((p) => p.type === type)));
+  getProjectsBycategory(category: string): Observable<Project[]> {
+    return this.getAllProjects().pipe(
+      map((projects) => projects.filter((p) => p.category === category)),
+    );
   }
 
   searchProjects(term: string): Observable<Project[]> {
@@ -56,20 +65,17 @@ export class ProjectsService {
         const searchTerm = term.toLowerCase();
         return projects.filter(
           (project) =>
-            project.title.toLowerCase().includes(searchTerm) ||
-            project.fullDescription.toLowerCase().includes(searchTerm) ||
-            project.shortDescription.toLowerCase().includes(searchTerm) ||
-            project.technologies.some((tech) => tech.toLowerCase().includes(searchTerm)) ||
-            project.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
+            project.name.toLowerCase().includes(searchTerm) ||
+            project.description.toLowerCase().includes(searchTerm) ||
+            project.techStack.some((tech) => tech.toLowerCase().includes(searchTerm)),
         );
-      })
+      }),
     );
   }
 
   filterProjects(filters: {
     category?: string;
     status?: string;
-    type?: string;
     technologies?: string[];
     year?: number;
     featured?: boolean;
@@ -85,17 +91,14 @@ export class ProjectsService {
             return false;
           }
 
-          if (filters.type && project.type !== filters.type) {
-            return false;
-          }
-
           if (filters.technologies && filters.technologies.length > 0) {
             const hasAllTech = filters.technologies.every((tech) =>
-              project.technologies.includes(tech)
+              project.techStack.includes(tech),
             );
             if (!hasAllTech) return false;
           }
 
+          /*
           if (filters.year && project.year !== filters.year) {
             return false;
           }
@@ -103,28 +106,20 @@ export class ProjectsService {
           if (filters.featured !== undefined && project.featured !== filters.featured) {
             return false;
           }
+            */
 
           return true;
         });
-      })
+      }),
     );
   }
 
   getAllTechnologies(): Observable<string[]> {
     return this.getAllProjects().pipe(
       map((projects) => {
-        const allTech = projects.flatMap((p) => p.technologies);
+        const allTech = projects.flatMap((p) => p.techStack);
         return [...new Set(allTech)].sort();
-      })
-    );
-  }
-
-  getAllTags(): Observable<string[]> {
-    return this.getAllProjects().pipe(
-      map((projects) => {
-        const allTags = projects.flatMap((p) => p.tags);
-        return [...new Set(allTags)].sort();
-      })
+      }),
     );
   }
 
@@ -132,13 +127,13 @@ export class ProjectsService {
     total: number;
     byCategory: Record<string, number>;
     byStatus: Record<string, number>;
-    byType: Record<string, number>;
+    bycategory: Record<string, number>;
   }> {
     return this.getAllProjects().pipe(
       map((projects) => {
         const byCategory: Record<string, number> = {};
         const byStatus: Record<string, number> = {};
-        const byType: Record<string, number> = {};
+        const bycategory: Record<string, number> = {};
 
         projects.forEach((project) => {
           // Contar por categoría
@@ -148,16 +143,16 @@ export class ProjectsService {
           byStatus[project.status] = (byStatus[project.status] || 0) + 1;
 
           // Contar por tipo
-          byType[project.type] = (byType[project.type] || 0) + 1;
+          bycategory[project.category] = (bycategory[project.category] || 0) + 1;
         });
 
         return {
           total: projects.length,
           byCategory,
           byStatus,
-          byType,
+          bycategory,
         };
-      })
+      }),
     );
   }
 }

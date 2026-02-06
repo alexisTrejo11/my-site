@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, OnInit } from '@angular/core';
-import { ProjectDocsService } from '../../../../../services/project-docs.service';
-import { DeploymentLayer } from '../../../../../core/models/docs/infrastructure';
+import { Component, input } from '@angular/core';
+import { DeploymentLayer } from '../../../../../core/models/project-docs.models';
 
 @Component({
   selector: 'app-deployment-diagram',

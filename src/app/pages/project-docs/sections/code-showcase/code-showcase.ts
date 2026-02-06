@@ -5,6 +5,7 @@ import {
   ElementRef,
   inject,
   Inject,
+  input,
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
@@ -18,8 +19,11 @@ import 'prismjs/components/prism-scss'; // For SCSS
 import 'prismjs/components/prism-markup'; // For HTML/XML
 import 'prismjs/components/prism-bash'; // For Bash
 import { IconComponent } from '../../../../shared/components/icon/icon';
-import { ProjectDocsService } from '../../../../services/project-docs.service';
-import { CodeExample, CodeFile } from './code-showcase.model';
+import {
+  CodeExample,
+  CodeFile,
+  ProjectCodeShowCase,
+} from '../../../../core/models/project-docs.models';
 
 // import 'prismjs/plugins/line-highlight/prism-line-highlight';
 // import 'prismjs/plugins/line-numbers/prism-line-numbers';
@@ -36,7 +40,7 @@ declare var Prism: any; // For TypeScript
 export class CodeShowcase implements AfterViewInit {
   @ViewChild('codeBlock') codeBlock!: ElementRef;
 
-  docsService = inject(ProjectDocsService);
+  model = input.required<ProjectCodeShowCase>();
 
   projectId: string = '';
   selectedExample: CodeExample | null = null;
@@ -58,15 +62,13 @@ export class CodeShowcase implements AfterViewInit {
 
   selectedCategory: string | null = 'All';
 
-  constructor(private route: ActivatedRoute, @Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(
+    private route: ActivatedRoute,
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {}
 
   ngOnInit() {
     this.isBrowser = isPlatformBrowser(this.platformId);
-    this.projectId = this.route.parent?.snapshot.params['projectId'] || '';
-
-    this.docsService.getCodeExamplesForProject(this.projectId).subscribe((examples) => {
-      this.codeExamples = examples;
-    });
 
     if (this.codeExamples.length > 0) {
       this.selectExample(this.codeExamples[0]);

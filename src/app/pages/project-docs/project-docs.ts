@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { ProjectNavItem } from '../../core/models/project-docts';
+import { ProjectNavItem } from '../../core/models/project';
 
 @Component({
   selector: 'app-project-docs',

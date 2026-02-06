@@ -1,13 +1,12 @@
 import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  ProjectFeature,
-  FeatureCategory,
   FEATURE_CATEGORIES,
   FEATURE_STATUS_CONFIG,
   DUMMY_PROJECT_FEATURES,
   FeatureCategoryInfo,
-} from './project-features.model';
+} from './dummy_data';
+import { FeatureCategory, ProjectFeature } from '../../../../core/models/project-docs.models';
 
 @Component({
   selector: 'app-features-projects',

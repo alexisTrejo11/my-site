@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { PipelineStage } from '../../../../../core/models/docs/infrastructure';
 import { CommonModule } from '@angular/common';
+import { PipelineStage } from '../../../../../core/models/project-docs.models';
 
 @Component({
   selector: 'app-cicd-pipeline',

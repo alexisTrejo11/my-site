@@ -4,97 +4,97 @@
   </h2>
 
   <div class="space-y-4">
-    @for (decision of decisions; track decision.title) {
-    <div
-      class="card transition-all duration-300"
-      [class.ring-2]="selectedDecision === decision"
-      [class.ring-blue-600]="selectedDecision === decision"
-      [class.dark:ring-blue-400]="selectedDecision === decision"
-    >
-      <!-- Decision Header (Clickable) -->
-      <button
-        (click)="selectDecision(decision)"
-        class="w-full p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors rounded-t-xl"
+    @for (decision of decisions(); track decision.title) {
+      <div
+        class="card transition-all duration-300"
+        [class.ring-2]="selectedDecision === decision"
+        [class.ring-blue-600]="selectedDecision === decision"
+        [class.dark:ring-blue-400]="selectedDecision === decision"
       >
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-4">
-            <div class="text-4xl">{{ decision.icon }}</div>
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white">
-              {{ decision.title }}
-            </h3>
-          </div>
-          <svg
-            class="w-6 h-6 text-gray-400 transform transition-transform"
-            [class.rotate-180]="selectedDecision === decision"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </div>
-      </button>
-
-      <!-- Decision Details (Expandable) -->
-      @if (selectedDecision === decision) {
-      <div class="px-6 pb-6 space-y-6 animate-slide-down">
-        <!-- Problem -->
-        <div>
-          <h4 class="font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-            <span class="text-red-500">⚠️</span>
-            The Problem
-          </h4>
-          <p class="text-gray-600 dark:text-gray-400 pl-7">
-            {{ decision.problem }}
-          </p>
-        </div>
-
-        <!-- Solution -->
-        <div>
-          <h4 class="font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-            <span class="text-green-500">✅</span>
-            The Solution
-          </h4>
-          <p class="text-gray-600 dark:text-gray-400 pl-7">
-            {{ decision.solution }}
-          </p>
-        </div>
-
-        <!-- Alternatives Considered -->
-        <div>
-          <h4 class="font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-            <span class="text-blue-500">🔄</span>
-            Alternatives Considered
-          </h4>
-          <div class="flex flex-wrap gap-2 pl-7">
-            @for (alt of decision.alternatives; track alt) {
-            <span class="badge badge-gray">
-              {{ alt }}
-            </span>
-            }
-          </div>
-        </div>
-
-        <!-- Outcome -->
-        <div
-          class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800"
+        <!-- Decision Header (Clickable) -->
+        <button
+          (click)="selectDecision(decision)"
+          class="w-full p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors rounded-t-xl"
         >
-          <h4 class="font-bold text-green-900 dark:text-green-100 mb-2 flex items-center gap-2">
-            <span>📊</span>
-            The Outcome
-          </h4>
-          <p class="text-green-700 dark:text-green-300">
-            {{ decision.outcome }}
-          </p>
-        </div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div class="text-4xl">{{ decision.icon }}</div>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                {{ decision.title }}
+              </h3>
+            </div>
+            <svg
+              class="w-6 h-6 text-gray-400 transform transition-transform"
+              [class.rotate-180]="selectedDecision === decision"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+        </button>
+
+        <!-- Decision Details (Expandable) -->
+        @if (selectedDecision === decision) {
+          <div class="px-6 pb-6 space-y-6 animate-slide-down">
+            <!-- Problem -->
+            <div>
+              <h4 class="font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                <span class="text-red-500">⚠️</span>
+                The Problem
+              </h4>
+              <p class="text-gray-600 dark:text-gray-400 pl-7">
+                {{ decision.problem }}
+              </p>
+            </div>
+
+            <!-- Solution -->
+            <div>
+              <h4 class="font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                <span class="text-green-500">✅</span>
+                The Solution
+              </h4>
+              <p class="text-gray-600 dark:text-gray-400 pl-7">
+                {{ decision.solution }}
+              </p>
+            </div>
+
+            <!-- Alternatives Considered -->
+            <div>
+              <h4 class="font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                <span class="text-blue-500">🔄</span>
+                Alternatives Considered
+              </h4>
+              <div class="flex flex-wrap gap-2 pl-7">
+                @for (alt of decision.alternatives; track alt) {
+                  <span class="badge badge-gray">
+                    {{ alt }}
+                  </span>
+                }
+              </div>
+            </div>
+
+            <!-- Outcome -->
+            <div
+              class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800"
+            >
+              <h4 class="font-bold text-green-900 dark:text-green-100 mb-2 flex items-center gap-2">
+                <span>📊</span>
+                The Outcome
+              </h4>
+              <p class="text-green-700 dark:text-green-300">
+                {{ decision.outcome }}
+              </p>
+            </div>
+          </div>
+        }
       </div>
-      }
-    </div>
     }
   </div>
 </section>

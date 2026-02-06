@@ -13,7 +13,7 @@
       DevOps Performance Metrics
     </h2>
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-      @for (metric of metrics; track metric) {
+      @for (metric of model().metrics; track metric) {
         <div class="card p-6 hover:shadow-xl transition-all duration-300">
           <div class="text-4xl mb-3">{{ metric.icon }}</div>
           <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
@@ -31,10 +31,10 @@
   </section>
 
   <!-- Deployment Diagram -->
-  <app-deployment-diagram [projectLayers]="deploymentLayers" />
+  <app-deployment-diagram [projectLayers]="model().deploymentLayers" />
 
   <!-- Docker Configuration -->
-  <app-docker-config [dockerFiles]="dockerFiles" />
+  <app-docker-config [dockerFiles]="model().dockerFiles" />
 
   <!-- CI/CD Pipeline -->
   <app-cicd-pipeline />
@@ -46,7 +46,7 @@
     </h2>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-      @for (service of cloudServices; track $index) {
+      @for (service of model().cloudServices; track $index) {
         <div class="card p-6 hover:shadow-lg transition-all duration-300">
           <div class="flex items-start justify-between mb-4">
             <div class="text-4xl">{{ service.icon }}</div>

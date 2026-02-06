@@ -79,13 +79,12 @@ export class ProjectsList implements OnInit {
       // Search filter
       const matchesSearch =
         this.searchQuery === '' ||
-        project.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        project.shortDescription.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        project.fullDescription.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        project.technologies.some((tech) =>
-          tech.toLowerCase().includes(this.searchQuery.toLowerCase())
+        project.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        project.description.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        project.techStack.some((tech) =>
+          tech.toLowerCase().includes(this.searchQuery.toLowerCase()),
         ) ||
-        project.tags.some((tag) => tag.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        project.framework.toLowerCase().includes(this.searchQuery.toLowerCase());
 
       // Category filter
       const matchesCategory =
@@ -97,10 +96,9 @@ export class ProjectsList implements OnInit {
       // Tech filter
       const matchesTech =
         this.selectedTech === 'all' ||
-        project.technologies.some(
-          (tech) => tech.toLowerCase().replace(/\s+/g, '-') === this.selectedTech
-        ) ||
-        project.tags.some((tag) => tag.toLowerCase().replace(/\s+/g, '-') === this.selectedTech);
+        project.techStack.some(
+          (tech) => tech.toLowerCase().replace(/\s+/g, '-') === this.selectedTech,
+        );
 
       return matchesSearch && matchesCategory && matchesStatus && matchesTech;
     });
@@ -153,7 +151,7 @@ export class ProjectsList implements OnInit {
 
   onProjectClick(project: Project): void {
     // Puedes navegar directamente o emitir evento
-    console.log('Project clicked:', project.title);
+    console.log('Project clicked:', project.name);
     // this.router.navigate(['/projects', project.id]);
   }
 

@@ -80,7 +80,7 @@ export class TechStackShowcase {
       grouped[cat.id] = [];
     });
 
-    this.project().technologies.forEach((tech) => {
+    this.project().techStack.forEach((tech) => {
       const categoryId = this.techCategories[tech.toLowerCase()] || 'tools';
       const techItem: TechItem = {
         name: tech,
@@ -132,7 +132,7 @@ export class TechStackShowcase {
   }
 
   getMainStackCount(): number {
-    return this.project().technologies.length;
+    return this.project().techStack.length;
   }
 
   getInfraCount(): number {

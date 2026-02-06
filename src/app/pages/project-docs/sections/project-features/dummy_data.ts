@@ -3,45 +3,11 @@
  * Models for documenting backend project features in an elegant way
  */
 
-export interface ProjectFeature {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  category: FeatureCategory;
-  status: FeatureStatus;
-  highlights: string[];
-  techStack?: string[];
-  metrics?: FeatureMetric[];
-  codeSnippet?: CodeSnippet;
-}
-
-export interface FeatureMetric {
-  label: string;
-  value: string;
-  trend?: 'up' | 'down' | 'stable';
-  icon?: string;
-}
-
-export interface CodeSnippet {
-  language: string;
-  code: string;
-  filename?: string;
-}
-
-export type FeatureCategory =
-  | 'authentication'
-  | 'database'
-  | 'api'
-  | 'security'
-  | 'performance'
-  | 'integration'
-  | 'messaging'
-  | 'caching'
-  | 'monitoring'
-  | 'testing';
-
-export type FeatureStatus = 'stable' | 'beta' | 'experimental' | 'deprecated';
+import {
+  FeatureCategory,
+  FeatureStatus,
+  ProjectFeature,
+} from '../../../../core/models/project-docs.models';
 
 export interface FeatureCategoryInfo {
   id: FeatureCategory;

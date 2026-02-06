@@ -1,4 +1,4 @@
-import { Component, input, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Project } from '../../../../../../core/models/project';
 
@@ -23,7 +23,7 @@ export class QuickLinks {
 
   getLinks(): QuickLink[] {
     const links: QuickLink[] = [];
-    const projectLinks = this.project().links;
+    const projectLinks = this.project().docs.overview.links;
 
     // GitHub
     if (projectLinks.github) {
@@ -82,10 +82,10 @@ export class QuickLinks {
     }
 
     // Inner Links based on project type
-    if (this.project().type === 'microservices') {
+    if (this.project().category === 'backend' || this.project().category === 'fullstack') {
       links.push({
-        title: 'Architecture Overview',
-        description: 'Microservices communication and data flow',
+        title: 'Architecture',
+        description: 'Explore the system design and architecture',
         url: `/projects/${this.project().id}/architecture`,
         type: 'architecture',
         external: false,
@@ -94,7 +94,7 @@ export class QuickLinks {
       });
     }
 
-    if (this.project().type === 'api') {
+    if (this.project().category === 'backend') {
       links.push({
         title: 'API Explorer',
         description: 'Test endpoints with interactive playground',
@@ -107,7 +107,7 @@ export class QuickLinks {
     }
 
     // Additional link if more than 3 features
-    if (this.project().features.length > 3) {
+    if (this.project().docs.features.features.length > 3) {
       links.push({
         title: 'Features Breakdown',
         description: 'Detailed explanation of all features',

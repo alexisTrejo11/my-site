@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { DockerFile } from '../../../../../core/models/docs/infrastructure';
+import { DockerFile } from '../../../../../core/models/project-docs.models';
 
 @Component({
   selector: 'app-docker-config',

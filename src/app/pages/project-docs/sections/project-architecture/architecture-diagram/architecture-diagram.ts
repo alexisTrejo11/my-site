@@ -1,32 +1,6 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface DiagramNode {
-  id: string;
-  label: string;
-  type: 'client' | 'gateway' | 'service' | 'database' | 'queue' | 'monitoring';
-  x: number;
-  y: number;
-  connections?: string[];
-  status?: 'healthy' | 'warning' | 'error';
-  traffic?: number; // simulated traffic
-}
-
-interface DiagramConnection {
-  id: string;
-  from: string;
-  to: string;
-  label?: string;
-  protocol?: string;
-  isActive?: boolean;
-}
-
-interface LegendItem {
-  type: string;
-  label: string;
-  color: string;
-  icon: string;
-}
+import { DiagramConnection, DiagramNode } from '../../../../../core/models/project-docs.models';
 
 @Component({
   selector: 'app-architecture-diagram',
@@ -44,333 +18,8 @@ export class ArchitectureDiagram implements OnInit {
   offset: { x: number; y: number } = { x: 0, y: 0 };
   simulationActive: boolean = true;
 
-  legendItems: LegendItem[] = [
-    {
-      type: 'client',
-      label: 'Client Applications',
-      color: 'from-blue-500 to-cyan-500',
-      icon: '💻',
-    },
-    { type: 'gateway', label: 'API Gateway', color: 'from-purple-500 to-pink-500', icon: '🚪' },
-    { type: 'service', label: 'Microservices', color: 'from-emerald-500 to-teal-500', icon: '⚙️' },
-    { type: 'database', label: 'Databases', color: 'from-amber-500 to-orange-500', icon: '🗄️' },
-    { type: 'queue', label: 'Message Queue', color: 'from-rose-500 to-fuchsia-500', icon: '📮' },
-    { type: 'monitoring', label: 'Monitoring', color: 'from-indigo-500 to-violet-500', icon: '📊' },
-  ];
-
-  nodes: DiagramNode[] = [
-    // Client Layer
-    { id: 'web', label: 'Web App', type: 'client', x: 15, y: 10, status: 'healthy', traffic: 85 },
-    {
-      id: 'mobile',
-      label: 'Mobile App',
-      type: 'client',
-      x: 35,
-      y: 10,
-      status: 'healthy',
-      traffic: 75,
-    },
-    {
-      id: 'admin',
-      label: 'Admin Panel',
-      type: 'client',
-      x: 55,
-      y: 10,
-      status: 'healthy',
-      traffic: 40,
-    },
-
-    // API Gateway Layer
-    {
-      id: 'gateway',
-      label: 'API Gateway',
-      type: 'gateway',
-      x: 35,
-      y: 25,
-      status: 'healthy',
-      traffic: 95,
-    },
-
-    // Services Layer
-    {
-      id: 'auth',
-      label: 'Auth Service',
-      type: 'service',
-      x: 10,
-      y: 45,
-      status: 'healthy',
-      traffic: 65,
-    },
-    {
-      id: 'users',
-      label: 'Users Service',
-      type: 'service',
-      x: 25,
-      y: 45,
-      status: 'healthy',
-      traffic: 70,
-    },
-    {
-      id: 'products',
-      label: 'Products Service',
-      type: 'service',
-      x: 40,
-      y: 45,
-      status: 'warning',
-      traffic: 85,
-    },
-    {
-      id: 'orders',
-      label: 'Orders Service',
-      type: 'service',
-      x: 55,
-      y: 45,
-      status: 'healthy',
-      traffic: 90,
-    },
-    {
-      id: 'payments',
-      label: 'Payments Service',
-      type: 'service',
-      x: 70,
-      y: 45,
-      status: 'healthy',
-      traffic: 80,
-    },
-
-    // Message Queue
-    {
-      id: 'queue',
-      label: 'Message Queue',
-      type: 'queue',
-      x: 85,
-      y: 35,
-      status: 'healthy',
-      traffic: 60,
-    },
-
-    // Data Layer
-    {
-      id: 'postgres',
-      label: 'PostgreSQL',
-      type: 'database',
-      x: 15,
-      y: 70,
-      status: 'healthy',
-      traffic: 55,
-    },
-    {
-      id: 'mongo',
-      label: 'MongoDB',
-      type: 'database',
-      x: 35,
-      y: 70,
-      status: 'healthy',
-      traffic: 45,
-    },
-    {
-      id: 'redis',
-      label: 'Redis Cache',
-      type: 'database',
-      x: 55,
-      y: 70,
-      status: 'healthy',
-      traffic: 90,
-    },
-
-    // Monitoring
-    {
-      id: 'monitoring',
-      label: 'Monitoring',
-      type: 'monitoring',
-      x: 85,
-      y: 65,
-      status: 'healthy',
-      traffic: 25,
-    },
-  ];
-
-  connections: DiagramConnection[] = [
-    // Client to Gateway
-    {
-      id: 'web-gateway',
-      from: 'web',
-      to: 'gateway',
-      label: 'HTTPS',
-      protocol: 'REST',
-      isActive: true,
-    },
-    {
-      id: 'mobile-gateway',
-      from: 'mobile',
-      to: 'gateway',
-      label: 'HTTPS',
-      protocol: 'REST',
-      isActive: true,
-    },
-    {
-      id: 'admin-gateway',
-      from: 'admin',
-      to: 'gateway',
-      label: 'HTTPS',
-      protocol: 'REST',
-      isActive: true,
-    },
-
-    // Gateway to Services
-    {
-      id: 'gateway-auth',
-      from: 'gateway',
-      to: 'auth',
-      label: 'JWT Auth',
-      protocol: 'gRPC',
-      isActive: true,
-    },
-    {
-      id: 'gateway-users',
-      from: 'gateway',
-      to: 'users',
-      label: 'User Data',
-      protocol: 'REST',
-      isActive: true,
-    },
-    {
-      id: 'gateway-products',
-      from: 'gateway',
-      to: 'products',
-      label: 'Products',
-      protocol: 'GraphQL',
-      isActive: true,
-    },
-    {
-      id: 'gateway-orders',
-      from: 'gateway',
-      to: 'orders',
-      label: 'Orders',
-      protocol: 'REST',
-      isActive: true,
-    },
-    {
-      id: 'gateway-payments',
-      from: 'gateway',
-      to: 'payments',
-      label: 'Payments',
-      protocol: 'gRPC',
-      isActive: true,
-    },
-
-    // Service to Service
-    {
-      id: 'users-auth',
-      from: 'users',
-      to: 'auth',
-      label: 'Auth Check',
-      protocol: 'gRPC',
-      isActive: true,
-    },
-    {
-      id: 'orders-products',
-      from: 'orders',
-      to: 'products',
-      label: 'Stock Check',
-      protocol: 'REST',
-      isActive: true,
-    },
-    {
-      id: 'orders-payments',
-      from: 'orders',
-      to: 'payments',
-      label: 'Process Payment',
-      protocol: 'gRPC',
-      isActive: true,
-    },
-
-    // Service to Queue
-    {
-      id: 'orders-queue',
-      from: 'orders',
-      to: 'queue',
-      label: 'Order Events',
-      protocol: 'AMQP',
-      isActive: true,
-    },
-    {
-      id: 'products-queue',
-      from: 'products',
-      to: 'queue',
-      label: 'Inventory Events',
-      protocol: 'AMQP',
-      isActive: true,
-    },
-
-    // Service to Database
-    {
-      id: 'users-postgres',
-      from: 'users',
-      to: 'postgres',
-      label: 'User Data',
-      protocol: 'SQL',
-      isActive: true,
-    },
-    {
-      id: 'products-mongo',
-      from: 'products',
-      to: 'mongo',
-      label: 'Product Catalog',
-      protocol: 'NoSQL',
-      isActive: true,
-    },
-    {
-      id: 'orders-postgres',
-      from: 'orders',
-      to: 'postgres',
-      label: 'Order Data',
-      protocol: 'SQL',
-      isActive: true,
-    },
-    {
-      id: 'payments-postgres',
-      from: 'payments',
-      to: 'postgres',
-      label: 'Transaction Log',
-      protocol: 'SQL',
-      isActive: true,
-    },
-    {
-      id: 'auth-redis',
-      from: 'auth',
-      to: 'redis',
-      label: 'Session Cache',
-      protocol: 'Redis',
-      isActive: true,
-    },
-    {
-      id: 'products-redis',
-      from: 'products',
-      to: 'redis',
-      label: 'Product Cache',
-      protocol: 'Redis',
-      isActive: true,
-    },
-    {
-      id: 'products-s3',
-      from: 'products',
-      to: 's3',
-      label: 'Product Images',
-      protocol: 'HTTP',
-      isActive: true,
-    },
-
-    // Monitoring
-    {
-      id: 'monitoring-all',
-      from: 'monitoring',
-      to: 'gateway',
-      label: 'Metrics',
-      protocol: 'Prometheus',
-      isActive: true,
-    },
-  ];
+  nodes = input.required<DiagramNode[]>();
+  connections = input.required<DiagramConnection[]>();
 
   ngOnInit() {
     // Simular tráfico en las conexiones
@@ -432,7 +81,7 @@ export class ArchitectureDiagram implements OnInit {
   }
 
   getNodeConnections(nodeId: string): DiagramConnection[] {
-    return this.connections.filter((conn) => conn.from === nodeId || conn.to === nodeId);
+    return this.connections().filter((conn) => conn.from === nodeId || conn.to === nodeId);
   }
 
   getNodeDescription(node: DiagramNode): string {
@@ -460,7 +109,7 @@ export class ArchitectureDiagram implements OnInit {
     if (!this.simulationActive) return;
 
     // Simular cambios aleatorios de tráfico
-    this.nodes.forEach((node) => {
+    this.nodes().forEach((node) => {
       if (Math.random() > 0.7) {
         const change = Math.random() * 20 - 10; // -10 to +10
         node.traffic = Math.max(0, Math.min(100, (node.traffic || 50) + change));
@@ -507,20 +156,20 @@ export class ArchitectureDiagram implements OnInit {
   }
 
   getConnectionMidpoint(conn: DiagramConnection, axis: 'x' | 'y'): number {
-    const fromNode = this.nodes.find((n) => n.id === conn.from);
-    const toNode = this.nodes.find((n) => n.id === conn.to);
+    const fromNode = this.nodes().find((n) => n.id === conn.from);
+    const toNode = this.nodes().find((n) => n.id === conn.to);
     if (!fromNode || !toNode) return 0;
 
     return axis === 'x' ? (fromNode.x + toNode.x) / 2 : (fromNode.y + toNode.y) / 2;
   }
 
   getNodeX(nodeId: string): number {
-    const node = this.nodes.find((n) => n.id === nodeId);
+    const node = this.nodes().find((n) => n.id === nodeId);
     return node ? node.x : 0;
   }
 
   getNodeY(nodeId: string): number {
-    const node = this.nodes.find((n) => n.id === nodeId);
+    const node = this.nodes().find((n) => n.id === nodeId);
     return node ? node.y : 0;
   }
 }

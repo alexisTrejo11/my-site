@@ -1,3 +1,5 @@
+// REST API Explorer Models
+
 export interface ApiEndpoint {
   id: string;
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';

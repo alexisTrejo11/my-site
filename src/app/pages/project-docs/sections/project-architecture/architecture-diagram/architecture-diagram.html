@@ -27,7 +27,7 @@
         <div class="flex items-center gap-3">
           <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
           <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Live Diagram • {{ nodes.length }} Components • {{ connections.length }} Connections
+            Live Diagram • {{ nodes().length }} Components • {{ connections().length }} Connections
           </span>
         </div>
 
@@ -214,99 +214,101 @@
 
     <!-- Selected Node Details Panel -->
     @if (selectedNode) {
-    <div class="border-t border-gray-200 dark:border-gray-800 animate-scale-in">
-      <div class="p-6 grid md:grid-cols-2 gap-6">
-        <!-- Node Info -->
-        <div class="space-y-4">
-          <div class="flex items-start gap-4">
-            <div
-              [ngClass]="'bg-gradient-to-br ' + getNodeColor(selectedNode.type)"
-              class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 shadow-lg"
-            >
-              {{ getNodeIcon(selectedNode.type) }}
+      <div class="border-t border-gray-200 dark:border-gray-800 animate-scale-in">
+        <div class="p-6 grid md:grid-cols-2 gap-6">
+          <!-- Node Info -->
+          <div class="space-y-4">
+            <div class="flex items-start gap-4">
+              <div
+                [ngClass]="'bg-gradient-to-br ' + getNodeColor(selectedNode.type)"
+                class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 shadow-lg"
+              >
+                {{ getNodeIcon(selectedNode.type) }}
+              </div>
+
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-2">
+                  <h3 class="font-bold text-gray-900 dark:text-white text-lg">
+                    {{ selectedNode.label }}
+                  </h3>
+                  <span
+                    [ngClass]="getStatusColor(selectedNode.status)"
+                    class="px-2 py-1 rounded-full text-xs font-medium"
+                  >
+                    {{ selectedNode.status || 'healthy' | titlecase }}
+                  </span>
+                </div>
+
+                <p class="text-gray-600 dark:text-gray-400 text-sm">
+                  {{ getNodeDescription(selectedNode) }}
+                </p>
+
+                @if (selectedNode.traffic !== undefined) {
+                  <div class="mt-3">
+                    <div
+                      class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-1"
+                    >
+                      <span>Traffic Load</span>
+                      <span>{{ selectedNode.traffic.toFixed(0) }}%</span>
+                    </div>
+                    <div
+                      class="h-1.5 w-full bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden"
+                    >
+                      <div
+                        [ngClass]="
+                          selectedNode.traffic > 80
+                            ? 'bg-rose-500'
+                            : selectedNode.traffic > 60
+                              ? 'bg-amber-500'
+                              : 'bg-emerald-500'
+                        "
+                        class="h-full rounded-full transition-all duration-500"
+                        [style.width]="selectedNode.traffic + '%'"
+                      ></div>
+                    </div>
+                  </div>
+                }
+              </div>
             </div>
+          </div>
 
-            <div class="flex-1">
-              <div class="flex items-center gap-3 mb-2">
-                <h3 class="font-bold text-gray-900 dark:text-white text-lg">
-                  {{ selectedNode.label }}
-                </h3>
-                <span
-                  [ngClass]="getStatusColor(selectedNode.status)"
-                  class="px-2 py-1 rounded-full text-xs font-medium"
-                >
-                  {{ selectedNode.status || 'healthy' | titlecase }}
-                </span>
-              </div>
+          <!-- Connections Info -->
+          <div class="space-y-4">
+            <h4 class="font-semibold text-gray-900 dark:text-white">
+              Connections ({{ getNodeConnections(selectedNode.id).length }})
+            </h4>
 
-              <p class="text-gray-600 dark:text-gray-400 text-sm">
-                {{ getNodeDescription(selectedNode) }}
-              </p>
-
-              @if (selectedNode.traffic !== undefined) {
-              <div class="mt-3">
+            <div class="space-y-2 max-h-48 overflow-y-auto pr-2">
+              @for (conn of getNodeConnections(selectedNode.id); track conn.id) {
                 <div
-                  class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-1"
+                  class="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50"
                 >
-                  <span>Traffic Load</span>
-                  <span>{{ selectedNode.traffic.toFixed(0) }}%</span>
+                  <div class="flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      {{ conn.from === selectedNode.id ? conn.to : conn.from }}
+                    </span>
+                  </div>
+
+                  <div class="flex items-center gap-2">
+                    <span
+                      [ngClass]="getProtocolColor(conn.protocol || '')"
+                      class="px-2 py-1 rounded text-xs"
+                    >
+                      {{ conn.protocol }}
+                    </span>
+                    @if (conn.label) {
+                      <span class="text-xs text-gray-500 dark:text-gray-400">
+                        {{ conn.label }}
+                      </span>
+                    }
+                  </div>
                 </div>
-                <div class="h-1.5 w-full bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
-                  <div
-                    [ngClass]="
-                      selectedNode.traffic > 80
-                        ? 'bg-rose-500'
-                        : selectedNode.traffic > 60
-                        ? 'bg-amber-500'
-                        : 'bg-emerald-500'
-                    "
-                    class="h-full rounded-full transition-all duration-500"
-                    [style.width]="selectedNode.traffic + '%'"
-                  ></div>
-                </div>
-              </div>
               }
             </div>
           </div>
         </div>
-
-        <!-- Connections Info -->
-        <div class="space-y-4">
-          <h4 class="font-semibold text-gray-900 dark:text-white">
-            Connections ({{ getNodeConnections(selectedNode.id).length }})
-          </h4>
-
-          <div class="space-y-2 max-h-48 overflow-y-auto pr-2">
-            @for (conn of getNodeConnections(selectedNode.id); track conn.id) {
-            <div
-              class="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50"
-            >
-              <div class="flex items-center gap-3">
-                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {{ conn.from === selectedNode.id ? conn.to : conn.from }}
-                </span>
-              </div>
-
-              <div class="flex items-center gap-2">
-                <span
-                  [ngClass]="getProtocolColor(conn.protocol || '')"
-                  class="px-2 py-1 rounded text-xs"
-                >
-                  {{ conn.protocol }}
-                </span>
-                @if (conn.label) {
-                <span class="text-xs text-gray-500 dark:text-gray-400">
-                  {{ conn.label }}
-                </span>
-                }
-              </div>
-            </div>
-            }
-          </div>
-        </div>
       </div>
-    </div>
     }
 
     <!-- Controls Footer -->

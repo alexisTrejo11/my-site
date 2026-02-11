@@ -20,9 +20,9 @@ export interface ProjectLegacy {
   features: string[];
 }
 
-// MAKE CLASS?
 export interface Project {
-  id: string;
+  projectId: string;
+  featured: boolean;
   name: string;
   language: string;
   category: 'backend' | 'frontend' | 'fullstack' | 'devops';

@@ -1,13 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { ApiResponse } from '../../api-explorer.model';
 import { CommonModule } from '@angular/common';
+import { ApiResponse } from '../../../../../../core/models/project-docs.models';
 
 @Component({
   selector: 'app-response-viewer',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './response-viewer.html',
-  styleUrls: ['./response-viewer.scss'],
 })
 export class ResponseViewer {
   @Input({ required: true }) responses: ApiResponse[] = [];

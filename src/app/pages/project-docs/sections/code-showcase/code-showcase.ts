@@ -18,12 +18,15 @@ import 'prismjs/components/prism-css'; // For CSS
 import 'prismjs/components/prism-scss'; // For SCSS
 import 'prismjs/components/prism-markup'; // For HTML/XML
 import 'prismjs/components/prism-bash'; // For Bash
+import 'prismjs/components/prism-python'; // For Python
 import { IconComponent } from '../../../../shared/components/icon/icon';
 import {
   CodeExample,
   CodeFile,
   ProjectCodeShowCase,
 } from '../../../../core/models/project-docs.models';
+import { ProjectsService } from '../../../../services/projects.service';
+import { ErrorLoading } from '../../../../shared/components/errors/error-loading/error-loading';
 
 // import 'prismjs/plugins/line-highlight/prism-line-highlight';
 // import 'prismjs/plugins/line-numbers/prism-line-numbers';
@@ -34,20 +37,20 @@ declare var Prism: any; // For TypeScript
 
 @Component({
   selector: 'app-code-showcase',
-  imports: [CommonModule, IconComponent],
+  imports: [CommonModule, IconComponent, ErrorLoading],
   templateUrl: './code-showcase.html',
 })
 export class CodeShowcase implements AfterViewInit {
   @ViewChild('codeBlock') codeBlock!: ElementRef;
 
-  model = input.required<ProjectCodeShowCase>();
+  error = '';
+  projectService = inject(ProjectsService);
+  codeShowCase: ProjectCodeShowCase | undefined;
 
   projectId: string = '';
   selectedExample: CodeExample | null = null;
   selectedFile: CodeFile | null = null;
   isBrowser: boolean = false;
-
-  codeExamples: CodeExample[] = [];
 
   categories = [
     'All',
@@ -70,9 +73,35 @@ export class CodeShowcase implements AfterViewInit {
   ngOnInit() {
     this.isBrowser = isPlatformBrowser(this.platformId);
 
-    if (this.codeExamples.length > 0) {
-      this.selectExample(this.codeExamples[0]);
+    this.projectId = this.route.parent?.snapshot.params['projectId'] || '';
+
+    if (!this.projectId) {
+      this.error = 'No project ID provided in the route.';
+      return;
     }
+
+    this.projectService.getProjectCodeShowcase(this.projectId).subscribe({
+      next: (data) => {
+        this.codeShowCase = data;
+
+        if (this.codeShowCase && this.codeShowCase.codeExamples.length > 0) {
+          this.selectedExample = this.codeShowCase.codeExamples[0];
+
+          if (this.selectedExample.files.length > 0) {
+            this.selectedFile = this.selectedExample.files[0];
+          }
+        }
+      },
+      // TODO: Fix error handling to show a user-friendly message and possibly a retry button
+      error: (err) => {
+        console.error('Error fetching code showcase:', err);
+        this.error = 'Failed to load code examples. Please try again later.';
+      },
+    });
+  }
+
+  get codeExamples(): CodeExample[] {
+    return this.codeShowCase?.codeExamples || [];
   }
 
   get filteredExamples(): CodeExample[] {

@@ -86,7 +86,7 @@ export class QuickLinks {
       links.push({
         title: 'Architecture',
         description: 'Explore the system design and architecture',
-        url: `/projects/${this.project().id}/architecture`,
+        url: `/projects/${this.project().projectId}/architecture`,
         type: 'architecture',
         external: false,
         iconColor:
@@ -98,7 +98,7 @@ export class QuickLinks {
       links.push({
         title: 'API Explorer',
         description: 'Test endpoints with interactive playground',
-        url: `/projects/${this.project().id}/api`,
+        url: `/projects/${this.project().projectId}/api`,
         type: 'api',
         external: false,
         iconColor:
@@ -111,7 +111,7 @@ export class QuickLinks {
       links.push({
         title: 'Features Breakdown',
         description: 'Detailed explanation of all features',
-        url: `/projects/${this.project().id}/features`,
+        url: `/projects/${this.project().projectId}/features`,
         type: 'docs',
         external: false,
         iconColor:

@@ -78,7 +78,7 @@ import { Project } from '../../../core/models/project';
 
         <!-- View Details Button -->
         <a
-          [routerLink]="['/projects', project().id]"
+          [routerLink]="['/projects', project().projectId]"
           class="block w-full py-3 text-center border-2 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400 font-medium rounded-lg hover:bg-blue-600 hover:text-white dark:hover:bg-blue-400 dark:hover:text-gray-900 transition-all duration-300"
         >
           {{ buttonText() || 'View Documentation →' }}

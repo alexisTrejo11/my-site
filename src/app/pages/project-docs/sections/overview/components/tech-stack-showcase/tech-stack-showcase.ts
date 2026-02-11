@@ -118,11 +118,24 @@ export class TechStackShowcase {
   }
 
   private getTechSvgPath(tech: string): string {
+    if (!tech) return '';
+
+    if (tech.split(' ').length > 1) {
+      const firstWord = tech.split(' ')[0].toLowerCase();
+      return `icons/tech/${firstWord}.svg`;
+    }
+
     return `icons/tech/${tech.toLowerCase()}.svg`;
   }
 
   getCategoryName(categoryId: string): string {
-    const cat = this.categories.find((c) => c.id === categoryId);
+    if (!categoryId) return 'Unknown';
+    if (categoryId.split(' ').length > 1) {
+      const firstWord = categoryId.split(' ')[0].toLowerCase();
+      categoryId = firstWord;
+    }
+
+    const cat = this.categories.find((c) => c.id.toLocaleLowerCase() === categoryId);
     return cat?.name || categoryId;
   }
 

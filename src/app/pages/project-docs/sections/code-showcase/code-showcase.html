@@ -24,235 +24,241 @@
 
   <hr class="border-gray-200 dark:border-gray-800 mb-10" />
 
-  <!-- Main Content Grid -->
-  <div class="grid lg:grid-cols-12 gap-6 lg:gap-8">
-    <!-- Left Sidebar - Examples List -->
-    <aside class="lg:col-span-5 xl:col-span-4">
-      <div class="card border-gradient-primary sticky top-6 animate-slide-up">
-        <!-- Header -->
-        <div class="p-5 border-b border-gray-200 dark:border-gray-800">
-          <div class="flex items-center justify-between">
-            <div>
-              <h2 class="font-bold text-gray-900 dark:text-white text-lg">Code Examples</h2>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                {{ filteredExamples.length }} of {{ totalExamples }} examples
-              </p>
-            </div>
-            <div class="relative">
-              <app-icon name="search" class="w-6 h-6 text-gray-400 dark:text-gray-500" />
+  @if (error) {
+    <app-error-loading [entity]="'Code Showcase'" [message]="error" class="mb-10" />
+  } @else {
+    <!-- Main Content Grid -->
+    <div class="grid lg:grid-cols-12 gap-6 lg:gap-8">
+      <!-- Left Sidebar - Examples List -->
+      <aside class="lg:col-span-5 xl:col-span-4">
+        <div class="card border-gradient-primary sticky top-6 animate-slide-up">
+          <!-- Header -->
+          <div class="p-5 border-b border-gray-200 dark:border-gray-800">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="font-bold text-gray-900 dark:text-white text-lg">Code Examples</h2>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  {{ filteredExamples.length }} of {{ totalExamples }} examples
+                </p>
+              </div>
+              <div class="relative">
+                <app-icon name="search" class="w-6 h-6 text-gray-400 dark:text-gray-500" />
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Examples List -->
-        <div class="p-3 space-y-2 max-h-[calc(100vh-300px)] overflow-y-auto custom-scrollbar">
-          @for (example of filteredExamples; track example.id; let i = $index) {
-            <button
-              (click)="selectExample(example)"
-              [class.card-interactive]="selectedExample?.id !== example.id"
-              [class.ring-2]="selectedExample?.id === example.id"
-              [class.ring-blue-500]="selectedExample?.id === example.id"
-              class="w-full text-left p-4 rounded-xl transition-all duration-300 animate-fade-in"
-              [style.animation-delay]="i * 50 + 'ms'"
-            >
-              <div class="flex items-start justify-between gap-3 mb-2">
-                <div class="flex-1 min-w-0">
-                  <h3 class="font-semibold text-gray-900 dark:text-white text-sm truncate">
-                    {{ example.title }}
-                  </h3>
-                  <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
-                    {{ example.description }}
+          <!-- Examples List -->
+          <div class="p-3 space-y-2 max-h-[calc(100vh-300px)] overflow-y-auto custom-scrollbar">
+            @for (example of filteredExamples; track example.id; let i = $index) {
+              <button
+                (click)="selectExample(example)"
+                [class.card-interactive]="selectedExample?.id !== example.id"
+                [class.ring-2]="selectedExample?.id === example.id"
+                [class.ring-blue-500]="selectedExample?.id === example.id"
+                class="w-full text-left p-4 rounded-xl transition-all duration-300 animate-fade-in"
+                [style.animation-delay]="i * 50 + 'ms'"
+              >
+                <div class="flex items-start justify-between gap-3 mb-2">
+                  <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold text-gray-900 dark:text-white text-sm truncate">
+                      {{ example.title }}
+                    </h3>
+                    <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                      {{ example.description }}
+                    </p>
+                  </div>
+                  <span
+                    [class]="selectedCategory === example.category ? 'badge-primary' : 'badge-gray'"
+                    class="badge flex-shrink-0 text-xs animate-scale-in"
+                  >
+                    {{ example.category }}
+                  </span>
+                </div>
+
+                <div class="flex items-center justify-between mt-3 text-xs">
+                  <div class="flex items-center gap-4 text-gray-500 dark:text-gray-400">
+                    <div class="flex items-center gap-1">
+                      <app-icon name="document" class="w-4 h-4" />
+                      {{ example.files.length }} files
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <app-icon name="clock" class="w-4 h-4" />
+                      {{ example.duration || '5 min' }}
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-1">
+                    @for (tag of example.tags?.slice(0, 2); track tag) {
+                      <span class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs">
+                        {{ tag }}
+                      </span>
+                    }
+                    @if ((example.tags?.length || 0) > 2) {
+                      <span class="text-xs text-gray-400"
+                        >+{{ (example.tags?.length || 0) - 2 }}</span
+                      >
+                    }
+                  </div>
+                </div>
+              </button>
+            }
+
+            @if (filteredExamples.length === 0) {
+              <div class="text-center py-8 animate-fade-in">
+                <app-icon
+                  name="lightbulb"
+                  class="w-12 h-12 mx-auto text-gray-400 dark:text-gray-600 mb-3"
+                />
+                <p class="text-gray-500 dark:text-gray-400">No examples found for this category</p>
+                <button (click)="selectCategory(null)" class="btn-ghost mt-2 text-sm">
+                  Clear filter
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Content Area - Example Details -->
+      <main class="lg:col-span-7 xl:col-span-8">
+        @if (selectedExample) {
+          <div class="card animate-slide-up">
+            <!-- Example Header -->
+            <div class="p-6 border-b border-gray-200 dark:border-gray-800">
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                  <div class="flex items-center gap-3 mb-2">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                      {{ selectedExample.title }}
+                    </h2>
+                    <span class="badge badge-primary">
+                      {{ selectedExample.category }}
+                    </span>
+                  </div>
+                  <p class="text-gray-600 dark:text-gray-300">
+                    {{ selectedExample.description }}
                   </p>
                 </div>
-                <span
-                  [class]="selectedCategory === example.category ? 'badge-primary' : 'badge-gray'"
-                  class="badge flex-shrink-0 text-xs animate-scale-in"
-                >
-                  {{ example.category }}
-                </span>
+                <button class="btn-icon">
+                  <app-icon name="info" class="w-5 h-5" />
+                </button>
               </div>
 
-              <div class="flex items-center justify-between mt-3 text-xs">
-                <div class="flex items-center gap-4 text-gray-500 dark:text-gray-400">
-                  <div class="flex items-center gap-1">
-                    <app-icon name="document" class="w-4 h-4" />
-                    {{ example.files.length }} files
-                  </div>
-                  <div class="flex items-center gap-1">
-                    <app-icon name="clock" class="w-4 h-4" />
-                    {{ example.duration || '5 min' }}
-                  </div>
+              <!-- Meta Info -->
+              <div
+                class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400"
+              >
+                <div class="flex items-center gap-2">
+                  <app-icon name="clock" class="w-4 h-4" />
+                  {{ selectedExample.duration || '5 min read' }}
                 </div>
-
-                <div class="flex items-center gap-1">
-                  @for (tag of example.tags?.slice(0, 2); track tag) {
-                    <span class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs">
+                <div class="flex items-center gap-2">
+                  <app-icon name="eye" class="w-4 h-4" />
+                  {{ selectedExample.views || 0 }} views
+                </div>
+                <div class="flex-1"></div>
+                <div class="flex items-center gap-2">
+                  @for (tag of selectedExample.tags; track tag) {
+                    <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-xs">
                       {{ tag }}
                     </span>
                   }
-                  @if ((example.tags?.length || 0) > 2) {
-                    <span class="text-xs text-gray-400"
-                      >+{{ (example.tags?.length || 0) - 2 }}</span
-                    >
-                  }
                 </div>
               </div>
-            </button>
-          }
-
-          @if (filteredExamples.length === 0) {
-            <div class="text-center py-8 animate-fade-in">
-              <app-icon
-                name="lightbulb"
-                class="w-12 h-12 mx-auto text-gray-400 dark:text-gray-600 mb-3"
-              />
-              <p class="text-gray-500 dark:text-gray-400">No examples found for this category</p>
-              <button (click)="selectCategory(null)" class="btn-ghost mt-2 text-sm">
-                Clear filter
-              </button>
-            </div>
-          }
-        </div>
-      </div>
-    </aside>
-
-    <!-- Right Content Area - Example Details -->
-    <main class="lg:col-span-7 xl:col-span-8">
-      @if (selectedExample) {
-        <div class="card animate-slide-up">
-          <!-- Example Header -->
-          <div class="p-6 border-b border-gray-200 dark:border-gray-800">
-            <div class="flex items-start justify-between mb-4">
-              <div class="flex-1">
-                <div class="flex items-center gap-3 mb-2">
-                  <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-                    {{ selectedExample.title }}
-                  </h2>
-                  <span class="badge badge-primary">
-                    {{ selectedExample.category }}
-                  </span>
-                </div>
-                <p class="text-gray-600 dark:text-gray-300">
-                  {{ selectedExample.description }}
-                </p>
-              </div>
-              <button class="btn-icon">
-                <app-icon name="info" class="w-5 h-5" />
-              </button>
             </div>
 
-            <!-- Meta Info -->
-            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-              <div class="flex items-center gap-2">
-                <app-icon name="clock" class="w-4 h-4" />
-                {{ selectedExample.duration || '5 min read' }}
-              </div>
-              <div class="flex items-center gap-2">
-                <app-icon name="eye" class="w-4 h-4" />
-                {{ selectedExample.views || 0 }} views
-              </div>
-              <div class="flex-1"></div>
-              <div class="flex items-center gap-2">
-                @for (tag of selectedExample.tags; track tag) {
-                  <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-xs">
-                    {{ tag }}
-                  </span>
+            <!-- Code Tabs -->
+            <div class="border-b border-gray-200 dark:border-gray-800">
+              <div class="flex overflow-x-auto">
+                @for (file of selectedExample.files; track file.name; let i = $index) {
+                  <button
+                    (click)="selectedFile = file"
+                    [class.border-b-2]="selectedFile?.name === file.name"
+                    [class.border-blue-600]="selectedFile?.name === file.name"
+                    [class.text-blue-600]="selectedFile?.name === file.name"
+                    [class.dark:text-blue-400]="selectedFile?.name === file.name"
+                    class="px-5 py-3 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white whitespace-nowrap border-b-2 border-transparent"
+                  >
+                    {{ file.name }}
+                    <span class="ml-2 badge badge-gray text-xs">
+                      {{ file.language }}
+                    </span>
+                  </button>
                 }
               </div>
             </div>
-          </div>
 
-          <!-- Code Tabs -->
-          <div class="border-b border-gray-200 dark:border-gray-800">
-            <div class="flex overflow-x-auto">
-              @for (file of selectedExample.files; track file.name; let i = $index) {
-                <button
-                  (click)="selectedFile = file"
-                  [class.border-b-2]="selectedFile?.name === file.name"
-                  [class.border-blue-600]="selectedFile?.name === file.name"
-                  [class.text-blue-600]="selectedFile?.name === file.name"
-                  [class.dark:text-blue-400]="selectedFile?.name === file.name"
-                  class="px-5 py-3 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white whitespace-nowrap border-b-2 border-transparent"
-                >
-                  {{ file.name }}
-                  <span class="ml-2 badge badge-gray text-xs">
-                    {{ file.language }}
-                  </span>
-                </button>
-              }
-            </div>
-          </div>
-
-          <!-- Code Display -->
-          @if (selectedFile) {
-            <div class="p-6">
-              <div class="flex items-center justify-between mb-4">
-                <div>
-                  <h4 class="font-semibold text-gray-900 dark:text-white">
-                    {{ selectedFile.name }}
-                  </h4>
-                  <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {{ selectedFile.explanation ? 'Implementation Code' : 'Code Snippet' }}
-                  </p>
+            <!-- Code Display -->
+            @if (selectedFile) {
+              <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                  <div>
+                    <h4 class="font-semibold text-gray-900 dark:text-white">
+                      {{ selectedFile.name }}
+                    </h4>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      {{ selectedFile.explanation ? 'Implementation Code' : 'Code Snippet' }}
+                    </p>
+                  </div>
+                  <!-- Copy Code Button -->
+                  <button class="btn-primary text-sm">
+                    <app-icon name="copy" class="w-4 h-4" />
+                    Copy Code
+                  </button>
                 </div>
-                <!-- Copy Code Button -->
-                <button class="btn-primary text-sm">
-                  <app-icon name="copy" class="w-4 h-4" />
-                  Copy Code
-                </button>
-              </div>
 
-              <!-- Code Block -->
-              <pre class="rounded-lg p-4 overflow-x-auto text-sm">
+                <!-- Code Block -->
+                <pre class="rounded-lg p-4 overflow-x-auto text-sm">
             <code #codeBlock [class]="'language-' + selectedFile.language">
               {{ selectedFile.content }}
             </code>
           </pre>
 
-              <!-- Code Explanation -->
-              @if (selectedFile.explanation) {
-                <div
-                  class="mt-6 p-4 bg-gradient-brand-subtle rounded-lg border border-gray-200 dark:border-gray-800"
-                >
-                  <h5
-                    class="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2"
+                <!-- Code Explanation -->
+                @if (selectedFile.explanation) {
+                  <div
+                    class="mt-6 p-4 bg-gradient-brand-subtle rounded-lg border border-gray-200 dark:border-gray-800"
                   >
-                    <app-icon name="info" class="w-5 h-5" />
-                    Explanation
-                  </h5>
-                  <p class="text-gray-700 dark:text-gray-300 text-sm">
-                    {{ selectedFile.explanation }}
-                  </p>
-                </div>
-              }
-            </div>
-          }
-        </div>
-      } @else {
-        <!-- Empty State -->
-        <div class="card text-center py-16 animate-fade-in">
-          <div class="max-w-md mx-auto">
-            <div
-              class="w-16 h-16 mx-auto mb-4 gradient-primary rounded-full flex items-center justify-center"
-            >
-              <app-icon name="code" class="w-8 h-8 text-white" />
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              Select an Example
-            </h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-6">
-              Choose a code example from the sidebar to view its implementation details, design
-              patterns, and best practices.
-            </p>
-            <div class="flex flex-wrap justify-center gap-3 text-sm">
-              <div class="badge badge-gray">Angular</div>
-              <div class="badge badge-gray">TypeScript</div>
-              <div class="badge badge-gray">Best Practices</div>
-              <div class="badge badge-gray">Design Patterns</div>
+                    <h5
+                      class="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2"
+                    >
+                      <app-icon name="info" class="w-5 h-5" />
+                      Explanation
+                    </h5>
+                    <p class="text-gray-700 dark:text-gray-300 text-sm">
+                      {{ selectedFile.explanation }}
+                    </p>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <!-- Empty State -->
+          <div class="card text-center py-16 animate-fade-in">
+            <div class="max-w-md mx-auto">
+              <div
+                class="w-16 h-16 mx-auto mb-4 gradient-primary rounded-full flex items-center justify-center"
+              >
+                <app-icon name="code" class="w-8 h-8 text-white" />
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Select an Example
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">
+                Choose a code example from the sidebar to view its implementation details, design
+                patterns, and best practices.
+              </p>
+              <div class="flex flex-wrap justify-center gap-3 text-sm">
+                <div class="badge badge-gray">Angular</div>
+                <div class="badge badge-gray">TypeScript</div>
+                <div class="badge badge-gray">Best Practices</div>
+                <div class="badge badge-gray">Design Patterns</div>
+              </div>
             </div>
           </div>
-        </div>
-      }
-    </main>
-  </div>
+        }
+      </main>
+    </div>
+  }
 </div>

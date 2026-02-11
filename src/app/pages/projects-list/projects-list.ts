@@ -5,11 +5,12 @@ import { RouterModule } from '@angular/router';
 import { ProjectsGrid } from '../../shared/components/projects-grid/projects-grid';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../core/models/project';
+import { ErrorLoading } from '../../shared/components/errors/error-loading/error-loading';
 
 @Component({
   selector: 'app-projects-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, ProjectsGrid],
+  imports: [CommonModule, RouterModule, FormsModule, ProjectsGrid, ErrorLoading],
   templateUrl: './projects-list.html',
 })
 export class ProjectsList implements OnInit {
@@ -56,6 +57,7 @@ export class ProjectsList implements OnInit {
   constructor(private projectsService: ProjectsService) {}
 
   ngOnInit(): void {
+    console.log('Loading projects list...');
     this.loadProjects();
   }
 
@@ -66,6 +68,7 @@ export class ProjectsList implements OnInit {
         this.allProjects = projects;
         this.filteredProjects = [...projects];
         this.loading = false;
+        console.log('Projects loaded:', projects.length);
       },
       error: (error) => {
         console.error('Error loading projects:', error);

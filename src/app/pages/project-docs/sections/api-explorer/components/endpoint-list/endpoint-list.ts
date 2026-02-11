@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
-import { ApiEndpoint } from '../../api-explorer.model';
 import { CommonModule } from '@angular/common';
+import { ApiEndpoint } from '../../../../../../core/models/project-docs.models';
 
 @Component({
   selector: 'app-endpoint-list',

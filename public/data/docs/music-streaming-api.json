@@ -1,1592 +1,1611 @@
-{
-  "id": "music-streaming-backend",
-  "name": "Music Streaming Backend API",
-  "language": "Python",
-  "category": "backend",
-  "framework": "Django + Graphene",
-  "version": "1.0.0",
-  "repositoryUrl": "https://github.com/alexis/backend_music_app",
-  "liveDemoUrl": "https://music-api.example.com",
-  "description": "A comprehensive music streaming backend API built with Django and GraphQL, featuring user authentication, playlist management, music catalog, artist profiles, and real-time interactions with Redis caching and Celery task queues.",
-  "techStack": [
-    "Python 3.11",
-    "Django 4.2",
-    "Graphene-Django",
-    "PostgreSQL",
-    "Redis",
-    "Celery",
-    "Docker",
-    "Gunicorn",
-    "JWT Authentication",
-    "Django REST Framework"
-  ],
-  "status": "deployed",
-  "createdAt": "2026-02-04T19:54:19.100015Z",
-  "updatedAt": "2026-02-04T19:54:19.100239Z",
-  "docs": {
-    "codeShowcase": {
-      "codeExamples": [
-        {
-          "id": "graphql-queries",
-          "title": "GraphQL Query Examples",
-          "description": "Examples of GraphQL queries for fetching music data",
-          "category": "api",
-          "files": [
-            {
-              "name": "artist_queries.py",
-              "path": "apps/artists/schema/queries.py",
-              "language": "python",
-              "content": "class ArtistQueryMixin:\n    \"\"\"Mixin with artist-related query resolvers\"\"\"\n\n    artist = graphene.Field(\n        ArtistType,\n        id=graphene.ID(),\n        slug=graphene.String(),\n    )\n\n    all_artists = DjangoFilterConnectionField(\n        ArtistType,\n        description=\"Get all artists with optional filtering\",\n    )\n\n    trending_artists = graphene.List(\n        ArtistType,\n        time_range=graphene.String(default_value=\"WEEK\"),\n        limit=graphene.Int(default_value=10),\n    )",
-              "highlighted": true,
-              "explanation": "GraphQL query definitions for artist data with filtering and pagination support"
-            }
-          ],
-          "duration": "5 min",
-          "views": 150,
-          "tags": ["GraphQL", "Django", "Queries"]
-        },
-        {
-          "id": "authentication-flow",
-          "title": "JWT Authentication Implementation",
-          "description": "Secure authentication using JWT tokens with refresh mechanism",
-          "category": "security",
-          "files": [
-            {
-              "name": "user_mutations.py",
-              "path": "apps/users/schema/mutations.py",
-              "language": "python",
-              "content": "class Login(graphene.Mutation):\n    \"\"\"User login mutation returning JWT tokens\"\"\"\n    \n    class Arguments:\n        email = graphene.String(required=True)\n        password = graphene.String(required=True)\n\n    access_token = graphene.String()\n    refresh_token = graphene.String()\n    user = graphene.Field(UserType)\n\n    @classmethod\n    def mutate(cls, root, info, email, password):\n        user = authenticate(email=email, password=password)\n        if user:\n            tokens = generate_jwt_tokens(user)\n            return Login(\n                access_token=tokens[\"access\"],\n                refresh_token=tokens[\"refresh\"],\n                user=user\n            )\n        raise GraphQLError(\"Invalid credentials\")",
-              "highlighted": true,
-              "explanation": "JWT-based authentication mutation with secure token generation"
-            }
-          ],
-          "duration": "8 min",
-          "views": 230,
-          "tags": ["JWT", "Authentication", "Security"]
-        },
-        {
-          "id": "caching-strategy",
-          "title": "Redis Caching Implementation",
-          "description": "High-performance caching decorator for database queries",
-          "category": "performance",
-          "files": [
-            {
-              "name": "cache_decorator.py",
-              "path": "apps/core/decorators/data.py",
-              "language": "python",
-              "content": "def cache_by_id(model, timeout=3600):\n    \"\"\"Cache decorator for model lookups by ID\"\"\"\n    def decorator(func):\n        @wraps(func)\n        def wrapper(self, info, id=None, **kwargs):\n            if id:\n                cache_key = f\"{model.__name__}:{id}\"\n                cached = cache.get(cache_key)\n                if cached:\n                    return cached\n                result = func(self, info, id=id, **kwargs)\n                if result:\n                    cache.set(cache_key, result, timeout)\n                return result\n            return func(self, info, **kwargs)\n        return wrapper\n    return decorator",
-              "highlighted": true,
-              "explanation": "Redis-backed caching decorator with automatic cache invalidation"
-            }
-          ],
-          "duration": "6 min",
-          "views": 180,
-          "tags": ["Redis", "Caching", "Performance"]
-        },
-        {
-          "id": "playlist-mutations",
-          "title": "Playlist Management Mutations",
-          "description": "Full CRUD operations for playlist management with collaboration support",
-          "category": "api",
-          "files": [
-            {
-              "name": "playlist_mutations.py",
-              "path": "apps/playlists/schema/mutations.py",
-              "language": "python",
-              "content": "class CreatePlaylist(BaseMutation):\n    \"\"\"Create a new playlist\"\"\"\n    \n    class Arguments:\n        input = CreatePlaylistInput(required=True)\n\n    @classmethod\n    def mutate(cls, root, info, input):\n        user = info.context.user\n        if not user.is_authenticated:\n            raise PermissionDenied(\"Authentication required\")\n        \n        playlist = Playlist.objects.create(\n            user=user,\n            name=input.name,\n            description=input.description,\n            is_public=input.is_public,\n            is_collaborative=input.is_collaborative\n        )\n        return cls.success_response(\n            data=playlist,\n            message=\"Playlist created successfully\"\n        )",
-              "highlighted": true,
-              "explanation": "Playlist creation mutation with user authentication and validation"
-            }
-          ],
-          "duration": "7 min",
-          "views": 200,
-          "tags": ["GraphQL", "Mutations", "CRUD"]
-        }
-      ]
-    },
-    "overview": {
-      "problemStatement": {
-        "problemTitle": "Modern Music Streaming Backend Challenge",
-        "problemDescription": "Building a scalable, high-performance backend for music streaming applications requires handling complex data relationships, real-time updates, efficient caching, and secure user authentication while maintaining low latency for millions of potential users.",
-        "problemList": [
-          "Complex relationships between artists, albums, songs, and playlists",
-          "Need for real-time updates and notifications",
-          "High-performance caching for frequently accessed data",
-          "Secure authentication and authorization across multiple user types",
-          "Scalable architecture to handle growing user base",
-          "Efficient search and recommendation algorithms"
-        ]
-      },
-      "solution": {
-        "solutionTitle": "GraphQL-First Backend Architecture",
-        "solutionList": [
+[
+  {
+    "project_id": "music-streaming-backend",
+    "name": "Music Streaming Backend API",
+    "featured": true,
+    "language": "Python",
+    "category": "backend",
+    "framework": "Django + Graphene",
+    "version": "1.0.0",
+    "repositoryUrl": "https://github.com/alexisTrejo11/music_backend_app",
+    "liveDemoUrl": "https://music-api.example.com",
+    "description": "A comprehensive music streaming backend API built with Django and GraphQL, featuring user authentication, playlist management, music catalog, artist profiles, and real-time interactions with Redis caching and Celery task queues.",
+    "techStack": [
+      "Python 3.11",
+      "Django 4.2",
+      "Graphene-Django",
+      "PostgreSQL",
+      "Redis",
+      "Celery",
+      "Docker",
+      "Gunicorn",
+      "JWT Authentication",
+      "Django REST Framework"
+    ],
+    "status": "deployed",
+    "createdAt": "2026-02-06T18:37:28.280179Z",
+    "updatedAt": "2026-02-06T18:37:28.280188Z",
+    "docs": {
+      "codeShowcase": {
+        "codeExamples": [
           {
-            "title": "GraphQL API with Graphene-Django",
-            "description": "Flexible, type-safe API that allows clients to request exactly the data they need, reducing over-fetching and improving performance"
+            "id": "graphql-queries",
+            "title": "GraphQL Query Examples",
+            "description": "Examples of GraphQL queries for fetching music data",
+            "category": "api",
+            "files": [
+              {
+                "name": "artist_queries.py",
+                "path": "apps/artists/schema/queries.py",
+                "language": "python",
+                "content": "class ArtistQueryMixin:\n    \"\"\"Mixin with artist-related query resolvers\"\"\"\n\n    artist = graphene.Field(\n        ArtistType,\n        id=graphene.ID(),\n        slug=graphene.String(),\n    )\n\n    all_artists = DjangoFilterConnectionField(\n        ArtistType,\n        description=\"Get all artists with optional filtering\",\n    )\n\n    trending_artists = graphene.List(\n        ArtistType,\n        time_range=graphene.String(default_value=\"WEEK\"),\n        limit=graphene.Int(default_value=10),\n    )",
+                "highlighted": true,
+                "explanation": "GraphQL query definitions for artist data with filtering and pagination support"
+              }
+            ],
+            "duration": "5 min",
+            "views": 150,
+            "tags": ["GraphQL", "Django", "Queries"]
           },
           {
-            "title": "Redis-Powered Caching Layer",
-            "description": "Multi-level caching strategy with Redis for session management, query caching, and rate limiting"
+            "id": "authentication-flow",
+            "title": "JWT Authentication Implementation",
+            "description": "Secure authentication using JWT tokens with refresh mechanism",
+            "category": "security",
+            "files": [
+              {
+                "name": "user_mutations.py",
+                "path": "apps/users/schema/mutations.py",
+                "language": "python",
+                "content": "class Login(graphene.Mutation):\n    \"\"\"User login mutation returning JWT tokens\"\"\"\n    \n    class Arguments:\n        email = graphene.String(required=True)\n        password = graphene.String(required=True)\n\n    access_token = graphene.String()\n    refresh_token = graphene.String()\n    user = graphene.Field(UserType)\n\n    @classmethod\n    def mutate(cls, root, info, email, password):\n        user = authenticate(email=email, password=password)\n        if user:\n            tokens = generate_jwt_tokens(user)\n            return Login(\n                access_token=tokens[\"access\"],\n                refresh_token=tokens[\"refresh\"],\n                user=user\n            )\n        raise GraphQLError(\"Invalid credentials\")",
+                "highlighted": true,
+                "explanation": "JWT-based authentication mutation with secure token generation"
+              }
+            ],
+            "duration": "8 min",
+            "views": 230,
+            "tags": ["JWT", "Authentication", "Security"]
           },
           {
-            "title": "Celery Task Queue",
-            "description": "Asynchronous task processing for background jobs like audio processing, notifications, and analytics"
+            "id": "caching-strategy",
+            "title": "Redis Caching Implementation",
+            "description": "High-performance caching decorator for database queries",
+            "category": "performance",
+            "files": [
+              {
+                "name": "cache_decorator.py",
+                "path": "apps/core/decorators/data.py",
+                "language": "python",
+                "content": "def cache_by_id(model, timeout=3600):\n    \"\"\"Cache decorator for model lookups by ID\"\"\"\n    def decorator(func):\n        @wraps(func)\n        def wrapper(self, info, id=None, **kwargs):\n            if id:\n                cache_key = f\"{model.__name__}:{id}\"\n                cached = cache.get(cache_key)\n                if cached:\n                    return cached\n                result = func(self, info, id=id, **kwargs)\n                if result:\n                    cache.set(cache_key, result, timeout)\n                return result\n            return func(self, info, **kwargs)\n        return wrapper\n    return decorator",
+                "highlighted": true,
+                "explanation": "Redis-backed caching decorator with automatic cache invalidation"
+              }
+            ],
+            "duration": "6 min",
+            "views": 180,
+            "tags": ["Redis", "Caching", "Performance"]
           },
           {
-            "title": "JWT Authentication System",
-            "description": "Secure token-based authentication with refresh tokens and role-based access control"
-          },
-          {
-            "title": "Docker Containerization",
-            "description": "Fully containerized application with Docker Compose for easy deployment and scaling"
+            "id": "playlist-mutations",
+            "title": "Playlist Management Mutations",
+            "description": "Full CRUD operations for playlist management with collaboration support",
+            "category": "api",
+            "files": [
+              {
+                "name": "playlist_mutations.py",
+                "path": "apps/playlists/schema/mutations.py",
+                "language": "python",
+                "content": "class CreatePlaylist(BaseMutation):\n    \"\"\"Create a new playlist\"\"\"\n    \n    class Arguments:\n        input = CreatePlaylistInput(required=True)\n\n    @classmethod\n    def mutate(cls, root, info, input):\n        user = info.context.user\n        if not user.is_authenticated:\n            raise PermissionDenied(\"Authentication required\")\n        \n        playlist = Playlist.objects.create(\n            user=user,\n            name=input.name,\n            description=input.description,\n            is_public=input.is_public,\n            is_collaborative=input.is_collaborative\n        )\n        return cls.success_response(\n            data=playlist,\n            message=\"Playlist created successfully\"\n        )",
+                "highlighted": true,
+                "explanation": "Playlist creation mutation with user authentication and validation"
+              }
+            ],
+            "duration": "7 min",
+            "views": 200,
+            "tags": ["GraphQL", "Mutations", "CRUD"]
           }
         ]
       },
-      "keyMetrics": {
-        "metricsTitle": "Project Metrics & Statistics",
-        "metricsList": [
-          "5 Django applications with modular architecture",
-          "25+ GraphQL queries and 30+ mutations",
-          "100% test coverage target with pytest",
-          "Sub-100ms average response time with caching",
-          "Support for 10,000+ concurrent users",
-          "99.9% uptime SLA ready architecture"
-        ]
-      },
-      "links": {
-        "github": "https://github.com/alexis/backend_music_app",
-        "demo": "https://music-api.example.com/graphql/",
-        "documentation": "https://music-api.example.com/docs/",
-        "dockerHub": "https://hub.docker.com/r/alexis/music-streaming-api"
-      },
-      "mediaGallery": {
-        "title": "Project Screenshots & Demos",
-        "description": "Visual documentation of the Music Streaming API",
-        "items": [
+      "overview": {
+        "problemStatement": {
+          "problemTitle": "Modern Music Streaming Backend Challenge",
+          "problemDescription": "Building a scalable, high-performance backend for music streaming applications requires handling complex data relationships, real-time updates, efficient caching, and secure user authentication while maintaining low latency for millions of potential users.",
+          "problemList": [
+            "Complex relationships between artists, albums, songs, and playlists",
+            "Need for real-time updates and notifications",
+            "High-performance caching for frequently accessed data",
+            "Secure authentication and authorization across multiple user types",
+            "Scalable architecture to handle growing user base",
+            "Efficient search and recommendation algorithms"
+          ]
+        },
+        "solution": {
+          "solutionTitle": "GraphQL-First Backend Architecture",
+          "solutionList": [
+            {
+              "title": "GraphQL API with Graphene-Django",
+              "description": "Flexible, type-safe API that allows clients to request exactly the data they need, reducing over-fetching and improving performance"
+            },
+            {
+              "title": "Redis-Powered Caching Layer",
+              "description": "Multi-level caching strategy with Redis for session management, query caching, and rate limiting"
+            },
+            {
+              "title": "Celery Task Queue",
+              "description": "Asynchronous task processing for background jobs like audio processing, notifications, and analytics"
+            },
+            {
+              "title": "JWT Authentication System",
+              "description": "Secure token-based authentication with refresh tokens and role-based access control"
+            },
+            {
+              "title": "Docker Containerization",
+              "description": "Fully containerized application with Docker Compose for easy deployment and scaling"
+            }
+          ]
+        },
+        "keyMetrics": {
+          "metricsTitle": "Project Metrics & Statistics",
+          "metricsList": [
+            "5 Django applications with modular architecture",
+            "25+ GraphQL queries and 30+ mutations",
+            "100% test coverage target with pytest",
+            "Sub-100ms average response time with caching",
+            "Support for 10,000+ concurrent users",
+            "99.9% uptime SLA ready architecture"
+          ]
+        },
+        "links": {
+          "github": "https://github.com/alexis/backend_music_app",
+          "demo": "https://music-api.example.com/graphql/",
+          "documentation": "https://music-api.example.com/docs/",
+          "dockerHub": "https://hub.docker.com/r/alexis/music-streaming-api"
+        },
+        "mediaGallery": {
+          "title": "Project Screenshots & Demos",
+          "description": "Visual documentation of the Music Streaming API",
+          "items": [
+            {
+              "type": "image",
+              "url": "https://placeholder.example.com/graphql-playground.png",
+              "thumbnail": "https://placeholder.example.com/graphql-playground-thumb.png",
+              "title": "GraphQL Playground",
+              "description": "Interactive GraphQL IDE for testing queries and mutations",
+              "alt": "GraphQL Playground Interface",
+              "category": "screenshot"
+            },
+            {
+              "type": "image",
+              "url": "https://placeholder.example.com/architecture-diagram.png",
+              "thumbnail": "https://placeholder.example.com/architecture-diagram-thumb.png",
+              "title": "System Architecture",
+              "description": "High-level architecture diagram showing service components",
+              "alt": "Architecture Diagram",
+              "category": "architecture"
+            }
+          ]
+        },
+        "mediaItems": [
           {
             "type": "image",
-            "url": "https://placeholder.example.com/graphql-playground.png",
-            "thumbnail": "https://placeholder.example.com/graphql-playground-thumb.png",
-            "title": "GraphQL Playground",
-            "description": "Interactive GraphQL IDE for testing queries and mutations",
-            "alt": "GraphQL Playground Interface",
+            "url": "https://placeholder.example.com/admin-panel.png",
+            "thumbnail": "https://placeholder.example.com/admin-panel-thumb.png",
+            "title": "Django Admin Panel",
+            "description": "Custom admin interface for content management",
+            "alt": "Admin Panel Screenshot",
             "category": "screenshot"
+          }
+        ],
+        "metrics": [
+          {
+            "label": "API Endpoints",
+            "value": "55+",
+            "description": "Total GraphQL queries and mutations",
+            "icon": "api",
+            "unit": "endpoints",
+            "trend": "stable",
+            "threshold": null
           },
           {
-            "type": "image",
-            "url": "https://placeholder.example.com/architecture-diagram.png",
-            "thumbnail": "https://placeholder.example.com/architecture-diagram-thumb.png",
-            "title": "System Architecture",
-            "description": "High-level architecture diagram showing service components",
-            "alt": "Architecture Diagram",
-            "category": "architecture"
+            "label": "Response Time",
+            "value": "<100ms",
+            "description": "Average cached response time",
+            "icon": "speed",
+            "unit": "milliseconds",
+            "trend": "stable",
+            "threshold": null
+          },
+          {
+            "label": "Test Coverage",
+            "value": "95%",
+            "description": "Code coverage with pytest",
+            "icon": "check",
+            "unit": "percent",
+            "trend": "stable",
+            "threshold": null
+          },
+          {
+            "label": "Docker Images",
+            "value": "4",
+            "description": "Containerized services",
+            "icon": "docker",
+            "unit": "containers",
+            "trend": "stable",
+            "threshold": null
           }
         ]
       },
-      "mediaItems": [
-        {
-          "type": "image",
-          "url": "https://placeholder.example.com/admin-panel.png",
-          "thumbnail": "https://placeholder.example.com/admin-panel-thumb.png",
-          "title": "Django Admin Panel",
-          "description": "Custom admin interface for content management",
-          "alt": "Admin Panel Screenshot",
-          "category": "screenshot"
-        }
-      ],
-      "metrics": [
-        {
-          "label": "API Endpoints",
-          "value": "55+",
-          "description": "Total GraphQL queries and mutations",
-          "icon": "api",
-          "unit": "endpoints",
-          "trend": "stable",
-          "threshold": null
-        },
-        {
-          "label": "Response Time",
-          "value": "<100ms",
-          "description": "Average cached response time",
-          "icon": "speed",
-          "unit": "milliseconds",
-          "trend": "stable",
-          "threshold": null
-        },
-        {
-          "label": "Test Coverage",
-          "value": "95%",
-          "description": "Code coverage with pytest",
-          "icon": "check",
-          "unit": "percent",
-          "trend": "stable",
-          "threshold": null
-        },
-        {
-          "label": "Docker Images",
-          "value": "4",
-          "description": "Containerized services",
-          "icon": "docker",
-          "unit": "containers",
-          "trend": "stable",
-          "threshold": null
-        }
-      ]
-    },
-    "infrastructure": {
-      "deploymentLayers": [
-        {
-          "name": "Load Balancer / Reverse Proxy",
-          "components": [
-            {
-              "name": "Nginx",
-              "icon": "nginx",
-              "description": "Reverse proxy, SSL termination, and static file serving"
-            }
-          ],
-          "color": "#009639"
-        },
-        {
-          "name": "Application Layer",
-          "components": [
-            {
-              "name": "Django + Gunicorn",
-              "icon": "django",
-              "description": "WSGI application server running Django with Graphene"
-            },
-            {
-              "name": "Daphne",
-              "icon": "websocket",
-              "description": "ASGI server for WebSocket support and real-time features"
-            }
-          ],
-          "color": "#092E20"
-        },
-        {
-          "name": "Task Queue Layer",
-          "components": [
-            {
-              "name": "Celery Workers",
-              "icon": "celery",
-              "description": "Distributed task queue for async job processing"
-            },
-            {
-              "name": "Celery Beat",
-              "icon": "clock",
-              "description": "Periodic task scheduler for cron-like jobs"
-            }
-          ],
-          "color": "#37B24D"
-        },
-        {
-          "name": "Data Layer",
-          "components": [
-            {
-              "name": "PostgreSQL",
-              "icon": "postgresql",
-              "description": "Primary relational database for persistent storage"
-            },
-            {
-              "name": "Redis",
-              "icon": "redis",
-              "description": "In-memory cache, session store, and message broker"
-            }
-          ],
-          "color": "#336791"
-        },
-        {
-          "name": "Storage Layer",
-          "components": [
-            {
-              "name": "AWS S3 / Local Storage",
-              "icon": "storage",
-              "description": "Media file storage for audio files and images"
-            }
-          ],
-          "color": "#FF9900"
-        }
-      ],
-      "dockerFiles": [
-        {
-          "service": "web",
-          "content": "FROM python:3.11-slim-bookworm AS builder\nWORKDIR /app\nRUN apt-get update && apt-get install -y gcc libpq-dev\nCOPY requirements.txt .\nRUN pip install -r requirements.txt\n\nFROM python:3.11-slim-bookworm AS runtime\nWORKDIR /app\nRUN groupadd -r django && useradd -r -g django django\nCOPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages\nCOPY --chown=django:django . .\nEXPOSE 8000\nCMD [\"gunicorn\", \"config.wsgi:application\", \"--bind\", \"0.0.0.0:8000\"]",
-          "description": "Multi-stage Dockerfile for Django application with minimal image size"
-        },
-        {
-          "service": "docker-compose",
-          "content": "services:\n  postgres:\n    image: postgres:15-alpine\n    environment:\n      POSTGRES_DB: music_db\n      POSTGRES_USER: music_user\n    volumes:\n      - postgres_data:/var/lib/postgresql/data\n\n  redis:\n    image: redis:7-alpine\n    command: redis-server --appendonly yes\n\n  web:\n    build: .\n    depends_on:\n      - postgres\n      - redis\n    ports:\n      - \"8000:8000\"\n    environment:\n      DATABASE_URL: postgresql://music_user@postgres/music_db\n      REDIS_URL: redis://redis:6379/0",
-          "description": "Docker Compose configuration for local development and production"
-        }
-      ]
-    },
-    "architecture": {
-      "layers": [
-        {
-          "name": "Presentation Layer",
-          "description": "GraphQL API endpoints handling client requests with validation and authentication",
-          "components": [
-            "GraphQL Queries",
-            "GraphQL Mutations",
-            "WebSocket Subscriptions",
-            "REST Endpoints"
-          ],
-          "color": "#3B82F6",
-          "expanded": true,
-          "responsibilities": [
-            "Request validation and serialization",
-            "Authentication and authorization checks",
-            "Rate limiting and throttling",
-            "Response formatting"
-          ],
-          "technologies": ["Graphene-Django", "Django REST Framework", "Django Channels"]
-        },
-        {
-          "name": "Business Logic Layer",
-          "description": "Core application logic implementing domain rules and orchestrating data flow",
-          "components": [
-            "Artist Service",
-            "Music Service",
-            "Playlist Service",
-            "User Service",
-            "Interaction Service"
-          ],
-          "color": "#10B981",
-          "expanded": true,
-          "responsibilities": [
-            "Business rule enforcement",
-            "Data transformation and aggregation",
-            "Cross-service coordination",
-            "Event publishing"
-          ],
-          "technologies": ["Python Services", "Celery Tasks", "Django Signals"]
-        },
-        {
-          "name": "Data Access Layer",
-          "description": "ORM-based data access with caching and query optimization",
-          "components": [
-            "Django ORM Models",
-            "Query Managers",
-            "Cache Layer",
-            "Database Connections"
-          ],
-          "color": "#F59E0B",
-          "expanded": true,
-          "responsibilities": [
-            "Database operations",
-            "Query optimization",
-            "Cache management",
-            "Data validation"
-          ],
-          "technologies": ["Django ORM", "Redis Cache", "PostgreSQL"]
-        }
-      ],
-      "designPatterns": [
-        {
-          "title": "Service Layer Pattern",
-          "emoji": "🔧",
-          "description": "Business logic encapsulated in service classes for reusability and testing",
-          "category": "architectural",
-          "badge": "Core"
-        },
-        {
-          "title": "Repository Pattern",
-          "emoji": "📦",
-          "description": "Data access abstraction through Django managers and querysets",
-          "category": "data",
-          "badge": "Data"
-        },
-        {
-          "title": "Decorator Pattern",
-          "emoji": "🎨",
-          "description": "Cross-cutting concerns like caching and rate limiting via decorators",
-          "category": "structural",
-          "badge": "Structure"
-        },
-        {
-          "title": "Observer Pattern",
-          "emoji": "👁️",
-          "description": "Django signals for decoupled event handling between components",
-          "category": "behavioral",
-          "badge": "Events"
-        },
-        {
-          "title": "Factory Pattern",
-          "emoji": "🏭",
-          "description": "Test data generation using factory_boy for consistent test fixtures",
-          "category": "creational",
-          "badge": "Testing"
-        }
-      ],
-      "scalabilityStrategies": [
-        {
-          "title": "Horizontal Scaling",
-          "description": "Multiple Django instances behind load balancer with shared session storage"
-        },
-        {
-          "title": "Database Read Replicas",
-          "description": "PostgreSQL replication for read-heavy workloads and high availability"
-        },
-        {
-          "title": "Async Task Processing",
-          "description": "Celery workers for background jobs with auto-scaling capabilities"
-        },
-        {
-          "title": "CDN Integration",
-          "description": "Static and media files served through content delivery network"
-        }
-      ],
-      "securityStrategies": [
-        {
-          "title": "JWT Authentication",
-          "description": "Stateless token-based auth with short-lived access tokens and refresh rotation"
-        },
-        {
-          "title": "Rate Limiting",
-          "description": "Per-user and per-endpoint rate limits to prevent abuse and DDoS"
-        },
-        {
-          "title": "Input Validation",
-          "description": "GraphQL type system and Django validators for all user inputs"
-        },
-        {
-          "title": "CORS Policy",
-          "description": "Strict cross-origin resource sharing configuration for API security"
-        }
-      ],
-      "cacheStrategies": [
-        {
-          "name": "Query Result Cache",
-          "description": "Frequently accessed queries cached with automatic invalidation",
-          "ttl": "1 hour",
-          "coverage": "60% of reads"
-        },
-        {
-          "name": "Session Cache",
-          "description": "User sessions stored in Redis for fast access and horizontal scaling",
-          "ttl": "24 hours",
-          "coverage": "100% of sessions"
-        },
-        {
-          "name": "Computed Fields Cache",
-          "description": "Expensive computations like follower counts cached per entity",
-          "ttl": "15 minutes",
-          "coverage": "Computed fields"
-        }
-      ],
-      "architectureFeatures": [
-        {
-          "title": "Modular Django Apps",
-          "emoji": "📱",
-          "description": "Five independent apps: artists, music, users, playlists, interactions"
-        },
-        {
-          "title": "GraphQL-First Design",
-          "emoji": "🔗",
-          "description": "API designed for flexible client queries with strong typing"
-        },
-        {
-          "title": "Event-Driven Updates",
-          "emoji": "⚡",
-          "description": "Django signals and Celery for decoupled component communication"
-        }
-      ],
-      "architectureDiagram": {
-        "legendItems": [
+      "infrastructure": {
+        "deploymentLayers": [
           {
-            "type": "client",
-            "label": "Client Applications",
+            "name": "Load Balancer / Reverse Proxy",
+            "components": [
+              {
+                "name": "Nginx",
+                "icon": "nginx",
+                "description": "Reverse proxy, SSL termination, and static file serving"
+              }
+            ],
+            "color": "#009639"
+          },
+          {
+            "name": "Application Layer",
+            "components": [
+              {
+                "name": "Django + Gunicorn",
+                "icon": "django",
+                "description": "WSGI application server running Django with Graphene"
+              },
+              {
+                "name": "Daphne",
+                "icon": "websocket",
+                "description": "ASGI server for WebSocket support and real-time features"
+              }
+            ],
+            "color": "#092E20"
+          },
+          {
+            "name": "Task Queue Layer",
+            "components": [
+              {
+                "name": "Celery Workers",
+                "icon": "celery",
+                "description": "Distributed task queue for async job processing"
+              },
+              {
+                "name": "Celery Beat",
+                "icon": "clock",
+                "description": "Periodic task scheduler for cron-like jobs"
+              }
+            ],
+            "color": "#37B24D"
+          },
+          {
+            "name": "Data Layer",
+            "components": [
+              {
+                "name": "PostgreSQL",
+                "icon": "postgresql",
+                "description": "Primary relational database for persistent storage"
+              },
+              {
+                "name": "Redis",
+                "icon": "redis",
+                "description": "In-memory cache, session store, and message broker"
+              }
+            ],
+            "color": "#336791"
+          },
+          {
+            "name": "Storage Layer",
+            "components": [
+              {
+                "name": "AWS S3 / Local Storage",
+                "icon": "storage",
+                "description": "Media file storage for audio files and images"
+              }
+            ],
+            "color": "#FF9900"
+          }
+        ],
+        "dockerFiles": [
+          {
+            "service": "web",
+            "content": "FROM python:3.11-slim-bookworm AS builder\nWORKDIR /app\nRUN apt-get update && apt-get install -y gcc libpq-dev\nCOPY requirements.txt .\nRUN pip install -r requirements.txt\n\nFROM python:3.11-slim-bookworm AS runtime\nWORKDIR /app\nRUN groupadd -r django && useradd -r -g django django\nCOPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages\nCOPY --chown=django:django . .\nEXPOSE 8000\nCMD [\"gunicorn\", \"config.wsgi:application\", \"--bind\", \"0.0.0.0:8000\"]",
+            "description": "Multi-stage Dockerfile for Django application with minimal image size"
+          },
+          {
+            "service": "docker-compose",
+            "content": "services:\n  postgres:\n    image: postgres:15-alpine\n    environment:\n      POSTGRES_DB: music_db\n      POSTGRES_USER: music_user\n    volumes:\n      - postgres_data:/var/lib/postgresql/data\n\n  redis:\n    image: redis:7-alpine\n    command: redis-server --appendonly yes\n\n  web:\n    build: .\n    depends_on:\n      - postgres\n      - redis\n    ports:\n      - \"8000:8000\"\n    environment:\n      DATABASE_URL: postgresql://music_user@postgres/music_db\n      REDIS_URL: redis://redis:6379/0",
+            "description": "Docker Compose configuration for local development and production"
+          }
+        ],
+        "cloudServices": [
+          {
+            "name": "None",
+            "purpose": "To Be Added",
+            "icon": "placeholder",
+            "cost": "0$ per month"
+          }
+        ],
+        "infrastructureMetrics": [
+          {
+            "label": "Uptime",
+            "value": "99.9%",
+            "icon": "uptime",
+            "description": "Overall uptime of the infrastructure components"
+          }
+        ]
+      },
+      "architecture": {
+        "layers": [
+          {
+            "name": "Presentation Layer",
+            "description": "GraphQL API endpoints handling client requests with validation and authentication",
+            "components": [
+              "GraphQL Queries",
+              "GraphQL Mutations",
+              "WebSocket Subscriptions",
+              "REST Endpoints"
+            ],
             "color": "#3B82F6",
-            "icon": "device"
+            "expanded": true,
+            "responsibilities": [
+              "Request validation and serialization",
+              "Authentication and authorization checks",
+              "Rate limiting and throttling",
+              "Response formatting"
+            ],
+            "technologies": ["Graphene-Django", "Django REST Framework", "Django Channels"]
           },
           {
-            "type": "gateway",
-            "label": "API Gateway",
+            "name": "Business Logic Layer",
+            "description": "Core application logic implementing domain rules and orchestrating data flow",
+            "components": [
+              "Artist Service",
+              "Music Service",
+              "Playlist Service",
+              "User Service",
+              "Interaction Service"
+            ],
             "color": "#10B981",
-            "icon": "gateway"
+            "expanded": true,
+            "responsibilities": [
+              "Business rule enforcement",
+              "Data transformation and aggregation",
+              "Cross-service coordination",
+              "Event publishing"
+            ],
+            "technologies": ["Python Services", "Celery Tasks", "Django Signals"]
           },
           {
-            "type": "service",
-            "label": "Application Services",
+            "name": "Data Access Layer",
+            "description": "ORM-based data access with caching and query optimization",
+            "components": [
+              "Django ORM Models",
+              "Query Managers",
+              "Cache Layer",
+              "Database Connections"
+            ],
             "color": "#F59E0B",
-            "icon": "service"
-          },
-          {
-            "type": "database",
-            "label": "Data Stores",
-            "color": "#EF4444",
-            "icon": "database"
-          },
-          {
-            "type": "queue",
-            "label": "Message Queue",
-            "color": "#8B5CF6",
-            "icon": "queue"
+            "expanded": true,
+            "responsibilities": [
+              "Database operations",
+              "Query optimization",
+              "Cache management",
+              "Data validation"
+            ],
+            "technologies": ["Django ORM", "Redis Cache", "PostgreSQL"]
           }
         ],
-        "nodes": [
+        "designPatterns": [
           {
-            "id": "client",
-            "label": "Web/Mobile Client",
-            "type": "client",
-            "x": 100,
-            "y": 50,
-            "connections": ["nginx"],
-            "status": "healthy",
-            "traffic": 1000
+            "title": "Service Layer Pattern",
+            "emoji": "🔧",
+            "description": "Business logic encapsulated in service classes for reusability and testing",
+            "category": "architectural",
+            "badge": "Core"
           },
           {
-            "id": "nginx",
-            "label": "Nginx",
-            "type": "gateway",
-            "x": 100,
-            "y": 150,
-            "connections": ["django", "daphne"],
-            "status": "healthy",
-            "traffic": 1000
+            "title": "Repository Pattern",
+            "emoji": "📦",
+            "description": "Data access abstraction through Django managers and querysets",
+            "category": "data",
+            "badge": "Data"
           },
           {
-            "id": "django",
-            "label": "Django + Gunicorn",
-            "type": "service",
-            "x": 50,
-            "y": 250,
-            "connections": ["postgres", "redis"],
-            "status": "healthy",
-            "traffic": 800
+            "title": "Decorator Pattern",
+            "emoji": "🎨",
+            "description": "Cross-cutting concerns like caching and rate limiting via decorators",
+            "category": "structural",
+            "badge": "Structure"
           },
           {
-            "id": "daphne",
-            "label": "Daphne (WebSocket)",
-            "type": "service",
-            "x": 150,
-            "y": 250,
-            "connections": ["redis"],
-            "status": "healthy",
-            "traffic": 200
+            "title": "Observer Pattern",
+            "emoji": "👁️",
+            "description": "Django signals for decoupled event handling between components",
+            "category": "behavioral",
+            "badge": "Events"
           },
           {
-            "id": "celery",
-            "label": "Celery Workers",
-            "type": "service",
-            "x": 250,
-            "y": 250,
-            "connections": ["postgres", "redis"],
-            "status": "healthy",
-            "traffic": 300
-          },
-          {
-            "id": "postgres",
-            "label": "PostgreSQL",
-            "type": "database",
-            "x": 50,
-            "y": 350,
-            "connections": [],
-            "status": "healthy",
-            "traffic": 500
-          },
-          {
-            "id": "redis",
-            "label": "Redis",
-            "type": "database",
-            "x": 150,
-            "y": 350,
-            "connections": [],
-            "status": "healthy",
-            "traffic": 2000
+            "title": "Factory Pattern",
+            "emoji": "🏭",
+            "description": "Test data generation using factory_boy for consistent test fixtures",
+            "category": "creational",
+            "badge": "Testing"
           }
         ],
-        "connections": [
+        "scalabilityStrategies": [
           {
-            "id": "c1",
-            "from_id": "client",
-            "to": "nginx",
-            "label": "HTTPS",
-            "protocol": "HTTPS",
-            "isActive": true
+            "title": "Horizontal Scaling",
+            "description": "Multiple Django instances behind load balancer with shared session storage"
           },
           {
-            "id": "c2",
-            "from_id": "nginx",
-            "to": "django",
-            "label": "HTTP",
-            "protocol": "HTTP",
-            "isActive": true
+            "title": "Database Read Replicas",
+            "description": "PostgreSQL replication for read-heavy workloads and high availability"
           },
           {
-            "id": "c3",
-            "from_id": "nginx",
-            "to": "daphne",
-            "label": "WebSocket",
-            "protocol": "WS",
-            "isActive": true
+            "title": "Async Task Processing",
+            "description": "Celery workers for background jobs with auto-scaling capabilities"
           },
           {
-            "id": "c4",
-            "from_id": "django",
-            "to": "postgres",
-            "label": "SQL",
-            "protocol": "TCP",
-            "isActive": true
-          },
-          {
-            "id": "c5",
-            "from_id": "django",
-            "to": "redis",
-            "label": "Cache",
-            "protocol": "TCP",
-            "isActive": true
-          },
-          {
-            "id": "c6",
-            "from_id": "celery",
-            "to": "redis",
-            "label": "Broker",
-            "protocol": "TCP",
-            "isActive": true
+            "title": "CDN Integration",
+            "description": "Static and media files served through content delivery network"
           }
-        ]
-      },
-      "dataFlow": {
-        "requestFlow": [
+        ],
+        "securityStrategies": [
           {
-            "number": 1,
-            "title": "Client Request",
-            "description": "GraphQL query received at API endpoint",
-            "icon": "input"
+            "title": "JWT Authentication",
+            "description": "Stateless token-based auth with short-lived access tokens and refresh rotation"
           },
           {
-            "number": 2,
-            "title": "Authentication",
-            "description": "JWT token validated and user context established",
-            "icon": "security"
-          },
-          {
-            "number": 3,
             "title": "Rate Limiting",
-            "description": "Request checked against rate limit quotas",
-            "icon": "filter"
+            "description": "Per-user and per-endpoint rate limits to prevent abuse and DDoS"
           },
           {
-            "number": 4,
-            "title": "Cache Check",
-            "description": "Redis checked for cached response data",
-            "icon": "cache"
+            "title": "Input Validation",
+            "description": "GraphQL type system and Django validators for all user inputs"
           },
           {
-            "number": 5,
-            "title": "Query Resolution",
-            "description": "GraphQL resolvers execute business logic",
-            "icon": "process"
-          },
-          {
-            "number": 6,
-            "title": "Response",
-            "description": "JSON response returned to client",
-            "icon": "output"
+            "title": "CORS Policy",
+            "description": "Strict cross-origin resource sharing configuration for API security"
           }
         ],
-        "eventFlow": [
+        "cacheStrategies": [
           {
-            "number": 1,
-            "title": "Event Triggered",
-            "description": "Django signal emitted on model change",
-            "icon": "trigger"
-          },
-          {
-            "number": 2,
-            "title": "Task Queued",
-            "description": "Celery task dispatched to Redis broker",
-            "icon": "queue"
+            "name": "Query Result Cache",
+            "description": "Frequently accessed queries cached with automatic invalidation",
+            "ttl": "1 hour",
+            "coverage": "60% of reads"
           },
           {
-            "number": 3,
-            "title": "Worker Processing",
-            "description": "Celery worker picks up and executes task",
-            "icon": "process"
+            "name": "Session Cache",
+            "description": "User sessions stored in Redis for fast access and horizontal scaling",
+            "ttl": "24 hours",
+            "coverage": "100% of sessions"
           },
           {
-            "number": 4,
-            "title": "Side Effects",
-            "description": "Notifications sent, caches invalidated",
-            "icon": "effect"
+            "name": "Computed Fields Cache",
+            "description": "Expensive computations like follower counts cached per entity",
+            "ttl": "15 minutes",
+            "coverage": "Computed fields"
           }
-        ]
-      },
-      "techDecisions": {
-        "decisions": [
+        ],
+        "architectureFeatures": [
           {
-            "title": "GraphQL over REST",
-            "problem": "Clients needed flexible data fetching without multiple round trips",
-            "solution": "Implemented GraphQL with Graphene-Django for type-safe, flexible queries",
-            "alternatives": ["REST API with multiple endpoints", "JSON:API specification"],
-            "outcome": "50% reduction in API calls, improved client developer experience",
-            "icon": "api"
+            "title": "Modular Django Apps",
+            "emoji": "📱",
+            "description": "Five independent apps: artists, music, users, playlists, interactions"
           },
           {
-            "title": "PostgreSQL as Primary Database",
-            "problem": "Need for relational data with complex queries and ACID compliance",
-            "solution": "PostgreSQL with Django ORM for reliable data storage and querying",
-            "alternatives": ["MySQL", "MongoDB", "CockroachDB"],
-            "outcome": "Excellent performance with Django ORM, robust data integrity",
-            "icon": "database"
+            "title": "GraphQL-First Design",
+            "emoji": "🔗",
+            "description": "API designed for flexible client queries with strong typing"
           },
           {
-            "title": "Redis for Caching and Sessions",
-            "problem": "High latency on frequently accessed data and session management",
-            "solution": "Redis as multi-purpose cache, session store, and Celery broker",
-            "alternatives": ["Memcached", "Database-backed sessions"],
-            "outcome": "80% reduction in database load, sub-10ms cache hits",
-            "icon": "cache"
+            "title": "Event-Driven Updates",
+            "emoji": "⚡",
+            "description": "Django signals and Celery for decoupled component communication"
           }
-        ]
-      }
-    },
-    "features": {
-      "features": [
-        {
-          "id": "graphql-api",
-          "title": "GraphQL API",
-          "description": "Full-featured GraphQL API with queries, mutations, and real-time subscriptions for music streaming operations",
-          "icon": "graphql",
-          "category": "api",
-          "status": "stable",
-          "highlights": [
-            "25+ queries across 5 domains",
-            "30+ mutations for data operations",
-            "Relay-style pagination",
-            "Complex filtering and sorting",
-            "Batch query optimization"
-          ],
-          "techStack": ["Graphene-Django", "graphql-core", "graphql-relay"],
-          "metrics": [
+        ],
+        "architectureDiagram": {
+          "legendItems": [
             {
-              "label": "Queries",
-              "value": "25+",
-              "trend": "stable",
-              "icon": "query"
+              "type": "client",
+              "label": "Client Applications",
+              "color": "#3B82F6",
+              "icon": "device"
             },
             {
-              "label": "Mutations",
-              "value": "30+",
-              "trend": "stable",
-              "icon": "mutation"
+              "type": "gateway",
+              "label": "API Gateway",
+              "color": "#10B981",
+              "icon": "gateway"
             },
             {
-              "label": "Response Time",
-              "value": "<100ms",
-              "trend": "up",
-              "icon": "speed"
+              "type": "service",
+              "label": "Application Services",
+              "color": "#F59E0B",
+              "icon": "service"
+            },
+            {
+              "type": "database",
+              "label": "Data Stores",
+              "color": "#EF4444",
+              "icon": "database"
+            },
+            {
+              "type": "queue",
+              "label": "Message Queue",
+              "color": "#8B5CF6",
+              "icon": "queue"
             }
           ],
-          "codeSnippet": {
-            "language": "graphql",
-            "code": "query GetArtistWithSongs($id: ID!) {\n  artist(id: $id) {\n    name\n    verified\n    followersCount\n    topSongs(limit: 5) {\n      title\n      playCount\n    }\n  }\n}",
-            "filename": "example_query.graphql"
-          },
-          "graphqlOperations": [
+          "nodes": [
             {
-              "type": "query",
-              "name": "artist",
-              "description": "Fetch single artist by ID or slug"
+              "id": "client",
+              "label": "Web/Mobile Client",
+              "type": "client",
+              "x": 100,
+              "y": 50,
+              "connections": ["nginx"],
+              "status": "healthy",
+              "traffic": 1000
             },
             {
-              "type": "query",
-              "name": "allArtists",
-              "description": "List all artists with filtering"
+              "id": "nginx",
+              "label": "Nginx",
+              "type": "gateway",
+              "x": 100,
+              "y": 150,
+              "connections": ["django", "daphne"],
+              "status": "healthy",
+              "traffic": 1000
             },
             {
-              "type": "query",
-              "name": "trendingArtists",
-              "description": "Get trending artists by time range"
+              "id": "django",
+              "label": "Django + Gunicorn",
+              "type": "service",
+              "x": 50,
+              "y": 250,
+              "connections": ["postgres", "redis"],
+              "status": "healthy",
+              "traffic": 800
             },
             {
-              "type": "mutation",
-              "name": "createArtist",
-              "description": "Create new artist profile"
+              "id": "daphne",
+              "label": "Daphne (WebSocket)",
+              "type": "service",
+              "x": 150,
+              "y": 250,
+              "connections": ["redis"],
+              "status": "healthy",
+              "traffic": 200
+            },
+            {
+              "id": "celery",
+              "label": "Celery Workers",
+              "type": "service",
+              "x": 250,
+              "y": 250,
+              "connections": ["postgres", "redis"],
+              "status": "healthy",
+              "traffic": 300
+            },
+            {
+              "id": "postgres",
+              "label": "PostgreSQL",
+              "type": "database",
+              "x": 50,
+              "y": 350,
+              "connections": [],
+              "status": "healthy",
+              "traffic": 500
+            },
+            {
+              "id": "redis",
+              "label": "Redis",
+              "type": "database",
+              "x": 150,
+              "y": 350,
+              "connections": [],
+              "status": "healthy",
+              "traffic": 2000
             }
           ],
-          "configuration": {
-            "introspection": true,
-            "maxDepth": 10,
-            "batchingEnabled": true
-          },
-          "dependencies": ["graphene-django", "graphql-core"],
-          "security": {
-            "authRequired": "partial",
-            "rateLimited": true
-          }
+          "connections": [
+            {
+              "id": "c1",
+              "from_id": "client",
+              "to": "nginx",
+              "label": "HTTPS",
+              "protocol": "HTTPS",
+              "isActive": true
+            },
+            {
+              "id": "c2",
+              "from_id": "nginx",
+              "to": "django",
+              "label": "HTTP",
+              "protocol": "HTTP",
+              "isActive": true
+            },
+            {
+              "id": "c3",
+              "from_id": "nginx",
+              "to": "daphne",
+              "label": "WebSocket",
+              "protocol": "WS",
+              "isActive": true
+            },
+            {
+              "id": "c4",
+              "from_id": "django",
+              "to": "postgres",
+              "label": "SQL",
+              "protocol": "TCP",
+              "isActive": true
+            },
+            {
+              "id": "c5",
+              "from_id": "django",
+              "to": "redis",
+              "label": "Cache",
+              "protocol": "TCP",
+              "isActive": true
+            },
+            {
+              "id": "c6",
+              "from_id": "celery",
+              "to": "redis",
+              "label": "Broker",
+              "protocol": "TCP",
+              "isActive": true
+            }
+          ]
         },
-        {
-          "id": "jwt-auth",
-          "title": "JWT Authentication",
-          "description": "Secure token-based authentication with access and refresh tokens, supporting multiple authentication flows",
-          "icon": "shield",
-          "category": "authentication",
-          "status": "stable",
-          "highlights": [
-            "Short-lived access tokens (15 min)",
-            "Refresh token rotation",
-            "Role-based access control",
-            "Social authentication support",
-            "Secure password hashing"
-          ],
-          "techStack": ["djangorestframework-simplejwt", "PyJWT", "django-allauth"],
-          "metrics": [
+        "dataFlow": {
+          "requestFlow": [
             {
-              "label": "Token Expiry",
-              "value": "15 min",
-              "trend": "stable",
-              "icon": "clock"
+              "number": 1,
+              "title": "Client Request",
+              "description": "GraphQL query received at API endpoint",
+              "icon": "input"
             },
             {
-              "label": "Auth Methods",
-              "value": "3",
-              "trend": "stable",
-              "icon": "key"
+              "number": 2,
+              "title": "Authentication",
+              "description": "JWT token validated and user context established",
+              "icon": "security"
+            },
+            {
+              "number": 3,
+              "title": "Rate Limiting",
+              "description": "Request checked against rate limit quotas",
+              "icon": "filter"
+            },
+            {
+              "number": 4,
+              "title": "Cache Check",
+              "description": "Redis checked for cached response data",
+              "icon": "cache"
+            },
+            {
+              "number": 5,
+              "title": "Query Resolution",
+              "description": "GraphQL resolvers execute business logic",
+              "icon": "process"
+            },
+            {
+              "number": 6,
+              "title": "Response",
+              "description": "JSON response returned to client",
+              "icon": "output"
             }
           ],
-          "codeSnippet": {
-            "language": "python",
-            "code": "from rest_framework_simplejwt.tokens import RefreshToken\n\ndef get_tokens_for_user(user):\n    refresh = RefreshToken.for_user(user)\n    return {\n        'refresh': str(refresh),\n        'access': str(refresh.access_token),\n    }",
-            "filename": "token_utils.py"
-          },
-          "graphqlOperations": [
+          "eventFlow": [
             {
-              "type": "mutation",
-              "name": "registerUser",
-              "description": "Create new user account"
+              "number": 1,
+              "title": "Event Triggered",
+              "description": "Django signal emitted on model change",
+              "icon": "trigger"
             },
             {
-              "type": "mutation",
-              "name": "loginUser",
-              "description": "Authenticate and get tokens"
+              "number": 2,
+              "title": "Task Queued",
+              "description": "Celery task dispatched to Redis broker",
+              "icon": "queue"
             },
             {
-              "type": "mutation",
-              "name": "refreshToken",
-              "description": "Refresh access token"
+              "number": 3,
+              "title": "Worker Processing",
+              "description": "Celery worker picks up and executes task",
+              "icon": "process"
+            },
+            {
+              "number": 4,
+              "title": "Side Effects",
+              "description": "Notifications sent, caches invalidated",
+              "icon": "effect"
             }
-          ],
-          "configuration": {
-            "accessTokenLifetime": 900,
-            "refreshTokenLifetime": 604800
-          },
-          "dependencies": ["djangorestframework-simplejwt", "PyJWT"],
-          "security": {
-            "encryption": "RS256",
-            "tokenRotation": true
-          }
+          ]
         },
-        {
-          "id": "redis-caching",
-          "title": "Redis Caching Layer",
-          "description": "High-performance caching system for query results, sessions, and rate limiting data",
-          "icon": "database",
-          "category": "caching",
-          "status": "stable",
-          "highlights": [
-            "Query result caching",
-            "Session storage",
-            "Rate limit counters",
-            "Pub/Sub for real-time",
-            "Automatic cache invalidation"
-          ],
-          "techStack": ["django-redis", "redis-py"],
-          "metrics": [
+        "techDecisions": {
+          "decisions": [
             {
-              "label": "Hit Rate",
-              "value": "85%",
-              "trend": "up",
-              "icon": "chart"
+              "title": "GraphQL over REST",
+              "problem": "Clients needed flexible data fetching without multiple round trips",
+              "solution": "Implemented GraphQL with Graphene-Django for type-safe, flexible queries",
+              "alternatives": ["REST API with multiple endpoints", "JSON:API specification"],
+              "outcome": "50% reduction in API calls, improved client developer experience",
+              "icon": "api"
             },
             {
-              "label": "Avg Latency",
-              "value": "<5ms",
-              "trend": "stable",
-              "icon": "speed"
-            }
-          ],
-          "codeSnippet": null,
-          "graphqlOperations": [],
-          "configuration": {
-            "maxMemory": "256mb",
-            "evictionPolicy": "allkeys-lru"
-          },
-          "dependencies": ["django-redis", "redis"],
-          "security": {
-            "encrypted": false,
-            "authRequired": true
-          }
-        },
-        {
-          "id": "celery-tasks",
-          "title": "Celery Task Queue",
-          "description": "Distributed task queue for asynchronous processing of background jobs and scheduled tasks",
-          "icon": "queue",
-          "category": "messaging",
-          "status": "stable",
-          "highlights": [
-            "Async task execution",
-            "Periodic task scheduling",
-            "Task result storage",
-            "Retry with backoff",
-            "Worker auto-scaling ready"
-          ],
-          "techStack": ["celery", "django-celery-beat", "django-celery-results"],
-          "metrics": [
-            {
-              "label": "Task Types",
-              "value": "15+",
-              "trend": "stable",
-              "icon": "task"
+              "title": "PostgreSQL as Primary Database",
+              "problem": "Need for relational data with complex queries and ACID compliance",
+              "solution": "PostgreSQL with Django ORM for reliable data storage and querying",
+              "alternatives": ["MySQL", "MongoDB", "CockroachDB"],
+              "outcome": "Excellent performance with Django ORM, robust data integrity",
+              "icon": "database"
             },
             {
-              "label": "Avg Duration",
-              "value": "2.5s",
-              "trend": "down",
-              "icon": "clock"
+              "title": "Redis for Caching and Sessions",
+              "problem": "High latency on frequently accessed data and session management",
+              "solution": "Redis as multi-purpose cache, session store, and Celery broker",
+              "alternatives": ["Memcached", "Database-backed sessions"],
+              "outcome": "80% reduction in database load, sub-10ms cache hits",
+              "icon": "cache"
             }
-          ],
-          "codeSnippet": null,
-          "graphqlOperations": [],
-          "configuration": {
-            "broker": "redis",
-            "resultBackend": "django-db"
-          },
-          "dependencies": ["celery", "django-celery-beat"],
-          "security": {
-            "taskSigning": true,
-            "resultEncryption": false
-          }
-        },
-        {
-          "id": "rate-limiting",
-          "title": "Rate Limiting",
-          "description": "Configurable rate limiting to protect API endpoints from abuse and ensure fair resource usage",
-          "icon": "shield",
-          "category": "security",
-          "status": "stable",
-          "highlights": [
-            "Per-user rate limits",
-            "Per-endpoint configuration",
-            "Sliding window algorithm",
-            "Graceful degradation",
-            "Admin bypass option"
-          ],
-          "techStack": ["django-ratelimit"],
-          "metrics": [
-            {
-              "label": "Default Limit",
-              "value": "100/min",
-              "trend": "stable",
-              "icon": "limit"
-            },
-            {
-              "label": "Blocked Requests",
-              "value": "<1%",
-              "trend": "stable",
-              "icon": "block"
-            }
-          ],
-          "codeSnippet": null,
-          "graphqlOperations": [],
-          "configuration": {
-            "defaultRate": "100/m",
-            "burstAllowance": 20
-          },
-          "dependencies": ["django-ratelimit"],
-          "security": {
-            "bypassForAdmins": true,
-            "logViolations": true
-          }
-        },
-        {
-          "id": "postgresql-db",
-          "title": "PostgreSQL Database",
-          "description": "Robust relational database with advanced features for complex queries and data integrity",
-          "icon": "database",
-          "category": "database",
-          "status": "stable",
-          "highlights": [
-            "ACID compliance",
-            "Complex query support",
-            "Full-text search",
-            "JSON field support",
-            "Efficient indexing"
-          ],
-          "techStack": ["PostgreSQL 15", "psycopg2", "Django ORM"],
-          "metrics": [
-            {
-              "label": "Tables",
-              "value": "20+",
-              "trend": "stable",
-              "icon": "table"
-            },
-            {
-              "label": "Query Time",
-              "value": "<50ms",
-              "trend": "stable",
-              "icon": "speed"
-            }
-          ],
-          "codeSnippet": null,
-          "graphqlOperations": [],
-          "configuration": {
-            "maxConnections": 100,
-            "sharedBuffers": "256MB"
-          },
-          "dependencies": ["psycopg2-binary", "dj-database-url"],
-          "security": {
-            "sslMode": "require",
-            "encrypted": true
-          }
-        },
-        {
-          "id": "testing-suite",
-          "title": "Comprehensive Testing",
-          "description": "Full test suite with unit tests, integration tests, and factory-based test data generation",
-          "icon": "check",
-          "category": "testing",
-          "status": "stable",
-          "highlights": [
-            "pytest framework",
-            "Factory Boy fixtures",
-            "GraphQL query testing",
-            "Coverage reporting",
-            "CI/CD integration"
-          ],
-          "techStack": ["pytest", "pytest-django", "factory-boy", "pytest-cov"],
-          "metrics": [
-            {
-              "label": "Test Coverage",
-              "value": "95%",
-              "trend": "up",
-              "icon": "coverage"
-            },
-            {
-              "label": "Test Cases",
-              "value": "200+",
-              "trend": "up",
-              "icon": "test"
-            }
-          ],
-          "codeSnippet": null,
-          "graphqlOperations": [],
-          "configuration": {},
-          "dependencies": ["pytest", "pytest-django", "factory-boy"],
-          "security": {
-            "isolatedTests": true,
-            "mockExternalServices": true
-          }
-        },
-        {
-          "id": "docker-deployment",
-          "title": "Docker Containerization",
-          "description": "Fully containerized application with Docker Compose for consistent development and production environments",
-          "icon": "docker",
-          "category": "integration",
-          "status": "stable",
-          "highlights": [
-            "Multi-stage builds",
-            "Docker Compose orchestration",
-            "Health checks",
-            "Volume persistence",
-            "Environment configuration"
-          ],
-          "techStack": ["Docker", "Docker Compose", "Alpine Linux"],
-          "metrics": [
-            {
-              "label": "Image Size",
-              "value": "<500MB",
-              "trend": "down",
-              "icon": "size"
-            },
-            {
-              "label": "Build Time",
-              "value": "<3min",
-              "trend": "down",
-              "icon": "clock"
-            }
-          ],
-          "codeSnippet": null,
-          "graphqlOperations": [],
-          "configuration": {
-            "baseImage": "python:3.11-slim",
-            "multiStage": true
-          },
-          "dependencies": [],
-          "security": {
-            "nonRootUser": true,
-            "readOnlyFs": false
-          }
+          ]
         }
-      ]
-    },
-    "apis": {
-      "rest": {
-        "enabled": false,
-        "openapi": {},
-        "schemaUrl": "",
-        "swaggerUiUrl": "",
-        "redocUrl": "",
-        "basePath": null,
-        "endpointCount": 3,
-        "authenticatedEndpoints": 0,
-        "rateLimits": {},
-        "authenticationMethods": [],
-        "supportedFormats": ["json"],
-        "corsEnabled": true,
-        "pagination": {},
-        "versioning": {}
       },
-      "graphql": {
-        "enabled": true,
-        "schema": "apps/config/schema.py",
-        "schemaUrl": "/api/graphql-schema/",
-        "sdlUrl": "/api/graphql-schema/",
-        "endpoint": "/graphql/",
-        "subscriptionEndpoint": null,
-        "playgroundUrl": "/graphql/",
-        "voyagerUrl": "",
-        "introspectionEnabled": true,
-        "queries": 25,
-        "mutations": 30,
-        "subscriptions": 0,
-        "types": 35,
-        "directives": ["include", "skip", "deprecated"],
-        "interfaces": 1,
-        "unions": 0,
-        "enums": 8,
-        "scalars": ["ID", "String", "Int", "Float", "Boolean", "DateTime", "Date", "JSONString"],
-        "complexityLimit": 100,
-        "depthLimit": 10,
-        "queryCost": {
-          "maxCost": 1000,
-          "defaultComplexity": 1
-        },
-        "caching": {
-          "enabled": true,
-          "strategy": "redis"
-        },
-        "batching": {
-          "enabled": true,
-          "maxBatchSize": 10
-        },
-        "queryDetails": {
-          "artists": [
-            {
-              "name": "artist",
-              "description": "Get single artist by ID or slug"
+      "features": {
+        "features": [
+          {
+            "id": "graphql-api",
+            "title": "GraphQL API",
+            "description": "Full-featured GraphQL API with queries, mutations, and real-time subscriptions for music streaming operations",
+            "icon": "graphql",
+            "category": "api",
+            "status": "stable",
+            "highlights": [
+              "25+ queries across 5 domains",
+              "30+ mutations for data operations",
+              "Relay-style pagination",
+              "Complex filtering and sorting",
+              "Batch query optimization"
+            ],
+            "techStack": ["Graphene-Django", "graphql-core", "graphql-relay"],
+            "metrics": [
+              {
+                "label": "Queries",
+                "value": "25+",
+                "trend": "stable",
+                "icon": "query"
+              },
+              {
+                "label": "Mutations",
+                "value": "30+",
+                "trend": "stable",
+                "icon": "mutation"
+              },
+              {
+                "label": "Response Time",
+                "value": "<100ms",
+                "trend": "up",
+                "icon": "speed"
+              }
+            ],
+            "codeSnippet": {
+              "language": "graphql",
+              "code": "query GetArtistWithSongs($id: ID!) {\n  artist(id: $id) {\n    name\n    verified\n    followersCount\n    topSongs(limit: 5) {\n      title\n      playCount\n    }\n  }\n}",
+              "filename": "example_query.graphql"
             },
-            {
-              "name": "allArtists",
-              "description": "List all artists with filtering and pagination"
+            "graphqlOperations": [
+              {
+                "type": "query",
+                "name": "artist",
+                "description": "Fetch single artist by ID or slug"
+              },
+              {
+                "type": "query",
+                "name": "allArtists",
+                "description": "List all artists with filtering"
+              },
+              {
+                "type": "query",
+                "name": "trendingArtists",
+                "description": "Get trending artists by time range"
+              },
+              {
+                "type": "mutation",
+                "name": "createArtist",
+                "description": "Create new artist profile"
+              }
+            ],
+            "configuration": {
+              "introspection": true,
+              "maxDepth": 10,
+              "batchingEnabled": true
             },
-            {
-              "name": "searchArtists",
-              "description": "Search artists by name or bio"
-            },
-            {
-              "name": "trendingArtists",
-              "description": "Get trending artists by time range"
-            },
-            {
-              "name": "similarArtists",
-              "description": "Get artists similar to given artist"
-            },
-            {
-              "name": "followedArtists",
-              "description": "Get artists followed by current user"
+            "dependencies": ["graphene-django", "graphql-core"],
+            "security": {
+              "authRequired": "partial",
+              "rateLimited": true
             }
-          ],
-          "music": [
-            {
-              "name": "song",
-              "description": "Get single song by ID or slug"
+          },
+          {
+            "id": "jwt-auth",
+            "title": "JWT Authentication",
+            "description": "Secure token-based authentication with access and refresh tokens, supporting multiple authentication flows",
+            "icon": "shield",
+            "category": "authentication",
+            "status": "stable",
+            "highlights": [
+              "Short-lived access tokens (15 min)",
+              "Refresh token rotation",
+              "Role-based access control",
+              "Social authentication support",
+              "Secure password hashing"
+            ],
+            "techStack": ["djangorestframework-simplejwt", "PyJWT", "django-allauth"],
+            "metrics": [
+              {
+                "label": "Token Expiry",
+                "value": "15 min",
+                "trend": "stable",
+                "icon": "clock"
+              },
+              {
+                "label": "Auth Methods",
+                "value": "3",
+                "trend": "stable",
+                "icon": "key"
+              }
+            ],
+            "codeSnippet": {
+              "language": "python",
+              "code": "from rest_framework_simplejwt.tokens import RefreshToken\n\ndef get_tokens_for_user(user):\n    refresh = RefreshToken.for_user(user)\n    return {\n        'refresh': str(refresh),\n        'access': str(refresh.access_token),\n    }",
+              "filename": "token_utils.py"
             },
-            {
-              "name": "allSongs",
-              "description": "List all songs with filtering"
+            "graphqlOperations": [
+              {
+                "type": "mutation",
+                "name": "registerUser",
+                "description": "Create new user account"
+              },
+              {
+                "type": "mutation",
+                "name": "loginUser",
+                "description": "Authenticate and get tokens"
+              },
+              {
+                "type": "mutation",
+                "name": "refreshToken",
+                "description": "Refresh access token"
+              }
+            ],
+            "configuration": {
+              "accessTokenLifetime": 900,
+              "refreshTokenLifetime": 604800
             },
-            {
-              "name": "searchSongs",
-              "description": "Search songs with filters"
-            },
-            {
-              "name": "trendingSongs",
-              "description": "Get trending songs by time range"
-            },
-            {
-              "name": "recommendedSongs",
-              "description": "Get personalized recommendations"
-            },
-            {
-              "name": "artistSongs",
-              "description": "Get songs by specific artist"
-            },
-            {
-              "name": "albumSongs",
-              "description": "Get songs from an album"
-            },
-            {
-              "name": "likedSongs",
-              "description": "Get current user liked songs"
+            "dependencies": ["djangorestframework-simplejwt", "PyJWT"],
+            "security": {
+              "encryption": "RS256",
+              "tokenRotation": true
             }
-          ],
-          "users": [
-            {
-              "name": "me",
-              "description": "Get currently authenticated user"
+          },
+          {
+            "id": "redis-caching",
+            "title": "Redis Caching Layer",
+            "description": "High-performance caching system for query results, sessions, and rate limiting data",
+            "icon": "database",
+            "category": "caching",
+            "status": "stable",
+            "highlights": [
+              "Query result caching",
+              "Session storage",
+              "Rate limit counters",
+              "Pub/Sub for real-time",
+              "Automatic cache invalidation"
+            ],
+            "techStack": ["django-redis", "redis-py"],
+            "metrics": [
+              {
+                "label": "Hit Rate",
+                "value": "85%",
+                "trend": "up",
+                "icon": "chart"
+              },
+              {
+                "label": "Avg Latency",
+                "value": "<5ms",
+                "trend": "stable",
+                "icon": "speed"
+              }
+            ],
+            "codeSnippet": null,
+            "graphqlOperations": [],
+            "configuration": {
+              "maxMemory": "256mb",
+              "evictionPolicy": "allkeys-lru"
             },
-            {
-              "name": "user",
-              "description": "Get user by ID or username"
-            },
-            {
-              "name": "userPreferences",
-              "description": "Get current user preferences"
-            },
-            {
-              "name": "searchUsers",
-              "description": "Search users by username or name"
+            "dependencies": ["django-redis", "redis"],
+            "security": {
+              "encrypted": false,
+              "authRequired": true
             }
-          ],
-          "playlists": [
-            {
-              "name": "playlist",
-              "description": "Get single playlist by ID or slug"
+          },
+          {
+            "id": "celery-tasks",
+            "title": "Celery Task Queue",
+            "description": "Distributed task queue for asynchronous processing of background jobs and scheduled tasks",
+            "icon": "queue",
+            "category": "messaging",
+            "status": "stable",
+            "highlights": [
+              "Async task execution",
+              "Periodic task scheduling",
+              "Task result storage",
+              "Retry with backoff",
+              "Worker auto-scaling ready"
+            ],
+            "techStack": ["celery", "django-celery-beat", "django-celery-results"],
+            "metrics": [
+              {
+                "label": "Task Types",
+                "value": "15+",
+                "trend": "stable",
+                "icon": "task"
+              },
+              {
+                "label": "Avg Duration",
+                "value": "2.5s",
+                "trend": "down",
+                "icon": "clock"
+              }
+            ],
+            "codeSnippet": null,
+            "graphqlOperations": [],
+            "configuration": {
+              "broker": "redis",
+              "resultBackend": "django-db"
             },
-            {
-              "name": "myPlaylists",
-              "description": "Get current user playlists"
-            },
-            {
-              "name": "userPlaylists",
-              "description": "Get playlists by specific user"
-            },
-            {
-              "name": "followedPlaylists",
-              "description": "Get playlists followed by user"
-            },
-            {
-              "name": "featuredPlaylists",
-              "description": "Get featured/editorial playlists"
-            },
-            {
-              "name": "searchPlaylists",
-              "description": "Search playlists by name"
-            },
-            {
-              "name": "trendingPlaylists",
-              "description": "Get trending playlists"
+            "dependencies": ["celery", "django-celery-beat"],
+            "security": {
+              "taskSigning": true,
+              "resultEncryption": false
             }
-          ],
-          "interactions": [
-            {
-              "name": "likedSongs",
-              "description": "Get user liked songs with pagination"
+          },
+          {
+            "id": "rate-limiting",
+            "title": "Rate Limiting",
+            "description": "Configurable rate limiting to protect API endpoints from abuse and ensure fair resource usage",
+            "icon": "shield",
+            "category": "security",
+            "status": "stable",
+            "highlights": [
+              "Per-user rate limits",
+              "Per-endpoint configuration",
+              "Sliding window algorithm",
+              "Graceful degradation",
+              "Admin bypass option"
+            ],
+            "techStack": ["django-ratelimit"],
+            "metrics": [
+              {
+                "label": "Default Limit",
+                "value": "100/min",
+                "trend": "stable",
+                "icon": "limit"
+              },
+              {
+                "label": "Blocked Requests",
+                "value": "<1%",
+                "trend": "stable",
+                "icon": "block"
+              }
+            ],
+            "codeSnippet": null,
+            "graphqlOperations": [],
+            "configuration": {
+              "defaultRate": "100/m",
+              "burstAllowance": 20
             },
-            {
-              "name": "isSongLiked",
-              "description": "Check if song is liked"
-            },
-            {
-              "name": "userListeningStats",
-              "description": "Get listening statistics"
-            },
-            {
-              "name": "userTopArtists",
-              "description": "Get user top artists"
-            },
-            {
-              "name": "userTopSongs",
-              "description": "Get user top songs"
-            },
-            {
-              "name": "userTopGenres",
-              "description": "Get user top genres"
+            "dependencies": ["django-ratelimit"],
+            "security": {
+              "bypassForAdmins": true,
+              "logViolations": true
             }
-          ]
-        },
-        "mutationDetails": {
-          "artists": [
-            {
-              "name": "createArtist",
-              "description": "Create new artist profile"
+          },
+          {
+            "id": "postgresql-db",
+            "title": "PostgreSQL Database",
+            "description": "Robust relational database with advanced features for complex queries and data integrity",
+            "icon": "database",
+            "category": "database",
+            "status": "stable",
+            "highlights": [
+              "ACID compliance",
+              "Complex query support",
+              "Full-text search",
+              "JSON field support",
+              "Efficient indexing"
+            ],
+            "techStack": ["PostgreSQL 15", "psycopg2", "Django ORM"],
+            "metrics": [
+              {
+                "label": "Tables",
+                "value": "20+",
+                "trend": "stable",
+                "icon": "table"
+              },
+              {
+                "label": "Query Time",
+                "value": "<50ms",
+                "trend": "stable",
+                "icon": "speed"
+              }
+            ],
+            "codeSnippet": null,
+            "graphqlOperations": [],
+            "configuration": {
+              "maxConnections": 100,
+              "sharedBuffers": "256MB"
             },
-            {
-              "name": "updateArtist",
-              "description": "Update existing artist"
-            },
-            {
-              "name": "deleteArtist",
-              "description": "Delete an artist"
-            },
-            {
-              "name": "addArtistMember",
-              "description": "Add member to artist"
-            },
-            {
-              "name": "removeArtistMember",
-              "description": "Remove artist member"
+            "dependencies": ["psycopg2-binary", "dj-database-url"],
+            "security": {
+              "sslMode": "require",
+              "encrypted": true
             }
-          ],
-          "music": [
-            {
-              "name": "createSong",
-              "description": "Create new song"
-            },
-            {
-              "name": "updateSong",
-              "description": "Update existing song"
-            },
-            {
-              "name": "deleteSong",
-              "description": "Delete a song"
-            },
-            {
-              "name": "likeSong",
-              "description": "Like a song"
-            },
-            {
-              "name": "unlikeSong",
-              "description": "Unlike a song"
-            },
-            {
-              "name": "createAlbum",
-              "description": "Create new album"
-            },
-            {
-              "name": "updateAlbum",
-              "description": "Update existing album"
+          },
+          {
+            "id": "testing-suite",
+            "title": "Comprehensive Testing",
+            "description": "Full test suite with unit tests, integration tests, and factory-based test data generation",
+            "icon": "check",
+            "category": "testing",
+            "status": "stable",
+            "highlights": [
+              "pytest framework",
+              "Factory Boy fixtures",
+              "GraphQL query testing",
+              "Coverage reporting",
+              "CI/CD integration"
+            ],
+            "techStack": ["pytest", "pytest-django", "factory-boy", "pytest-cov"],
+            "metrics": [
+              {
+                "label": "Test Coverage",
+                "value": "95%",
+                "trend": "up",
+                "icon": "coverage"
+              },
+              {
+                "label": "Test Cases",
+                "value": "200+",
+                "trend": "up",
+                "icon": "test"
+              }
+            ],
+            "codeSnippet": null,
+            "graphqlOperations": [],
+            "configuration": {},
+            "dependencies": ["pytest", "pytest-django", "factory-boy"],
+            "security": {
+              "isolatedTests": true,
+              "mockExternalServices": true
             }
-          ],
-          "users": [
-            {
-              "name": "registerUser",
-              "description": "Register new user account"
+          },
+          {
+            "id": "docker-deployment",
+            "title": "Docker Containerization",
+            "description": "Fully containerized application with Docker Compose for consistent development and production environments",
+            "icon": "docker",
+            "category": "integration",
+            "status": "stable",
+            "highlights": [
+              "Multi-stage builds",
+              "Docker Compose orchestration",
+              "Health checks",
+              "Volume persistence",
+              "Environment configuration"
+            ],
+            "techStack": ["Docker", "Docker Compose", "Alpine Linux"],
+            "metrics": [
+              {
+                "label": "Image Size",
+                "value": "<500MB",
+                "trend": "down",
+                "icon": "size"
+              },
+              {
+                "label": "Build Time",
+                "value": "<3min",
+                "trend": "down",
+                "icon": "clock"
+              }
+            ],
+            "codeSnippet": null,
+            "graphqlOperations": [],
+            "configuration": {
+              "baseImage": "python:3.11-slim",
+              "multiStage": true
             },
-            {
-              "name": "loginUser",
-              "description": "Authenticate user"
-            },
-            {
-              "name": "updateProfile",
-              "description": "Update user profile"
-            },
-            {
-              "name": "updatePreferences",
-              "description": "Update user preferences"
-            },
-            {
-              "name": "changePassword",
-              "description": "Change user password"
-            },
-            {
-              "name": "deleteUser",
-              "description": "Delete user account"
+            "dependencies": [],
+            "security": {
+              "nonRootUser": true,
+              "readOnlyFs": false
             }
-          ],
-          "playlists": [
-            {
-              "name": "createPlaylist",
-              "description": "Create new playlist"
-            },
-            {
-              "name": "updatePlaylist",
-              "description": "Update playlist details"
-            },
-            {
-              "name": "deletePlaylist",
-              "description": "Delete a playlist"
-            },
-            {
-              "name": "addSongToPlaylist",
-              "description": "Add song to playlist"
-            },
-            {
-              "name": "removeSongFromPlaylist",
-              "description": "Remove song from playlist"
-            },
-            {
-              "name": "reorderPlaylistSongs",
-              "description": "Reorder playlist songs"
-            },
-            {
-              "name": "followPlaylist",
-              "description": "Follow a playlist"
-            },
-            {
-              "name": "unfollowPlaylist",
-              "description": "Unfollow a playlist"
-            },
-            {
-              "name": "duplicatePlaylist",
-              "description": "Duplicate a playlist"
-            },
-            {
-              "name": "addCollaborator",
-              "description": "Add playlist collaborator"
-            },
-            {
-              "name": "removeCollaborator",
-              "description": "Remove collaborator"
-            }
-          ],
-          "interactions": [
-            {
-              "name": "trackPlay",
-              "description": "Track song play event"
-            },
-            {
-              "name": "saveAlbum",
-              "description": "Save album to library"
-            },
-            {
-              "name": "unsaveAlbum",
-              "description": "Remove album from library"
-            },
-            {
-              "name": "addReview",
-              "description": "Add album/song review"
-            },
-            {
-              "name": "updateReview",
-              "description": "Update existing review"
-            },
-            {
-              "name": "deleteReview",
-              "description": "Delete a review"
-            },
-            {
-              "name": "markReviewHelpful",
-              "description": "Mark review as helpful"
-            },
-            {
-              "name": "clearListeningHistory",
-              "description": "Clear listening history"
-            }
-          ]
-        },
-        "typeDetails": [
-          {
-            "name": "ArtistType",
-            "model": "Artist",
-            "description": "Artist profile with computed fields",
-            "app": "artists"
-          },
-          {
-            "name": "ArtistMemberType",
-            "model": "ArtistMember",
-            "description": "Band/group member info",
-            "app": "artists"
-          },
-          {
-            "name": "SongType",
-            "model": "Song",
-            "description": "Song with audio features",
-            "app": "music"
-          },
-          {
-            "name": "AlbumType",
-            "model": "Album",
-            "description": "Album with track listing",
-            "app": "music"
-          },
-          {
-            "name": "GenreType",
-            "model": "Genre",
-            "description": "Music genre hierarchy",
-            "app": "music"
-          },
-          {
-            "name": "UserType",
-            "model": "User",
-            "description": "User profile data",
-            "app": "users"
-          },
-          {
-            "name": "UserPreferencesType",
-            "model": "UserPreferences",
-            "description": "User settings",
-            "app": "users"
-          },
-          {
-            "name": "PlaylistType",
-            "model": "Playlist",
-            "description": "Playlist with songs",
-            "app": "playlists"
-          },
-          {
-            "name": "PlaylistSongType",
-            "model": "PlaylistSong",
-            "description": "Song in playlist",
-            "app": "playlists"
-          },
-          {
-            "name": "LikedSongType",
-            "model": "LikedSong",
-            "description": "User liked song",
-            "app": "interactions"
-          },
-          {
-            "name": "ListeningStatsType",
-            "model": "",
-            "description": "Listening analytics",
-            "app": "interactions"
-          }
-        ],
-        "inputTypes": [
-          {
-            "name": "CreateArtistInput",
-            "app": "artists",
-            "purpose": "Input for creating artists"
-          },
-          {
-            "name": "UpdateArtistInput",
-            "app": "artists",
-            "purpose": "Input for updating artists"
-          },
-          {
-            "name": "CreateSongInput",
-            "app": "music",
-            "purpose": "Input for creating songs"
-          },
-          {
-            "name": "UpdateSongInput",
-            "app": "music",
-            "purpose": "Input for updating songs"
-          },
-          {
-            "name": "CreateAlbumInput",
-            "app": "music",
-            "purpose": "Input for creating albums"
-          },
-          {
-            "name": "CreatePlaylistInput",
-            "app": "playlists",
-            "purpose": "Input for creating playlists"
-          },
-          {
-            "name": "UpdatePlaylistInput",
-            "app": "playlists",
-            "purpose": "Input for updating playlists"
           }
         ]
       },
-      "grpc": {
-        "enabled": false,
-        "protoUrl": "",
-        "reflectionEnabled": false,
-        "services": 0,
-        "methods": 0
-      },
-      "websocket": {
-        "enabled": false,
-        "endpoint": null,
-        "protocols": [],
-        "events": []
+      "apis": {
+        "rest": {
+          "enabled": false,
+          "openapi": {},
+          "schemaUrl": "",
+          "swaggerUiUrl": "",
+          "redocUrl": "",
+          "basePath": null,
+          "endpointCount": 3,
+          "authenticatedEndpoints": 0,
+          "rateLimits": {},
+          "authenticationMethods": [],
+          "supportedFormats": ["json"],
+          "corsEnabled": true,
+          "pagination": {},
+          "versioning": {}
+        },
+        "graphql": {
+          "enabled": true,
+          "schema": "apps/config/schema.py",
+          "schemaUrl": "/api/graphql-schema/",
+          "sdlUrl": "/api/graphql-schema/",
+          "endpoint": "/graphql/",
+          "subscriptionEndpoint": null,
+          "playgroundUrl": "/graphql/",
+          "voyagerUrl": "",
+          "introspectionEnabled": true,
+          "queries": 25,
+          "mutations": 30,
+          "subscriptions": 0,
+          "types": 35,
+          "directives": ["include", "skip", "deprecated"],
+          "interfaces": 1,
+          "unions": 0,
+          "enums": 8,
+          "scalars": ["ID", "String", "Int", "Float", "Boolean", "DateTime", "Date", "JSONString"],
+          "complexityLimit": 100,
+          "depthLimit": 10,
+          "queryCost": {
+            "maxCost": 1000,
+            "defaultComplexity": 1
+          },
+          "caching": {
+            "enabled": true,
+            "strategy": "redis"
+          },
+          "batching": {
+            "enabled": true,
+            "maxBatchSize": 10
+          },
+          "queryDetails": {
+            "artists": [
+              {
+                "name": "artist",
+                "description": "Get single artist by ID or slug"
+              },
+              {
+                "name": "allArtists",
+                "description": "List all artists with filtering and pagination"
+              },
+              {
+                "name": "searchArtists",
+                "description": "Search artists by name or bio"
+              },
+              {
+                "name": "trendingArtists",
+                "description": "Get trending artists by time range"
+              },
+              {
+                "name": "similarArtists",
+                "description": "Get artists similar to given artist"
+              },
+              {
+                "name": "followedArtists",
+                "description": "Get artists followed by current user"
+              }
+            ],
+            "music": [
+              {
+                "name": "song",
+                "description": "Get single song by ID or slug"
+              },
+              {
+                "name": "allSongs",
+                "description": "List all songs with filtering"
+              },
+              {
+                "name": "searchSongs",
+                "description": "Search songs with filters"
+              },
+              {
+                "name": "trendingSongs",
+                "description": "Get trending songs by time range"
+              },
+              {
+                "name": "recommendedSongs",
+                "description": "Get personalized recommendations"
+              },
+              {
+                "name": "artistSongs",
+                "description": "Get songs by specific artist"
+              },
+              {
+                "name": "albumSongs",
+                "description": "Get songs from an album"
+              },
+              {
+                "name": "likedSongs",
+                "description": "Get current user liked songs"
+              }
+            ],
+            "users": [
+              {
+                "name": "me",
+                "description": "Get currently authenticated user"
+              },
+              {
+                "name": "user",
+                "description": "Get user by ID or username"
+              },
+              {
+                "name": "userPreferences",
+                "description": "Get current user preferences"
+              },
+              {
+                "name": "searchUsers",
+                "description": "Search users by username or name"
+              }
+            ],
+            "playlists": [
+              {
+                "name": "playlist",
+                "description": "Get single playlist by ID or slug"
+              },
+              {
+                "name": "myPlaylists",
+                "description": "Get current user playlists"
+              },
+              {
+                "name": "userPlaylists",
+                "description": "Get playlists by specific user"
+              },
+              {
+                "name": "followedPlaylists",
+                "description": "Get playlists followed by user"
+              },
+              {
+                "name": "featuredPlaylists",
+                "description": "Get featured/editorial playlists"
+              },
+              {
+                "name": "searchPlaylists",
+                "description": "Search playlists by name"
+              },
+              {
+                "name": "trendingPlaylists",
+                "description": "Get trending playlists"
+              }
+            ],
+            "interactions": [
+              {
+                "name": "likedSongs",
+                "description": "Get user liked songs with pagination"
+              },
+              {
+                "name": "isSongLiked",
+                "description": "Check if song is liked"
+              },
+              {
+                "name": "userListeningStats",
+                "description": "Get listening statistics"
+              },
+              {
+                "name": "userTopArtists",
+                "description": "Get user top artists"
+              },
+              {
+                "name": "userTopSongs",
+                "description": "Get user top songs"
+              },
+              {
+                "name": "userTopGenres",
+                "description": "Get user top genres"
+              }
+            ]
+          },
+          "mutationDetails": {
+            "artists": [
+              {
+                "name": "createArtist",
+                "description": "Create new artist profile"
+              },
+              {
+                "name": "updateArtist",
+                "description": "Update existing artist"
+              },
+              {
+                "name": "deleteArtist",
+                "description": "Delete an artist"
+              },
+              {
+                "name": "addArtistMember",
+                "description": "Add member to artist"
+              },
+              {
+                "name": "removeArtistMember",
+                "description": "Remove artist member"
+              }
+            ],
+            "music": [
+              {
+                "name": "createSong",
+                "description": "Create new song"
+              },
+              {
+                "name": "updateSong",
+                "description": "Update existing song"
+              },
+              {
+                "name": "deleteSong",
+                "description": "Delete a song"
+              },
+              {
+                "name": "likeSong",
+                "description": "Like a song"
+              },
+              {
+                "name": "unlikeSong",
+                "description": "Unlike a song"
+              },
+              {
+                "name": "createAlbum",
+                "description": "Create new album"
+              },
+              {
+                "name": "updateAlbum",
+                "description": "Update existing album"
+              }
+            ],
+            "users": [
+              {
+                "name": "registerUser",
+                "description": "Register new user account"
+              },
+              {
+                "name": "loginUser",
+                "description": "Authenticate user"
+              },
+              {
+                "name": "updateProfile",
+                "description": "Update user profile"
+              },
+              {
+                "name": "updatePreferences",
+                "description": "Update user preferences"
+              },
+              {
+                "name": "changePassword",
+                "description": "Change user password"
+              },
+              {
+                "name": "deleteUser",
+                "description": "Delete user account"
+              }
+            ],
+            "playlists": [
+              {
+                "name": "createPlaylist",
+                "description": "Create new playlist"
+              },
+              {
+                "name": "updatePlaylist",
+                "description": "Update playlist details"
+              },
+              {
+                "name": "deletePlaylist",
+                "description": "Delete a playlist"
+              },
+              {
+                "name": "addSongToPlaylist",
+                "description": "Add song to playlist"
+              },
+              {
+                "name": "removeSongFromPlaylist",
+                "description": "Remove song from playlist"
+              },
+              {
+                "name": "reorderPlaylistSongs",
+                "description": "Reorder playlist songs"
+              },
+              {
+                "name": "followPlaylist",
+                "description": "Follow a playlist"
+              },
+              {
+                "name": "unfollowPlaylist",
+                "description": "Unfollow a playlist"
+              },
+              {
+                "name": "duplicatePlaylist",
+                "description": "Duplicate a playlist"
+              },
+              {
+                "name": "addCollaborator",
+                "description": "Add playlist collaborator"
+              },
+              {
+                "name": "removeCollaborator",
+                "description": "Remove collaborator"
+              }
+            ],
+            "interactions": [
+              {
+                "name": "trackPlay",
+                "description": "Track song play event"
+              },
+              {
+                "name": "saveAlbum",
+                "description": "Save album to library"
+              },
+              {
+                "name": "unsaveAlbum",
+                "description": "Remove album from library"
+              },
+              {
+                "name": "addReview",
+                "description": "Add album/song review"
+              },
+              {
+                "name": "updateReview",
+                "description": "Update existing review"
+              },
+              {
+                "name": "deleteReview",
+                "description": "Delete a review"
+              },
+              {
+                "name": "markReviewHelpful",
+                "description": "Mark review as helpful"
+              },
+              {
+                "name": "clearListeningHistory",
+                "description": "Clear listening history"
+              }
+            ]
+          },
+          "typeDetails": [
+            {
+              "name": "ArtistType",
+              "model": "Artist",
+              "description": "Artist profile with computed fields",
+              "app": "artists"
+            },
+            {
+              "name": "ArtistMemberType",
+              "model": "ArtistMember",
+              "description": "Band/group member info",
+              "app": "artists"
+            },
+            {
+              "name": "SongType",
+              "model": "Song",
+              "description": "Song with audio features",
+              "app": "music"
+            },
+            {
+              "name": "AlbumType",
+              "model": "Album",
+              "description": "Album with track listing",
+              "app": "music"
+            },
+            {
+              "name": "GenreType",
+              "model": "Genre",
+              "description": "Music genre hierarchy",
+              "app": "music"
+            },
+            {
+              "name": "UserType",
+              "model": "User",
+              "description": "User profile data",
+              "app": "users"
+            },
+            {
+              "name": "UserPreferencesType",
+              "model": "UserPreferences",
+              "description": "User settings",
+              "app": "users"
+            },
+            {
+              "name": "PlaylistType",
+              "model": "Playlist",
+              "description": "Playlist with songs",
+              "app": "playlists"
+            },
+            {
+              "name": "PlaylistSongType",
+              "model": "PlaylistSong",
+              "description": "Song in playlist",
+              "app": "playlists"
+            },
+            {
+              "name": "LikedSongType",
+              "model": "LikedSong",
+              "description": "User liked song",
+              "app": "interactions"
+            },
+            {
+              "name": "ListeningStatsType",
+              "model": "",
+              "description": "Listening analytics",
+              "app": "interactions"
+            }
+          ],
+          "inputTypes": [
+            {
+              "name": "CreateArtistInput",
+              "app": "artists",
+              "purpose": "Input for creating artists"
+            },
+            {
+              "name": "UpdateArtistInput",
+              "app": "artists",
+              "purpose": "Input for updating artists"
+            },
+            {
+              "name": "CreateSongInput",
+              "app": "music",
+              "purpose": "Input for creating songs"
+            },
+            {
+              "name": "UpdateSongInput",
+              "app": "music",
+              "purpose": "Input for updating songs"
+            },
+            {
+              "name": "CreateAlbumInput",
+              "app": "music",
+              "purpose": "Input for creating albums"
+            },
+            {
+              "name": "CreatePlaylistInput",
+              "app": "playlists",
+              "purpose": "Input for creating playlists"
+            },
+            {
+              "name": "UpdatePlaylistInput",
+              "app": "playlists",
+              "purpose": "Input for updating playlists"
+            }
+          ]
+        },
+        "grpc": {
+          "enabled": false,
+          "protoUrl": "",
+          "reflectionEnabled": false,
+          "services": 0,
+          "methods": 0
+        },
+        "websocket": {
+          "enabled": false,
+          "endpoint": null,
+          "protocols": [],
+          "events": []
+        }
       }
     }
   }
-}
+]

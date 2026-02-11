@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ApiEndpoint } from '../../api-explorer.model';
 import { CommonModule } from '@angular/common';
+import { ApiEndpoint } from '../../../../../../core/models/project-docs.models';
 
 @Component({
   selector: 'app-request-builder',
@@ -33,7 +33,7 @@ export class RequestBuilder {
   }
 
   get fullUrl(): string {
-    let url = this.baseUrl + this.endpoint().path;
+    let url = this.baseUrl + this.endpoint().urlPath;
 
     // Replace path parameters
     this.endpoint()
@@ -44,7 +44,7 @@ export class RequestBuilder {
 
     // Add query parameters
     const queryParams = this.endpoint().parameters?.filter(
-      (p) => p.in === 'query' && this.parameterValues[p.name]
+      (p) => p.in === 'query' && this.parameterValues[p.name],
     );
     if (queryParams && queryParams.length > 0) {
       const query = queryParams
@@ -67,7 +67,7 @@ export class RequestBuilder {
 
       // Mock successful response
       const mockResponse = this.endpoint().responses.find(
-        (r) => r.status === 200 || r.status === 201
+        (r) => r.status === 200 || r.status === 201,
       );
       this.response = {
         status: mockResponse?.status || 200,

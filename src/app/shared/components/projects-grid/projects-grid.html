@@ -36,7 +36,7 @@
     <!-- Projects grid -->
   } @else {
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" [class]="gridClasses()">
-      @for (project of projects(); track project.id) {
+      @for (project of projects(); track project.projectId) {
         <app-project-card
           [project]="project"
           [featured]="project.framework === 'Spring Boot'"

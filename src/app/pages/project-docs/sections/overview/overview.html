@@ -33,10 +33,10 @@
   }
 
   <!-- Success State -->
-  @else if (projectData) {
-    <app-project-header [project]="projectData" />
-    <app-tech-stack-showcase [project]="projectData" />
-    <app-quick-links [project]="projectData" />
-    <app-media-gallery [mediaItems]="projectData.docs.overview.mediaItems" />
+  @else if (data) {
+    <app-project-header [project]="data" />
+    <app-tech-stack-showcase [project]="data" />
+    <app-quick-links [project]="data" />
+    <app-media-gallery [mediaItems]="data.docs.overview.mediaItems" />
   }
 </div>

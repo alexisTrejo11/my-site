@@ -4,7 +4,7 @@ export interface ProjectDocsModel {
   infrastructure: InfrastructureModel;
   architecture: ProjectArchitectureModel;
   features: ProjectFeatures;
-  apis: APIs;
+  apiSchema: APISchema;
 }
 
 // Section: Overview
@@ -391,130 +391,43 @@ export interface TechDecisionModel {
 }
 
 // Section: APIs
-// TODO: Need To Create a Adapter Between Swagger and GraphQL Docs to API EXPLORER
-interface APIs {
-  rest?: RESTAPI;
-  graphql?: GraphQLAPI;
-  grpc?: GRPCAPI;
-  websocket?: WebSocketAPI;
+export interface APISchema {
+  httpEndpoints: ApiEndpoint[];
+  type: 'REST' | 'GraphQL' | 'SOAP' | 'Mixed';
 }
 
-// REST API
-interface RESTAPI {
-  enabled: boolean;
-  openapi: Record<string, any>;
-  schemaUrl: string | null;
-  swaggerUiUrl: string | null;
-  redocUrl: string | null;
-  basePath: string | null;
-  endpointCount: number;
-  authenticatedEndpoints: number;
-  rateLimits: Record<string, any>;
-  authenticationMethods: string[];
-  supportedFormats: string[];
-  corsEnabled: boolean;
-  pagination: Record<string, any>;
-  versioning: Record<string, any>;
-}
-
-// GraphQL API
-interface GraphQLAPI {
-  enabled: boolean;
-  schema: string;
-  schemaUrl: string;
-  sdlUrl: string;
-  endpoint: string;
-  subscriptionEndpoint: string | null;
-  playgroundUrl: string;
-  voyagerUrl: string | null;
-  introspectionEnabled: boolean;
-  queries: number;
-  mutations: number;
-  subscriptions: number;
-  types: number;
-  directives: string[];
-  interfaces: number;
-  unions: number;
-  enums: number;
-  scalars: string[];
-  complexityLimit: number | null;
-  depthLimit: number | null;
-  queryCost: QueryCost;
-  caching: GraphQLCaching;
-  batching: GraphQLBatching;
-  queryDetails: QueryDetails;
-  mutationDetails: MutationDetails;
-  typeDetails: TypeDetail[];
-  inputTypes: InputType[];
-}
-
-interface QueryCost {
-  maxCost: number | null;
-  defaultComplexity: number;
-}
-
-interface GraphQLCaching {
-  enabled: boolean;
-  strategy: string;
-}
-
-interface GraphQLBatching {
-  enabled: boolean;
-  maxBatchSize: number;
-}
-
-interface QueryDetails {
-  artists: QueryItem[];
-  music: QueryItem[];
-  users: QueryItem[];
-  playlists: QueryItem[];
-  interactions: QueryItem[];
-}
-
-interface MutationDetails {
-  artists: MutationItem[];
-  music: MutationItem[];
-  users: MutationItem[];
-  playlists: MutationItem[];
-  interactions: MutationItem[];
-}
-
-interface QueryItem {
-  name: string;
+export interface ApiEndpoint {
+  id: string;
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  urlPath: string;
+  summary: string;
   description: string;
+  tags: string[];
+  authenticated: boolean;
+  rateLimit: string;
+  parameters?: ApiParameter[];
+  requestBody?: ApiRequestBody;
+  responses: ApiResponse[];
 }
 
-interface MutationItem {
+export interface ApiParameter {
   name: string;
+  in: 'path' | 'query' | 'header';
+  type: string;
+  required: boolean;
   description: string;
+  example?: any;
 }
 
-interface TypeDetail {
-  name: string;
-  model?: string;
-  description?: string;
-  app: string;
+export interface ApiRequestBody {
+  contentType: string;
+  schema: any;
+  example: any;
 }
 
-interface InputType {
-  name: string;
-  app: string;
-  purpose: string;
-}
-
-// gRPC API
-interface GRPCAPI {
-  enabled: boolean;
-  protoUrl: string | null;
-  reflectionEnabled: boolean;
-  services: number;
-  methods: number;
-}
-
-// WebSocket API
-interface WebSocketAPI {
-  enabled: boolean;
-  endpoint: string | null;
-  protocols: string[];
-  events: any[];
+export interface ApiResponse {
+  status: number;
+  description: string;
+  schema?: any;
+  example: any;
 }

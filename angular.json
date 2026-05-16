@@ -28,12 +28,7 @@
               }
             ],
             "styles": ["src/styles.scss"],
-            "scripts": [
-              "node_modules/prismjs/prism.js",
-              "node_modules/prismjs/components/prism-typescript.min.js",
-              "node_modules/prismjs/components/prism-java.min.js",
-              "node_modules/mermaid/dist/mermaid.min.js"
-            ],
+            "scripts": [],
             "server": "src/main.server.ts",
             "outputMode": "server",
             "ssr": {
@@ -91,12 +86,7 @@
               }
             ],
             "styles": ["src/tailwind.css"],
-            "scripts": [
-              "node_modules/prismjs/prism.js",
-              "node_modules/prismjs/components/prism-typescript.min.js",
-              "node_modules/prismjs/components/prism-java.min.js",
-              "node_modules/mermaid/dist/mermaid.min.js"
-            ]
+            "scripts": []
           }
         },
         "lint": {

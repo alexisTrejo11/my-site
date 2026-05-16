@@ -85,11 +85,11 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class IconComponent {
-  @Input() name: string = '';
-  @Input() class: string = 'w-5 h-5';
-  @Input() fill: string = 'none';
-  @Input() stroke: string = 'currentColor';
-  @Input() viewBox: string = '0 0 24 24';
+  @Input() name = '';
+  @Input() class = 'w-5 h-5';
+  @Input() fill = 'none';
+  @Input() stroke = 'currentColor';
+  @Input() viewBox = '0 0 24 24';
   @Input() width?: string;
   @Input() height?: string;
 }

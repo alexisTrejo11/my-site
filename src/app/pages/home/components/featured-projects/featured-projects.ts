@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ProjectsGrid } from '../../../../shared/components/projects-grid/projects-grid';
 import { Project } from '../../../../core/models/project';
@@ -11,9 +11,11 @@ import { catchError, map, of } from 'rxjs';
   templateUrl: './featured-projects.html',
 })
 export class FeaturedProjects {
+  private readonly projectsService = inject(ProjectsService);
+
   featuredProjects: Project[] = [];
 
-  constructor(private projectsService: ProjectsService) {
+  constructor() {
     this.projectsService
       .getFeaturedProjects()
       .pipe(
@@ -21,7 +23,7 @@ export class FeaturedProjects {
         catchError((err) => {
           console.error('Error fetching featured projects:', err);
           return of([]);
-        })
+        }),
       )
       .subscribe((projects) => {
         this.featuredProjects = projects;

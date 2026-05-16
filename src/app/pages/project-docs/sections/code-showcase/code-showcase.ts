@@ -4,13 +4,11 @@ import {
   Component,
   ElementRef,
   inject,
-  Inject,
-  input,
   PLATFORM_ID,
   ViewChild,
+  OnInit,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import 'prismjs/prism'; // Core de Prism
+import * as Prism from 'prismjs';
 import 'prismjs/components/prism-typescript'; // For TypeScript
 import 'prismjs/components/prism-javascript'; // For JavaScript
 import 'prismjs/components/prism-json'; // For JSON
@@ -25,32 +23,27 @@ import {
   CodeFile,
   ProjectCodeShowCase,
 } from '../../../../core/models/project-docs.models';
-import { ProjectsService } from '../../../../services/projects.service';
 import { ErrorLoading } from '../../../../shared/components/errors/error-loading/error-loading';
+import { BaseDocComponent } from '../../../../shared/components/base-doc/base-doc';
+import { Observable } from 'rxjs';
 
 // import 'prismjs/plugins/line-highlight/prism-line-highlight';
 // import 'prismjs/plugins/line-numbers/prism-line-numbers';
 // import 'prismjs/plugins/toolbar/prism-toolbar';
 // import 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard';
 
-declare var Prism: any; // For TypeScript
-
 @Component({
   selector: 'app-code-showcase',
   imports: [CommonModule, IconComponent, ErrorLoading],
   templateUrl: './code-showcase.html',
 })
-export class CodeShowcase implements AfterViewInit {
+export class CodeShowcase extends BaseDocComponent<ProjectCodeShowCase> implements AfterViewInit, OnInit {
   @ViewChild('codeBlock') codeBlock!: ElementRef;
 
-  error = '';
-  projectService = inject(ProjectsService);
-  codeShowCase: ProjectCodeShowCase | undefined;
-
-  projectId: string = '';
+  private readonly platformId = inject(PLATFORM_ID);
   selectedExample: CodeExample | null = null;
   selectedFile: CodeFile | null = null;
-  isBrowser: boolean = false;
+  isBrowser = false;
 
   categories = [
     'All',
@@ -65,43 +58,22 @@ export class CodeShowcase implements AfterViewInit {
 
   selectedCategory: string | null = 'All';
 
-  constructor(
-    private route: ActivatedRoute,
-    @Inject(PLATFORM_ID) private platformId: Object,
-  ) {}
-
-  ngOnInit() {
+  override ngOnInit(): void {
     this.isBrowser = isPlatformBrowser(this.platformId);
+    super.ngOnInit();
+  }
 
-    this.projectId = this.route.parent?.snapshot.params['projectId'] || '';
+  override fetchData(projectId: string): Observable<ProjectCodeShowCase> {
+    return this.projectService.getProjectCodeShowcase(projectId) as Observable<ProjectCodeShowCase>;
+  }
 
-    if (!this.projectId) {
-      this.error = 'No project ID provided in the route.';
-      return;
-    }
-
-    this.projectService.getProjectCodeShowcase(this.projectId).subscribe({
-      next: (data) => {
-        this.codeShowCase = data;
-
-        if (this.codeShowCase && this.codeShowCase.codeExamples.length > 0) {
-          this.selectedExample = this.codeShowCase.codeExamples[0];
-
-          if (this.selectedExample.files.length > 0) {
-            this.selectedFile = this.selectedExample.files[0];
-          }
-        }
-      },
-      // TODO: Fix error handling to show a user-friendly message and possibly a retry button
-      error: (err) => {
-        console.error('Error fetching code showcase:', err);
-        this.error = 'Failed to load code examples. Please try again later.';
-      },
-    });
+  protected override onDataLoaded(codeShowCase: ProjectCodeShowCase): void {
+    this.selectedExample = codeShowCase.codeExamples[0] ?? null;
+    this.selectedFile = this.selectedExample?.files[0] ?? null;
   }
 
   get codeExamples(): CodeExample[] {
-    return this.codeShowCase?.codeExamples || [];
+    return this.data?.codeExamples || [];
   }
 
   get filteredExamples(): CodeExample[] {
@@ -133,10 +105,7 @@ export class CodeShowcase implements AfterViewInit {
     if (this.selectedFile) {
       navigator.clipboard
         .writeText(this.selectedFile.content)
-        .then(() => {
-          // You could add a toast notification here
-          console.log('Code copied to clipboard!');
-        })
+        .then(() => undefined)
         .catch((err) => {
           console.error('Failed to copy code: ', err);
         });
@@ -160,8 +129,6 @@ export class CodeShowcase implements AfterViewInit {
   }
 
   private highlightCode() {
-    if (typeof Prism !== 'undefined') {
-      Prism.highlightAll();
-    }
+    Prism.highlightAll();
   }
 }

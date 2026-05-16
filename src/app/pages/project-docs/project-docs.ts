@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { ProjectNavItem } from '../../core/models/project';
+import { Project, ProjectNavItem } from '../../core/models/project';
+import { ProjectsService } from '../../services/projects.service';
 
 @Component({
   selector: 'app-project-docs',
@@ -11,9 +12,11 @@ import { ProjectNavItem } from '../../core/models/project';
 })
 export class ProjectDocs implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
+  private projectsService = inject(ProjectsService);
   private destroy$ = new Subject<void>();
 
-  projectId: string = '';
+  projectId = '';
+  project: Project | undefined;
   isSidebarOpen = false;
 
   navItems: ProjectNavItem[] = [
@@ -32,7 +35,7 @@ export class ProjectDocs implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.projectId = params['projectId'];
-      console.log('Project ID loaded:', this.projectId);
+      this.loadProject();
     });
   }
 
@@ -54,5 +57,19 @@ export class ProjectDocs implements OnInit, OnDestroy {
   closeSidebar() {
     this.isSidebarOpen = false;
     document.body.style.overflow = '';
+  }
+
+  private loadProject(): void {
+    if (!this.projectId) {
+      this.project = undefined;
+      return;
+    }
+
+    this.projectsService
+      .getProjectById(this.projectId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((project) => {
+        this.project = project;
+      });
   }
 }

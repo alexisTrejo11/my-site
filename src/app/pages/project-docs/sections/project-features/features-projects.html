@@ -52,12 +52,16 @@
       <div class="flex flex-col lg:flex-row gap-6">
         <!-- Search Input -->
         <div class="flex-1">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label
+            for="features-search"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >
             Search Features
           </label>
           <div class="relative">
             <input
               type="text"
+              id="features-search"
               [value]="searchQuery()"
               (input)="onSearchChange($event)"
               placeholder="Search by name, description, or highlights..."
@@ -81,9 +85,9 @@
 
         <!-- Category Filter -->
         <div class="lg:w-auto">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <div class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Filter by Category
-          </label>
+          </div>
           <div class="flex flex-wrap gap-2">
             <button
               (click)="selectCategory('all')"

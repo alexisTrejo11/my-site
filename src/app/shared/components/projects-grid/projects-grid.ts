@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, input, output } from '@angular/core';
+import { Component, EventEmitter, input } from '@angular/core';
 import { ProjectCard } from '../project-card/project-card';
 import { Project } from '../../../core/models/project';
 

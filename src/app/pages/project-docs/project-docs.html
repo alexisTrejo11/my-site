@@ -22,7 +22,7 @@
         {{ projectId }}
       </h1>
       <a
-        routerLink="/home"
+        routerLink="/"
         class="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,7 +46,7 @@
     <div class="p-6 h-full">
       <!-- Back Link (Desktop) -->
       <a
-        routerLink="/home"
+        routerLink="/"
         class="hidden lg:flex items-center gap-2 text-blue-600 dark:text-blue-400 font-medium hover:underline mb-8"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,9 +93,11 @@
 
       <!-- Additional Links -->
       <div class="space-y-2">
+        @if (project?.repositoryUrl) {
         <a
-          href="#"
+          [href]="project!.repositoryUrl"
           target="_blank"
+          rel="noopener noreferrer"
           class="flex items-center gap-3 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
         >
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -105,9 +107,12 @@
           </svg>
           View on GitHub
         </a>
+        }
+        @if (project?.liveDemoUrl) {
         <a
-          href="#"
+          [href]="project!.liveDemoUrl"
           target="_blank"
+          rel="noopener noreferrer"
           class="flex items-center gap-3 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,13 +125,19 @@
           </svg>
           Live Demo
         </a>
+        }
       </div>
     </div>
   </aside>
 
   <!-- Overlay para mobile -->
   @if (isSidebarOpen) {
-  <div (click)="closeSidebar()" class="fixed inset-0 bg-black/50 z-30 lg:hidden"></div>
+  <button
+    type="button"
+    (click)="closeSidebar()"
+    class="fixed inset-0 bg-black/50 z-30 lg:hidden"
+    aria-label="Close navigation"
+  ></button>
   }
 
   <!-- Main Content -->

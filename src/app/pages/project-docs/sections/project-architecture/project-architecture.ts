@@ -88,7 +88,8 @@ export class ProjectArchitecture implements OnInit {
   }
 
   onComponentClick(component: string, layerName: string): void {
-    console.log(`Clicked on ${component} in ${layerName}`);
+    void component;
+    void layerName;
   }
 
   private fetchArchitecture(): void {

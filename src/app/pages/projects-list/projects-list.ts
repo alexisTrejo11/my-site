@@ -1,26 +1,27 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ProjectsGrid } from '../../shared/components/projects-grid/projects-grid';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../core/models/project';
-import { ErrorLoading } from '../../shared/components/errors/error-loading/error-loading';
 
 @Component({
   selector: 'app-projects-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, ProjectsGrid, ErrorLoading],
+  imports: [CommonModule, RouterModule, FormsModule, ProjectsGrid],
   templateUrl: './projects-list.html',
 })
 export class ProjectsList implements OnInit {
+  private readonly projectsService = inject(ProjectsService);
+
   allProjects: Project[] = [];
   filteredProjects: Project[] = [];
-  searchQuery: string = '';
-  selectedCategory: string = 'all';
-  selectedStatus: string = 'all';
-  selectedTech: string = 'all';
-  loading: boolean = true;
+  searchQuery = '';
+  selectedCategory = 'all';
+  selectedStatus = 'all';
+  selectedTech = 'all';
+  loading = true;
 
   categories = [
     { value: 'all', label: 'All Categories' },
@@ -32,10 +33,10 @@ export class ProjectsList implements OnInit {
 
   statusFilters = [
     { value: 'all', label: 'All Status' },
-    { value: 'production', label: 'Production' },
-    { value: 'development', label: 'Development' },
+    { value: 'deployed', label: 'Deployed' },
+    { value: 'develop', label: 'In Development' },
     { value: 'archived', label: 'Archived' },
-  ];
+  ] satisfies ({ value: Project['status'] | 'all'; label: string })[];
 
   techFilters = [
     { value: 'all', label: 'All Tech' },
@@ -54,10 +55,7 @@ export class ProjectsList implements OnInit {
     { value: 'rabbitmq', label: 'RabbitMQ' },
   ];
 
-  constructor(private projectsService: ProjectsService) {}
-
   ngOnInit(): void {
-    console.log('Loading projects list...');
     this.loadProjects();
   }
 
@@ -68,7 +66,6 @@ export class ProjectsList implements OnInit {
         this.allProjects = projects;
         this.filteredProjects = [...projects];
         this.loading = false;
-        console.log('Projects loaded:', projects.length);
       },
       error: (error) => {
         console.error('Error loading projects:', error);
@@ -153,8 +150,7 @@ export class ProjectsList implements OnInit {
   }
 
   onProjectClick(project: Project): void {
-    // Puedes navegar directamente o emitir evento
-    console.log('Project clicked:', project.name);
+    void project;
     // this.router.navigate(['/projects', project.id]);
   }
 

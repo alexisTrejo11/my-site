@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProjectHeader } from './components/project-header/project-header';
 import { Project } from '../../../../core/models/project';
 import { Observable, filter } from 'rxjs';

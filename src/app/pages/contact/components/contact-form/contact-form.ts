@@ -37,11 +37,9 @@ export class ContactForm {
       // Simulate API call (replace with actual endpoint)
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      console.log('Form submitted:', this.formData);
-
       this.submitSuccess = true;
       this.resetForm();
-    } catch (error) {
+    } catch {
       this.submitError = true;
     } finally {
       this.isSubmitting = false;

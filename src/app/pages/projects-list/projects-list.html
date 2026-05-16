@@ -78,9 +78,9 @@
     <div class="space-y-8 mb-12">
       <!-- Category Filter -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+        <div class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
           Category
-        </label>
+        </div>
         <div class="flex flex-wrap gap-3">
           @for (category of categories; track category.value) {
             <button
@@ -99,9 +99,9 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Status Filter -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+          <div class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
             Status
-          </label>
+          </div>
           <div class="flex flex-wrap gap-3">
             @for (filter of statusFilters; track filter.value) {
               <button
@@ -118,9 +118,9 @@
 
         <!-- Technology Filter -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+          <div class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
             Technology
-          </label>
+          </div>
           <div class="flex flex-wrap gap-3">
             @for (tech of techFilters; track tech.value) {
               <button

@@ -11,12 +11,12 @@ import { DiagramConnection, DiagramNode } from '../../../../../core/models/proje
 export class ArchitectureDiagram implements OnInit {
   selectedNode: DiagramNode | null = null;
   hoveredConnection: string | null = null;
-  viewBox: string = '0 0 100 100';
-  isPanning: boolean = false;
+  viewBox = '0 0 100 100';
+  isPanning = false;
   panStart: { x: number; y: number } = { x: 0, y: 0 };
-  scale: number = 1;
+  scale = 1;
   offset: { x: number; y: number } = { x: 0, y: 0 };
-  simulationActive: boolean = true;
+  simulationActive = true;
 
   nodes = input.required<DiagramNode[]>();
   connections = input.required<DiagramConnection[]>();

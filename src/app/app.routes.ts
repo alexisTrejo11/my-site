@@ -1,38 +1,62 @@
 import { Routes } from '@angular/router';
-import { Home } from './pages/home/home';
-import { ProjectDocs } from './pages/project-docs/project-docs';
-import { ProjectsList } from './pages/projects-list/projects-list';
-import { About } from './pages/about/about';
-import { Contact } from './pages/contact/contact';
-import { Overview } from './pages/project-docs/sections/overview/overview';
-import { CodeShowcase } from './pages/project-docs/sections/code-showcase/code-showcase';
-import { ApiExplorer } from './pages/project-docs/sections/api-explorer/api-explorer';
-import { ProjectFeatures } from './pages/project-docs/sections/project-features/project-features';
-import { Infrastructure } from './pages/project-docs/sections/infrastructure/infrastructure';
-import { ProjectArchitecture } from './pages/project-docs/sections/project-architecture/project-architecture';
 
 export const routes: Routes = [
   {
     path: '',
-    component: Home,
+    loadComponent: () => import('./pages/home/home').then((m) => m.Home),
   },
   {
     path: 'projects',
     children: [
       {
         path: '',
-        component: ProjectsList,
+        loadComponent: () =>
+          import('./pages/projects-list/projects-list').then((m) => m.ProjectsList),
       },
       {
         path: ':projectId',
-        component: ProjectDocs,
+        loadComponent: () => import('./pages/project-docs/project-docs').then((m) => m.ProjectDocs),
         children: [
-          { path: 'overview', component: Overview },
-          { path: 'architecture', component: ProjectArchitecture },
-          { path: 'code', component: CodeShowcase },
-          { path: 'api', component: ApiExplorer },
-          { path: 'features', component: ProjectFeatures },
-          { path: 'infrastructure', component: Infrastructure },
+          {
+            path: 'overview',
+            loadComponent: () =>
+              import('./pages/project-docs/sections/overview/overview').then((m) => m.Overview),
+          },
+          {
+            path: 'architecture',
+            loadComponent: () =>
+              import(
+                './pages/project-docs/sections/project-architecture/project-architecture'
+              ).then((m) => m.ProjectArchitecture),
+          },
+          {
+            path: 'code',
+            loadComponent: () =>
+              import('./pages/project-docs/sections/code-showcase/code-showcase').then(
+                (m) => m.CodeShowcase,
+              ),
+          },
+          {
+            path: 'api',
+            loadComponent: () =>
+              import('./pages/project-docs/sections/api-explorer/api-explorer').then(
+                (m) => m.ApiExplorer,
+              ),
+          },
+          {
+            path: 'features',
+            loadComponent: () =>
+              import('./pages/project-docs/sections/project-features/project-features').then(
+                (m) => m.ProjectFeatures,
+              ),
+          },
+          {
+            path: 'infrastructure',
+            loadComponent: () =>
+              import('./pages/project-docs/sections/infrastructure/infrastructure').then(
+                (m) => m.Infrastructure,
+              ),
+          },
           { path: '', redirectTo: 'overview', pathMatch: 'full' },
         ],
       },
@@ -40,11 +64,11 @@ export const routes: Routes = [
   },
   {
     path: 'about',
-    component: About,
+    loadComponent: () => import('./pages/about/about').then((m) => m.About),
   },
   {
     path: 'contact',
-    component: Contact,
+    loadComponent: () => import('./pages/contact/contact').then((m) => m.Contact),
   },
   {
     path: '**',

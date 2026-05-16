@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, isDevMode } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, of, retry, tap, throwError } from 'rxjs';
 import { Project } from '../core/models/project';
@@ -370,6 +370,8 @@ export class ProjectsService {
   }
 
   private log(message: string, data?: Record<string, unknown>): void {
+    if (!isDevMode()) return;
+
     if (data) {
       console.log(`[${this.serviceName}] ${message}`, data);
     } else {
@@ -378,6 +380,8 @@ export class ProjectsService {
   }
 
   private logWarning(message: string, data?: Record<string, unknown>): void {
+    if (!isDevMode()) return;
+
     if (data) {
       console.warn(`[${this.serviceName}] ${message}`, data);
     } else {

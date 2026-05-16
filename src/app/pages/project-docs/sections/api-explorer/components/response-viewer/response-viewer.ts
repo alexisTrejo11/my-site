@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiResponse } from '../../../../../../core/models/project-docs.models';
 
@@ -7,7 +7,7 @@ import { ApiResponse } from '../../../../../../core/models/project-docs.models';
   imports: [CommonModule],
   templateUrl: './response-viewer.html',
 })
-export class ResponseViewer {
+export class ResponseViewer implements OnInit {
   @Input({ required: true }) responses: ApiResponse[] = [];
   selectedResponse: ApiResponse | null = null;
 

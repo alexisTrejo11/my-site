@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -8,8 +8,10 @@ import { Router } from '@angular/router';
   imports: [CommonModule],
   templateUrl: './hero.html',
 })
-export class Hero {
+export class Hero implements OnDestroy, OnInit {
   private router = inject(Router);
+  private typingTimeouts: ReturnType<typeof setTimeout>[] = [];
+  private terminalInterval: ReturnType<typeof setInterval> | null = null;
 
   // Señales para efectos
   displayText = signal('');
@@ -51,7 +53,12 @@ export class Hero {
     this.startTerminalEffect();
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.typingTimeouts.forEach((timeout) => clearTimeout(timeout));
+    if (this.terminalInterval) {
+      clearInterval(this.terminalInterval);
+    }
+  }
 
   private startTypingEffect(): void {
     let index = 0;
@@ -61,24 +68,26 @@ export class Hero {
       if (index < this.fullText.length) {
         this.displayText.update((current) => current + this.fullText.charAt(index));
         index++;
-        setTimeout(typeCharacter, this.typingSpeed);
+        this.typingTimeouts.push(setTimeout(typeCharacter, this.typingSpeed));
       } else {
         this.isTypingComplete.set(true);
       }
     };
 
-    setTimeout(typeCharacter, this.initialDelay);
+    this.typingTimeouts.push(setTimeout(typeCharacter, this.initialDelay));
   }
 
   private startTerminalEffect(): void {
     let lineIndex = 0;
-    const terminalInterval = setInterval(() => {
+    this.terminalInterval = setInterval(() => {
       if (lineIndex < this.terminalCode.length) {
         this.terminalLines.update((lines) => [...lines, this.terminalCode[lineIndex]]);
         lineIndex++;
         this.currentLine.set(lineIndex);
       } else {
-        clearInterval(terminalInterval);
+        if (this.terminalInterval) {
+          clearInterval(this.terminalInterval);
+        }
       }
     }, 150);
   }

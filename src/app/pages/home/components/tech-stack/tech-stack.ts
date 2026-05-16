@@ -1,21 +1,23 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { TechCategoryInfo, Technology } from '../../../../core/models/hero';
 import { CommonModule } from '@angular/common';
 import { TechStackService } from '../../../../services/tech-stack.service';
+
+type TechStatistics = ReturnType<TechStackService['getStatistics']>;
 
 @Component({
   selector: 'app-tech-stack',
   imports: [CommonModule],
   templateUrl: './tech-stack.html',
 })
-export class TechStack {
+export class TechStack implements OnInit {
   private techStackService = inject(TechStackService);
 
   technologies: Technology[] = [];
   categories: TechCategoryInfo[] = [];
-  selectedCategory: string = 'all';
-  isLoading: boolean = true;
-  statistics: any;
+  selectedCategory = 'all';
+  isLoading = true;
+  statistics: TechStatistics | null = null;
 
   ngOnInit(): void {
     this.loadData();

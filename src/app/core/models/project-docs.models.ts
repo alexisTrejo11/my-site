@@ -58,7 +58,8 @@ export interface Technology {
   name: string;
   category: string;
   usage: string;
-  iconPath: string;
+  iconPath?: string;
+  icon?: string;
   version?: string;
 }
 
@@ -69,19 +70,6 @@ export interface QuickLink {
   iconPath: string;
   color: string;
   external: boolean;
-}
-
-export interface ProjectMetric {
-  label: string;
-  value: string;
-  description?: string;
-}
-
-export interface ProjectSection {
-  id: string;
-  title: string;
-  content: string;
-  subsections?: ProjectSection[];
 }
 
 export interface ProjectMediaItem {
@@ -98,12 +86,6 @@ export interface MediaGallerySection {
   title: string;
   description?: string;
   items: ProjectMediaItem[];
-}
-
-export interface ProjectOverview {
-  problemStatement: OverviewProblemStatement;
-  solution: OverviewSolution;
-  keyMetrics: OverviewKeyMetrics;
 }
 
 export interface OverviewProblemStatement {
@@ -127,14 +109,6 @@ export interface OverviewKeyMetrics {
   metricsList: string[];
 }
 
-export interface Technology {
-  name: string;
-  category: string;
-  usage: string;
-  icon: string;
-  version?: string;
-}
-
 export interface MediaItem {
   type: 'image' | 'video';
   url: string;
@@ -142,15 +116,6 @@ export interface MediaItem {
   title: string;
   description: string;
   alt?: string;
-}
-
-export interface QuickLink {
-  title: string;
-  description: string;
-  url: string;
-  icon: string;
-  color: string;
-  external: boolean;
 }
 
 // Section: Code Showcase
@@ -396,6 +361,14 @@ export interface APISchema {
   type: 'REST' | 'GraphQL' | 'SOAP' | 'Mixed';
 }
 
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
 export interface ApiEndpoint {
   id: string;
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -416,18 +389,18 @@ export interface ApiParameter {
   type: string;
   required: boolean;
   description: string;
-  example?: any;
+  example?: JsonValue;
 }
 
 export interface ApiRequestBody {
   contentType: string;
-  schema: any;
-  example: any;
+  schema: JsonValue;
+  example: JsonValue;
 }
 
 export interface ApiResponse {
   status: number;
   description: string;
-  schema?: any;
-  example: any;
+  schema?: JsonValue;
+  example: JsonValue;
 }

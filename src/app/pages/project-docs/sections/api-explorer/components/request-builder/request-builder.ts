@@ -1,24 +1,30 @@
-import { Component, input } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ApiEndpoint } from '../../../../../../core/models/project-docs.models';
+import { ApiEndpoint, JsonValue } from '../../../../../../core/models/project-docs.models';
+
+interface ApiDemoResponse {
+  status: number;
+  statusText: string;
+  data: JsonValue | undefined;
+}
 
 @Component({
   selector: 'app-request-builder',
   imports: [CommonModule, FormsModule],
   templateUrl: './request-builder.html',
 })
-export class RequestBuilder {
+export class RequestBuilder implements OnInit {
   endpoint = input.required<ApiEndpoint>();
 
   baseUrl = 'https://api.example.com';
   authToken = '';
   requestBody = '';
   isLoading = false;
-  response: any = null;
+  response: ApiDemoResponse | null = null;
   error: string | null = null;
 
-  parameterValues: Record<string, any> = {};
+  parameterValues: Record<string, JsonValue> = {};
 
   ngOnInit() {
     // Initialize parameter values
@@ -39,7 +45,10 @@ export class RequestBuilder {
     this.endpoint()
       .parameters?.filter((p) => p.in === 'path')
       .forEach((param) => {
-        url = url.replace(`{${param.name}}`, this.parameterValues[param.name] || `{${param.name}}`);
+        url = url.replace(
+          `{${param.name}}`,
+          String(this.parameterValues[param.name] || `{${param.name}}`),
+        );
       });
 
     // Add query parameters
@@ -48,7 +57,7 @@ export class RequestBuilder {
     );
     if (queryParams && queryParams.length > 0) {
       const query = queryParams
-        .map((p) => `${p.name}=${encodeURIComponent(this.parameterValues[p.name])}`)
+        .map((p) => `${p.name}=${encodeURIComponent(String(this.parameterValues[p.name]))}`)
         .join('&');
       url += `?${query}`;
     }
@@ -74,8 +83,8 @@ export class RequestBuilder {
         statusText: mockResponse?.description || 'OK',
         data: mockResponse?.example,
       };
-    } catch (err: any) {
-      this.error = err.message || 'Request failed';
+    } catch (err: unknown) {
+      this.error = err instanceof Error ? err.message : 'Request failed';
     } finally {
       this.isLoading = false;
     }

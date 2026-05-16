@@ -4,6 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { ProjectsService } from '../../../services/projects.service';
 
+interface LoadError {
+  status?: number;
+}
+
 @Component({
   selector: 'app-base-doc',
   template: '',
@@ -45,26 +49,29 @@ export abstract class BaseDocComponent<T> implements OnInit, OnDestroy {
           this.isLoading = false;
           this.onDataLoaded(response);
         },
-        error: (err: any) => {
+        error: (err: unknown) => {
           this.isLoading = false;
           this.handleError(err);
         },
       });
   }
 
-  protected onDataLoaded(data: T): void {}
+  protected onDataLoaded(data: T): void {
+    void data;
+  }
 
-  protected handleError(err: any): void {
+  protected handleError(err: unknown): void {
     console.error('Error loading data:', err);
     this.setError(this.getErrorMessage(err));
   }
 
-  protected getErrorMessage(err: any): string {
-    if (err.status === 404) {
+  protected getErrorMessage(err: unknown): string {
+    const error = err as LoadError;
+    if (error.status === 404) {
       return 'The requested resource was not found.';
-    } else if (err.status === 403) {
+    } else if (error.status === 403) {
       return 'You do not have permission to access this resource.';
-    } else if (err.status === 0) {
+    } else if (error.status === 0) {
       return 'Network error. Please check your connection.';
     }
     return 'Failed to load data. Please try again later.';

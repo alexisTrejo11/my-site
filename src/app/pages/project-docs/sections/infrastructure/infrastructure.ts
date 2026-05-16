@@ -14,35 +14,11 @@ import { ErrorLoading } from '../../../../shared/components/errors/error-loading
 })
 export class Infrastructure extends BaseDocComponent<InfrastructureModel> implements OnInit {
   override ngOnInit(): void {
-    this.projectId = this.route.parent?.snapshot.params['projectId'] || '';
-
-    if (!this.projectId) {
-      this.error = 'No project ID provided in the route.';
-      this.isLoading = false;
-      return;
-    }
-
-    this.fetchData();
+    super.ngOnInit();
   }
 
-  fetchData(): Observable<InfrastructureModel> {
-    this.isLoading = true;
-    this.error = null;
-
-    const project = this.projectService.getProjectInfrastructure(this.projectId);
-    project.subscribe({
-      next: (data) => {
-        console.log('Infrastructure data received:', data);
-        this.data = data;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error fetching infrastructure data:', err);
-        this.error = 'Failed to load infrastructure data. Please try again later.';
-        this.isLoading = false;
-      },
-    });
-    return project;
+  fetchData(projectId: string): Observable<InfrastructureModel> {
+    return this.projectService.getProjectInfrastructure(projectId);
   }
 
   get totalMonthlyCost(): number {

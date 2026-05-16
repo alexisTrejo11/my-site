@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { DockerFile } from '../../../../../core/models/project-docs.models';
 
 @Component({
@@ -7,7 +7,7 @@ import { DockerFile } from '../../../../../core/models/project-docs.models';
   imports: [CommonModule],
   templateUrl: './docker-config.html',
 })
-export class DockerConfig {
+export class DockerConfig implements OnInit {
   selectedFile: DockerFile | null = null;
   dockerFiles = input.required<DockerFile[]>();
 

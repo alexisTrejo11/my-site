@@ -16,7 +16,7 @@ export class QuickStats implements OnInit, OnDestroy {
   ];
 
   private targetValues = [5, 50, 500, 99.9];
-  private intervals: any[] = [];
+  private intervals: ReturnType<typeof setInterval>[] = [];
 
   ngOnInit() {
     this.animateStats();

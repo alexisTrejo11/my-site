@@ -262,7 +262,7 @@ export class TechStackService {
     return this.technologies.find((tech) => tech.id === id);
   }
 
-  getFeaturedTechnologies(count: number = 6): Technology[] {
+  getFeaturedTechnologies(count = 6): Technology[] {
     return this.technologies
       .filter((tech) => tech.level === 'expert' || tech.level === 'advanced')
       .slice(0, count);

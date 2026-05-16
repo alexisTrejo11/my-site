@@ -164,9 +164,13 @@
           let isLast = $last
         ) {
           <div
+            role="button"
+            tabindex="0"
             class="card-interactive group animate-fade-in"
             [style.animation-delay]="i * 0.1 + 's'"
             (click)="toggleLayer(i)"
+            (keydown.enter)="toggleLayer(i)"
+            (keydown.space)="toggleLayer(i); $event.preventDefault()"
           >
             <div class="p-6 lg:p-8 flex items-start gap-4 lg:gap-6">
               <!-- Layer Number with Connector -->

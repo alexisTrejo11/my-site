@@ -57,6 +57,7 @@ export class Header implements OnInit {
   navLinks: NavLink[] = [
     { label: 'Home', path: '/' },
     { label: 'Projects', path: '/projects' },
+    { label: 'Learning', path: '/learning' },
     { label: 'About', path: '/about' },
     { label: 'Contact', path: '/contact' },
   ];

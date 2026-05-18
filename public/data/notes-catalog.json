@@ -1,0 +1,358 @@
+[
+  {
+    "title": "Welcome to the Machine: Client-Server Architecture",
+    "category": "backend",
+    "subcategory": "introduction",
+    "slug": "welcome-to-the-machine",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "introduction"
+    ],
+    "description": "Understanding the client-server model, the HTTP request/response lifecycle, and what really happens when you hit Enter in a browser.",
+    "filePath": "notes/introduction/welcome-to-the-machine.md"
+  },
+  {
+    "title": "The Ultimate Backend Cheat Sheet & Glossary",
+    "category": "backend",
+    "subcategory": "introduction",
+    "slug": "glossary",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "introduction"
+    ],
+    "description": "Interactive technical dictionary establishing fundamental backend vocabulary. Each term links to its deep-dive note.",
+    "filePath": "notes/introduction/glossary.md"
+  },
+  {
+    "title": "History and Evolution of Backend Systems",
+    "category": "backend",
+    "subcategory": "introduction",
+    "slug": "history-and-evolution",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "introduction"
+    ],
+    "description": "From CGI scripts to cloud-native serverless — how backend architecture evolved across four decades.",
+    "filePath": "notes/introduction/history-and-evolution.md"
+  },
+  {
+    "title": "The Perfect API Design",
+    "category": "backend",
+    "subcategory": "introduction",
+    "slug": "api-design",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "introduction"
+    ],
+    "description": "Core API contracts, design philosophies, and the practical tradeoffs between REST, RPC, and GraphQL.",
+    "filePath": "notes/introduction/api-design.md"
+  },
+  {
+    "title": "Spring Boot: Enterprise Backend Engineering",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-moc",
+    "difficulty": "beginner",
+    "tags": [
+      "java",
+      "spring-boot",
+      "spring-framework",
+      "ioc",
+      "enterprise",
+      "backend"
+    ],
+    "description": "Master hub for Spring Boot — IoC philosophy, ecosystem map, learning tracks, and links to Core, Data, Web, Security, and Testing pillars.",
+    "filePath": "notes/spring-boot/spring-moc.md"
+  },
+  {
+    "title": "Mastering Spring Core and IoC Containers",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-core-ioc",
+    "difficulty": "intermediate",
+    "tags": [
+      "java",
+      "spring-boot",
+      "dependency-injection",
+      "ioc",
+      "beans",
+      "backend"
+    ],
+    "description": "Deep dive into the Spring ApplicationContext, bean lifecycles, scopes, and clean dependency injection architectures.",
+    "filePath": "notes/spring-boot/spring-core-ioc.md"
+  },
+  {
+    "title": "Spring Boot Auto-Configuration Lifecycle",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-autoconfiguration",
+    "difficulty": "intermediate",
+    "tags": [
+      "java",
+      "spring-boot",
+      "autoconfiguration",
+      "conditional",
+      "backend"
+    ],
+    "description": "How @SpringBootApplication enables auto-configuration, classpath scanning, and @ConditionalOn* beans under the hood.",
+    "filePath": "notes/spring-boot/spring-autoconfiguration.md"
+  },
+  {
+    "title": "Properties, Profiles, and YAML Configuration",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-properties-profiles-yaml",
+    "difficulty": "beginner",
+    "tags": [
+      "java",
+      "spring-boot",
+      "configuration",
+      "yaml",
+      "profiles",
+      "backend"
+    ],
+    "description": "Externalized configuration with application.yml, type-safe @ConfigurationProperties, Spring profiles, and multi-document YAML.",
+    "filePath": "notes/spring-boot/spring-properties-profiles-yaml.md"
+  },
+  {
+    "title": "JPA, Hibernate, and Spring Data JDBC",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-jpa-hibernate",
+    "difficulty": "intermediate",
+    "tags": [
+      "java",
+      "spring-boot",
+      "jpa",
+      "hibernate",
+      "spring-data",
+      "backend"
+    ],
+    "description": "Spring Data JPA, entity lifecycle states, solving N+1 with fetch strategies, Hibernate proxies, and second-level caching.",
+    "filePath": "notes/spring-boot/spring-jpa-hibernate.md"
+  },
+  {
+    "title": "Declarative Transaction Management in Spring",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-transaction-management",
+    "difficulty": "advanced",
+    "tags": [
+      "java",
+      "spring-boot",
+      "transactions",
+      "transactional",
+      "jpa",
+      "backend"
+    ],
+    "description": "@Transactional mechanics, proxy behavior, propagation (REQUIRED, REQUIRES_NEW), and isolation levels for production data integrity.",
+    "filePath": "notes/spring-boot/spring-transaction-management.md"
+  },
+  {
+    "title": "REST Controllers and Spring MVC",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-rest-controllers-mvc",
+    "difficulty": "intermediate",
+    "tags": [
+      "java",
+      "spring-boot",
+      "rest",
+      "mvc",
+      "controllers",
+      "backend"
+    ],
+    "description": "@RestController design, request mapping, content negotiation, DTO patterns, path variables vs query parameters.",
+    "filePath": "notes/spring-boot/spring-rest-controllers-mvc.md"
+  },
+  {
+    "title": "Global Exception Handling in Spring Boot",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-global-exception-handling",
+    "difficulty": "intermediate",
+    "tags": [
+      "java",
+      "spring-boot",
+      "exceptions",
+      "controller-advice",
+      "rfc7807",
+      "backend"
+    ],
+    "description": "Centralized errors with @ControllerAdvice, @ExceptionHandler, and RFC 7807 Problem Details JSON responses.",
+    "filePath": "notes/spring-boot/spring-global-exception-handling.md"
+  },
+  {
+    "title": "Spring Security Architecture",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-security-architecture",
+    "difficulty": "advanced",
+    "tags": [
+      "java",
+      "spring-boot",
+      "security",
+      "jwt",
+      "oauth2",
+      "backend"
+    ],
+    "description": "SecurityFilterChain, DelegatingFilterProxy, stateless JWT authentication, @PreAuthorize, and OAuth2 Resource Server basics.",
+    "filePath": "notes/spring-boot/spring-security-architecture.md"
+  },
+  {
+    "title": "Spring Boot Testing and Slice Annotations",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-testing-slices",
+    "difficulty": "intermediate",
+    "tags": [
+      "java",
+      "spring-boot",
+      "testing",
+      "mockmvc",
+      "junit",
+      "backend"
+    ],
+    "description": "Testing pyramid in Spring Boot, @SpringBootTest vs sliced tests, MockMvc, and @MockBean patterns.",
+    "filePath": "notes/spring-boot/spring-testing-slices.md"
+  },
+  {
+    "title": "Spring Boot Actuator and Metrics",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-actuator-metrics",
+    "difficulty": "advanced",
+    "tags": [
+      "java",
+      "spring-boot",
+      "actuator",
+      "micrometer",
+      "prometheus",
+      "virtual-threads",
+      "backend"
+    ],
+    "description": "Securing Actuator endpoints, Micrometer Prometheus integration, and Java 21+ virtual threads configuration.",
+    "filePath": "notes/spring-boot/spring-actuator-metrics.md"
+  },
+  {
+    "title": "Monoliths vs Microservices",
+    "category": "backend",
+    "subcategory": "architecture-patterns",
+    "slug": "monoliths-vs-microservices",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "architecture-patterns"
+    ],
+    "description": "A rigorous comparison of monolithic and microservice architectures — when each is right, and the cost of each transition.",
+    "filePath": "notes/architecture-patterns/monoliths-vs-microservices.md"
+  },
+  {
+    "title": "Modular Monoliths",
+    "category": "backend",
+    "subcategory": "architecture-patterns",
+    "slug": "modular-monoliths",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "architecture-patterns"
+    ],
+    "description": "The architectural middle ground — a single deployable with strict internal module boundaries that enable future extraction.",
+    "filePath": "notes/architecture-patterns/modular-monoliths.md"
+  },
+  {
+    "title": "Clean Architecture",
+    "category": "backend",
+    "subcategory": "architecture-patterns",
+    "slug": "clean-architecture",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "architecture-patterns"
+    ],
+    "description": "Robert C. Martin's Clean Architecture — dependency rules, layer responsibilities, and how to apply it in a Spring Boot or FastAPI service.",
+    "filePath": "notes/architecture-patterns/clean-architecture.md"
+  },
+  {
+    "title": "Sync vs Async Communication",
+    "category": "backend",
+    "subcategory": "communication-patterns",
+    "slug": "sync-vs-async",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "communication-patterns"
+    ],
+    "description": "Synchronous blocking calls vs asynchronous non-blocking patterns — thread models, concurrency, and when to use each.",
+    "filePath": "notes/communication-patterns/sync-vs-async.md"
+  },
+  {
+    "title": "gRPC Deep Dive",
+    "category": "backend",
+    "subcategory": "communication-patterns",
+    "slug": "grpc-deep-dive",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "communication-patterns"
+    ],
+    "description": "How gRPC works under the hood — Protobuf encoding, HTTP/2 framing, streaming modes, and when to use gRPC over REST.",
+    "filePath": "notes/communication-patterns/grpc-deep-dive.md"
+  },
+  {
+    "title": "Serialization Protocols",
+    "category": "backend",
+    "subcategory": "communication-patterns",
+    "slug": "serialization-protocols",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "communication-patterns"
+    ],
+    "description": "JSON, Protocol Buffers, and Apache Avro — encoding formats, tradeoffs, and when to use each in backend systems.",
+    "filePath": "notes/communication-patterns/serialization-protocols.md"
+  },
+  {
+    "title": "The Three Pillars of Observability",
+    "category": "backend",
+    "subcategory": "observability-and-security",
+    "slug": "three-pillars-observability",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "observability-and-security"
+    ],
+    "description": "Metrics, Logs, and Traces — the observability triad that makes production systems debuggable and resilient.",
+    "filePath": "notes/observability-and-security/three-pillars-observability.md"
+  },
+  {
+    "title": "Authentication & Authorization",
+    "category": "backend",
+    "subcategory": "observability-and-security",
+    "slug": "authentication-authorization",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "observability-and-security"
+    ],
+    "description": "JWT, OAuth2, session management — the difference between AuthN and AuthZ, and how to implement them correctly.",
+    "filePath": "notes/observability-and-security/authentication-authorization.md"
+  },
+  {
+    "title": "Rate Limiting & CORS",
+    "category": "backend",
+    "subcategory": "observability-and-security",
+    "slug": "rate-limiting-cors",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "observability-and-security"
+    ],
+    "description": "Protecting APIs with rate limiting strategies and understanding Cross-Origin Resource Sharing (CORS) security boundaries.",
+    "filePath": "notes/observability-and-security/rate-limiting-cors.md"
+  }
+]

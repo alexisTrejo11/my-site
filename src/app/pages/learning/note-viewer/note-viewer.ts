@@ -1,89 +1,122 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MarkdownComponent } from 'ngx-markdown';
+import { LearningDataService } from '../../../services/learning-data.service';
+import { NoteMetadata } from '../../../core/models/note-metadata';
 
-interface NoteMetadata {
-  title: string;
-  summary: string;
-  category: string;
-  readingMinutes: number;
-  breadcrumb: string[];
-  lastUpdated: string;
-}
-
-const SLUG_META: Record<string, NoteMetadata> = {
-  microservices: {
-    title: 'Microservices Architecture',
-    summary:
-      'An architectural pattern that structures an application as a collection of loosely coupled, independently deployable services — each responsible for a distinct business capability.',
-    category: 'Backend',
-    readingMinutes: 8,
-    breadcrumb: ['Learning Hub', 'Backend Engineering', 'Microservices'],
-    lastUpdated: 'May 2026',
-  },
-  'event-driven-systems': {
-    title: 'Event-Driven Systems',
-    summary:
-      'A design paradigm where components communicate by producing and consuming events — enabling high decoupling, scalability, and resilience in distributed architectures.',
-    category: 'Backend',
-    readingMinutes: 10,
-    breadcrumb: ['Learning Hub', 'Backend Engineering', 'Event-Driven Systems'],
-    lastUpdated: 'May 2026',
-  },
-  'docker-containers': {
-    title: 'Docker & Containers',
-    summary:
-      'Containerization technology that packages applications with their dependencies into isolated, portable units — reproducible across any environment.',
-    category: 'DevOps',
-    readingMinutes: 7,
-    breadcrumb: ['Learning Hub', 'DevOps & Cloud', 'Docker & Containers'],
-    lastUpdated: 'May 2026',
-  },
-  'angular-internals': {
-    title: 'Angular Internals & Change Detection',
-    summary:
-      'A deep dive into Angular\'s runtime machinery — the compiler, dependency injection tree, zone.js, and the new Signals-based reactivity model.',
-    category: 'Frontend',
-    readingMinutes: 12,
-    breadcrumb: ['Learning Hub', 'Frontend Architecture', 'Angular Internals'],
-    lastUpdated: 'May 2026',
-  },
+const SUBCATEGORY_BADGE: Record<string, string> = {
+  'spring-boot': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+  django: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
+  fastapi: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300',
+  'architecture-patterns': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+  'communication-patterns': 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300',
+  'observability-and-security': 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300',
+  introduction: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
 };
 
-const DEFAULT_META: NoteMetadata = {
-  title: 'Engineering Reference',
-  summary: 'A curated technical reference note from the Knowledge Hub.',
-  category: 'General',
-  readingMinutes: 5,
-  breadcrumb: ['Learning Hub', 'Reference'],
-  lastUpdated: 'May 2026',
-};
-
-const CATEGORY_BADGE: Record<string, string> = {
-  Backend: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
-  DevOps: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300',
-  Frontend: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
-  General: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+const SUBCATEGORY_LABEL: Record<string, string> = {
+  'spring-boot': 'Spring Boot',
+  django: 'Django',
+  fastapi: 'FastAPI',
+  'architecture-patterns': 'Architecture Patterns',
+  'communication-patterns': 'Communication Patterns',
+  'observability-and-security': 'Observability & Security',
+  introduction: 'Introduction',
 };
 
 @Component({
   selector: 'app-note-viewer',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, MarkdownComponent],
   templateUrl: './note-viewer.html',
   styleUrl: './note-viewer.scss',
 })
 export class NoteViewer implements OnInit {
   private route = inject(ActivatedRoute);
+  private service = inject(LearningDataService);
 
-  slug = signal('');
-  meta = computed<NoteMetadata>(() => SLUG_META[this.slug()] ?? DEFAULT_META);
+  note = signal<NoteMetadata | undefined>(undefined);
+  markdownContent = signal('');
+  isLoading = signal(true);
+  hasError = signal(false);
+  notFound = signal(false);
 
-  badgeClass = computed(() => CATEGORY_BADGE[this.meta().category] ?? CATEGORY_BADGE['General']);
+  // ── Derived display values ──────────────────────────────────────────────────
+
+  readonly title = computed(() => this.note()?.title ?? 'Engineering Reference');
+  readonly description = computed(() => this.note()?.description ?? '');
+  readonly subcategory = computed(() => this.note()?.subcategory ?? '');
+  readonly difficulty = computed(() => this.note()?.difficulty ?? 'beginner');
+  readonly tags = computed(() => this.note()?.tags ?? []);
+
+  /** Estimate reading time from word count at 200 wpm. */
+  readonly readingMinutes = computed(() => {
+    const words = this.markdownContent().split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.round(words / 200));
+  });
+
+  readonly breadcrumb = computed<string[]>(() => {
+    const n = this.note();
+    if (!n) return ['Learning Hub', 'Reference'];
+    return [
+      'Learning Hub',
+      'Backend Engineering',
+      this.subcategoryLabel(n.subcategory),
+      n.title,
+    ];
+  });
+
+  readonly badgeClass = computed(
+    () =>
+      SUBCATEGORY_BADGE[this.subcategory()] ??
+      'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
+  );
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      this.slug.set(params.get('slug') ?? '');
+      const slug = params.get('slug') ?? '';
+      this.loadNote(slug);
     });
+  }
+
+  private loadNote(slug: string): void {
+    this.isLoading.set(true);
+    this.hasError.set(false);
+    this.notFound.set(false);
+    this.note.set(undefined);
+    this.markdownContent.set('');
+
+    this.service.getNoteBySlug(slug).subscribe({
+      next: (note) => {
+        if (!note) {
+          this.notFound.set(true);
+          this.isLoading.set(false);
+          return;
+        }
+        this.note.set(note);
+        this.service.getNoteContent(note.filePath).subscribe({
+          next: (content) => {
+            this.markdownContent.set(content);
+            this.isLoading.set(false);
+          },
+          error: () => {
+            this.hasError.set(true);
+            this.isLoading.set(false);
+          },
+        });
+      },
+      error: () => {
+        this.hasError.set(true);
+        this.isLoading.set(false);
+      },
+    });
+  }
+
+  subcategoryLabel(sub: string): string {
+    return (
+      SUBCATEGORY_LABEL[sub] ??
+      sub.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+    );
   }
 }

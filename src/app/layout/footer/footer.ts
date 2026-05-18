@@ -45,8 +45,9 @@ export class Footer {
   ];
 
   quickLinks: FooterLink[] = [
-    { label: 'Home', path: '/home' },
+    { label: 'Home', path: '/' },
     { label: 'Projects', path: '/projects' },
+    { label: 'Learning', path: '/learning' },
     { label: 'About', path: '/about' },
     { label: 'Contact', path: '/contact' },
   ];

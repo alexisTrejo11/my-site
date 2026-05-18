@@ -1,78 +1,132 @@
 <div class="min-h-full bg-gray-50 dark:bg-gray-950 py-10 px-4">
   <div class="max-w-[800px] mx-auto">
-    <!-- ─── Breadcrumb ──────────────────────────────────────────────────────── -->
-    <nav class="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500 mb-8 flex-wrap">
-      @for (crumb of meta().breadcrumb; track crumb; let last = $last; let i = $index) {
-        @if (i === 0) {
-          <a
-            routerLink="/learning"
-            class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-          >
-            {{ crumb }}
-          </a>
-        } @else if (!last) {
-          <span>›</span>
-          <span>{{ crumb }}</span>
-        } @else {
-          <span>›</span>
-          <span class="text-gray-700 dark:text-gray-300 font-medium">{{ crumb }}</span>
-        }
-      }
-    </nav>
 
-    <!-- ─── Article Header ──────────────────────────────────────────────────── -->
-    <header class="mb-10">
-      <!-- Category + reading time -->
-      <div class="flex items-center gap-3 mb-4 flex-wrap">
-        <span class="text-xs font-semibold px-2.5 py-1 rounded-full" [ngClass]="badgeClass()">
-          {{ meta().category }}
-        </span>
-        <span class="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500">
-          <span>⏱</span>
-          <span>{{ meta().readingMinutes }} min read</span>
-        </span>
-        <span class="text-xs text-gray-300 dark:text-gray-600">·</span>
-        <span class="text-xs text-gray-400 dark:text-gray-500"
-          >Updated {{ meta().lastUpdated }}</span
-        >
+    <!-- ─── Loading skeleton ────────────────────────────────────────────────── -->
+    @if (isLoading()) {
+      <div class="animate-pulse space-y-6">
+        <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-1/3"></div>
+        <div class="space-y-3 mt-8">
+          <div class="h-8 bg-gray-200 dark:bg-gray-800 rounded w-2/3"></div>
+          <div class="h-4 bg-gray-100 dark:bg-gray-800 rounded w-full"></div>
+          <div class="h-4 bg-gray-100 dark:bg-gray-800 rounded w-5/6"></div>
+        </div>
+        <div class="h-px bg-gray-200 dark:bg-gray-800 mt-8"></div>
+        <div class="space-y-3">
+          @for (n of [1,2,3,4,5,6]; track n) {
+            <div class="h-4 bg-gray-100 dark:bg-gray-800 rounded" [style.width]="(70 + n * 4) + '%'"></div>
+          }
+        </div>
       </div>
+    }
 
-      <!-- Title -->
-      <h1 class="text-3xl font-bold text-gray-900 dark:text-white leading-tight mb-4">
-        {{ meta().title }}
-      </h1>
-
-      <!-- Summary block -->
-      <div
-        class="bg-primary-50 dark:bg-primary-700/20 border-l-4 border-primary-500 pl-4 py-3 pr-4 rounded-r-xl"
-      >
-        <p class="text-sm text-gray-600 dark:text-gray-200 leading-relaxed italic">
-          {{ meta().summary }}
+    <!-- ─── Not found / Error ───────────────────────────────────────────────── -->
+    @if (!isLoading() && (hasError() || notFound())) {
+      <div class="flex flex-col items-center justify-center py-24 text-center">
+        <span class="text-5xl mb-4">{{ notFound() ? '🔭' : '⚠️' }}</span>
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">
+          {{ notFound() ? 'Note not found' : 'Could not load content' }}
+        </h2>
+        <p class="text-sm text-gray-400 dark:text-gray-500 mb-6 max-w-sm">
+          @if (notFound()) {
+            This slug isn't in the catalog yet. Mark the note as
+            <code class="font-mono bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">status: "published"</code>
+            and re-run <code class="font-mono bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">npm run parse-vault</code>.
+          } @else {
+            The markdown file couldn't be fetched. Make sure
+            <code class="font-mono bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">npm run parse-vault</code>
+            has been run and the dev server restarted.
+          }
         </p>
+        <a
+          routerLink="/learning"
+          class="inline-flex items-center gap-2 text-sm text-primary-600 dark:text-primary-400 hover:underline"
+        >← Back to Learning Hub</a>
       </div>
-    </header>
+    }
 
-    <!-- ─── Static Reference Content ───────────────────────────────────────── -->
-    <p>Content here............</p>
+    <!-- ─── Article ─────────────────────────────────────────────────────────── -->
+    @if (!isLoading() && !hasError() && !notFound()) {
 
-    <!-- ─── Bottom Nav ──────────────────────────────────────────────────────── -->
-    <div
-      class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between"
-    >
-      <a
-        routerLink="/learning"
-        class="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
-      >
-        <span>←</span>
-        <span>Back to Hub</span>
-      </a>
-      <a
-        routerLink="/learning/glossary"
-        class="inline-flex items-center gap-2 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors font-medium"
-      >
-        <span>📚</span>
-        <span>Open Glossary</span>
-      </a>
-    </div>
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500 mb-8 flex-wrap">
+        @for (crumb of breadcrumb(); track crumb; let last = $last; let i = $index) {
+          @if (i === 0) {
+            <a routerLink="/learning" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+              {{ crumb }}
+            </a>
+          } @else if (!last) {
+            <span>›</span>
+            <span>{{ crumb }}</span>
+          } @else {
+            <span>›</span>
+            <span class="text-gray-700 dark:text-gray-300 font-medium truncate max-w-[200px]">{{ crumb }}</span>
+          }
+        }
+      </nav>
+
+      <!-- Article header -->
+      <header class="mb-10">
+        <div class="flex items-center gap-3 mb-4 flex-wrap">
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full" [ngClass]="badgeClass()">
+            {{ subcategoryLabel(subcategory()) }}
+          </span>
+          <span class="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500">
+            <span>⏱</span>
+            <span>{{ readingMinutes() }} min read</span>
+          </span>
+          <span class="text-xs text-gray-300 dark:text-gray-600">·</span>
+          <span class="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1.5">
+            <span>● {{ difficulty() }}</span>
+          </span>
+        </div>
+
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white leading-tight mb-4">
+          {{ title() }}
+        </h1>
+
+        @if (description()) {
+          <div class="bg-primary-50 dark:bg-primary-700/20 border-l-4 border-primary-500 pl-4 py-3 pr-4 rounded-r-xl mb-4">
+            <p class="text-sm text-gray-600 dark:text-gray-200 leading-relaxed italic">
+              {{ description() }}
+            </p>
+          </div>
+        }
+
+        <!-- Tags row -->
+        @if (tags().length > 0) {
+          <div class="flex items-center gap-2 flex-wrap">
+            @for (tag of tags(); track tag) {
+              <span class="text-xs font-mono text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded">
+                #{{ tag }}
+              </span>
+            }
+          </div>
+        }
+      </header>
+
+      <!-- ─── Markdown content ──────────────────────────────────────────────── -->
+      <article class="note-article">
+        <markdown [data]="markdownContent()"></markdown>
+      </article>
+
+      <!-- ─── Bottom nav ───────────────────────────────────────────────────── -->
+      <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
+        <a
+          routerLink="/learning"
+          class="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+        >
+          <span>←</span>
+          <span>Back to Hub</span>
+        </a>
+        <a
+          routerLink="/learning/glossary"
+          class="inline-flex items-center gap-2 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors font-medium"
+        >
+          <span>📚</span>
+          <span>Open Glossary</span>
+        </a>
+      </div>
+    }
+
   </div>
 </div>

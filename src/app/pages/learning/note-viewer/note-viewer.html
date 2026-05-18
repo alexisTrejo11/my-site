@@ -1,0 +1,78 @@
+<div class="min-h-full bg-gray-50 dark:bg-gray-950 py-10 px-4">
+  <div class="max-w-[800px] mx-auto">
+    <!-- ─── Breadcrumb ──────────────────────────────────────────────────────── -->
+    <nav class="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500 mb-8 flex-wrap">
+      @for (crumb of meta().breadcrumb; track crumb; let last = $last; let i = $index) {
+        @if (i === 0) {
+          <a
+            routerLink="/learning"
+            class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+          >
+            {{ crumb }}
+          </a>
+        } @else if (!last) {
+          <span>›</span>
+          <span>{{ crumb }}</span>
+        } @else {
+          <span>›</span>
+          <span class="text-gray-700 dark:text-gray-300 font-medium">{{ crumb }}</span>
+        }
+      }
+    </nav>
+
+    <!-- ─── Article Header ──────────────────────────────────────────────────── -->
+    <header class="mb-10">
+      <!-- Category + reading time -->
+      <div class="flex items-center gap-3 mb-4 flex-wrap">
+        <span class="text-xs font-semibold px-2.5 py-1 rounded-full" [ngClass]="badgeClass()">
+          {{ meta().category }}
+        </span>
+        <span class="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500">
+          <span>⏱</span>
+          <span>{{ meta().readingMinutes }} min read</span>
+        </span>
+        <span class="text-xs text-gray-300 dark:text-gray-600">·</span>
+        <span class="text-xs text-gray-400 dark:text-gray-500"
+          >Updated {{ meta().lastUpdated }}</span
+        >
+      </div>
+
+      <!-- Title -->
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white leading-tight mb-4">
+        {{ meta().title }}
+      </h1>
+
+      <!-- Summary block -->
+      <div
+        class="bg-primary-50 dark:bg-primary-700/20 border-l-4 border-primary-500 pl-4 py-3 pr-4 rounded-r-xl"
+      >
+        <p class="text-sm text-gray-600 dark:text-gray-200 leading-relaxed italic">
+          {{ meta().summary }}
+        </p>
+      </div>
+    </header>
+
+    <!-- ─── Static Reference Content ───────────────────────────────────────── -->
+    <p>Content here............</p>
+
+    <!-- ─── Bottom Nav ──────────────────────────────────────────────────────── -->
+    <div
+      class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between"
+    >
+      <a
+        routerLink="/learning"
+        class="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+      >
+        <span>←</span>
+        <span>Back to Hub</span>
+      </a>
+      <a
+        routerLink="/learning/glossary"
+        class="inline-flex items-center gap-2 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors font-medium"
+      >
+        <span>📚</span>
+        <span>Open Glossary</span>
+      </a>
+    </div>
+  </div>
+</div>

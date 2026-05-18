@@ -25,9 +25,9 @@ export const routes: Routes = [
           {
             path: 'architecture',
             loadComponent: () =>
-              import(
-                './pages/project-docs/sections/project-architecture/project-architecture'
-              ).then((m) => m.ProjectArchitecture),
+              import('./pages/project-docs/sections/project-architecture/project-architecture').then(
+                (m) => m.ProjectArchitecture,
+              ),
           },
           {
             path: 'code',
@@ -69,6 +69,11 @@ export const routes: Routes = [
   {
     path: 'contact',
     loadComponent: () => import('./pages/contact/contact').then((m) => m.Contact),
+  },
+  {
+    path: 'learning',
+    loadChildren: () =>
+      import('./pages/learning/learning.routes').then((m) => m.learningRoutes),
   },
   {
     path: '**',

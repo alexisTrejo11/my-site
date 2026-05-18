@@ -1,0 +1,220 @@
+.note-article {
+  color: #374151;
+  line-height: 1.8;
+  font-size: 0.9375rem;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  p {
+    margin-bottom: 1.25rem;
+    color: #4b5563;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1.25rem;
+
+    li {
+      position: relative;
+      padding-left: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: #4b5563;
+
+      &::before {
+        content: '·';
+        position: absolute;
+        left: 0;
+        color: #0ea5e9;
+        font-weight: 700;
+        font-size: 1.25rem;
+        line-height: 1.4;
+      }
+    }
+  }
+
+  a {
+    color: #0284c7;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s;
+
+    &:hover {
+      color: #0369a1;
+      text-decoration: underline;
+    }
+  }
+
+  pre {
+    background: #0f172a;
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    border: 1px solid #1e293b;
+
+    code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8125rem;
+      color: #e2e8f0;
+      line-height: 1.7;
+      background: none;
+      padding: 0;
+    }
+  }
+
+  code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875em;
+    background: #f1f5f9;
+    color: #0f172a;
+    padding: 0.15em 0.4em;
+    border-radius: 0.25rem;
+  }
+
+  .architecture-diagram pre {
+    background: #0f172a;
+    code {
+      color: #94a3b8;
+      white-space: pre;
+    }
+  }
+
+  .warning-callout {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    border-radius: 0 0.75rem 0.75rem 0;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    font-style: normal;
+    font-size: 0.875rem;
+    color: #78350f;
+
+    strong {
+      color: #92400e;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+
+    thead tr {
+      background: #f8fafc;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      color: #374151;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      color: #4b5563;
+      border-bottom: 1px solid #f3f4f6;
+      vertical-align: top;
+
+      &:first-child {
+        font-weight: 500;
+        color: #374151;
+      }
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #f9fafb;
+    }
+  }
+}
+
+// ── Dark mode ──────────────────────────────────────────────────────────────
+// :host-context() is required here because `.dark` lives on <html>, which is
+// outside Angular's emulated encapsulation boundary. `.dark .note-article`
+// would get scoped attribute selectors that never match the document root.
+:host-context(.dark) .note-article {
+  color: #d1d5db;
+
+  h2 {
+    color: #f1f5f9;
+    border-bottom-color: #1f2937;
+  }
+
+  p {
+    color: #cbd5e1;
+  }
+
+  ul li {
+    color: #cbd5e1;
+  }
+
+  a {
+    color: #38bdf8;
+
+    &:hover {
+      color: #7dd3fc;
+    }
+  }
+
+  code {
+    background: #1e293b;
+    color: #e2e8f0;
+  }
+
+  .warning-callout {
+    background: #1c1a0f;
+    border-left-color: #d97706;
+    color: #fcd34d;
+
+    strong {
+      color: #fbbf24;
+    }
+  }
+
+  table {
+    border-color: #1f2937;
+
+    thead tr {
+      background: #111827;
+    }
+
+    th {
+      color: #94a3b8;
+      border-bottom-color: #1f2937;
+    }
+
+    td {
+      color: #94a3b8;
+      border-bottom-color: #111827;
+
+      &:first-child {
+        color: #e2e8f0;
+      }
+    }
+
+    tr:hover td {
+      background: #111827;
+    }
+  }
+}

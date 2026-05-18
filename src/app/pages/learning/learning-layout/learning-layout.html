@@ -1,0 +1,152 @@
+<div class="learning-shell flex h-screen bg-gray-50 dark:bg-gray-950 overflow-hidden font-sans">
+
+  <!-- ─── Sidebar ─────────────────────────────────────────────────────────── -->
+  <aside
+    class="flex-shrink-0 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col transition-all duration-300 ease-in-out overflow-hidden z-20"
+    [style.width]="isSidebarOpen() ? '256px' : '60px'"
+  >
+    <!-- Brand -->
+    <div class="flex items-center gap-3 px-3 py-4 border-b border-gray-200 dark:border-gray-800 min-h-[64px]">
+      <div
+        class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-500 to-violet-500 flex items-center justify-center flex-shrink-0 text-white font-bold text-sm shadow-lg"
+      >
+        K
+      </div>
+      @if (isSidebarOpen()) {
+        <div class="overflow-hidden">
+          <p class="text-gray-900 dark:text-white font-semibold text-sm leading-tight whitespace-nowrap">Knowledge Hub</p>
+          <p class="text-gray-400 dark:text-gray-500 text-xs whitespace-nowrap mt-0.5">Engineering Mastery</p>
+        </div>
+      }
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
+
+      <!-- Dashboard -->
+      <a
+        routerLink="/learning"
+        routerLinkActive="!bg-gray-100 dark:!bg-gray-800 !text-gray-900 dark:!text-white"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex items-center gap-3 px-2.5 py-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors group"
+        [title]="isSidebarOpen() ? '' : 'Dashboard'"
+      >
+        <span class="text-base flex-shrink-0 leading-none">🏠</span>
+        @if (isSidebarOpen()) {
+          <span class="text-sm font-medium whitespace-nowrap">Dashboard</span>
+        }
+      </a>
+
+      <!-- Glossary -->
+      <a
+        routerLink="/learning/glossary"
+        routerLinkActive="!bg-gray-100 dark:!bg-gray-800 !text-gray-900 dark:!text-white"
+        class="flex items-center gap-3 px-2.5 py-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        [title]="isSidebarOpen() ? '' : 'Glossary'"
+      >
+        <span class="text-base flex-shrink-0 leading-none">📚</span>
+        @if (isSidebarOpen()) {
+          <span class="text-sm font-medium whitespace-nowrap">Glossary</span>
+        }
+      </a>
+
+      <!-- Section divider -->
+      @if (isSidebarOpen()) {
+        <p class="text-xs font-semibold text-gray-400 dark:text-gray-600 uppercase tracking-widest px-2.5 pt-5 pb-2">
+          Pillars
+        </p>
+      } @else {
+        <div class="my-3 border-t border-gray-200 dark:border-gray-800"></div>
+      }
+
+      <!-- Accordion sections -->
+      @for (section of sidebarSections; track section.id) {
+        <div>
+          <button
+            (click)="toggleSection(section.id)"
+            class="w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            [title]="isSidebarOpen() ? '' : section.label"
+          >
+            <span class="text-base flex-shrink-0 leading-none">{{ section.icon }}</span>
+            @if (isSidebarOpen()) {
+              <span class="text-sm font-medium flex-1 text-left whitespace-nowrap">{{ section.label }}</span>
+              <span
+                class="text-gray-400 dark:text-gray-600 text-xs transition-transform duration-200 leading-none"
+                [class.rotate-90]="isSectionOpen(section.id)"
+              >›</span>
+            }
+          </button>
+
+          @if (isSidebarOpen() && isSectionOpen(section.id)) {
+            <div class="ml-3 pl-3 border-l border-gray-200 dark:border-gray-800 mt-1 mb-1 space-y-0.5">
+              @for (topic of section.topics; track topic.slug) {
+                <a
+                  [routerLink]="['/learning', topic.slug]"
+                  routerLinkActive="!text-primary-600 dark:!text-primary-400 !bg-gray-100/80 dark:!bg-gray-800/50"
+                  class="block text-xs text-gray-500 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 py-1.5 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800/60 transition-colors truncate"
+                >
+                  {{ topic.label }}
+                </a>
+              }
+            </div>
+          }
+        </div>
+      }
+    </nav>
+
+    <!-- Collapse toggle -->
+    <div class="border-t border-gray-200 dark:border-gray-800 p-3">
+      <button
+        (click)="toggleSidebar()"
+        class="w-full flex items-center justify-center gap-1.5 text-gray-400 dark:text-gray-600 hover:text-gray-700 dark:hover:text-gray-300 transition-colors text-xs py-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+      >
+        @if (isSidebarOpen()) {
+          <span>‹‹</span>
+          <span>Collapse</span>
+        } @else {
+          <span>››</span>
+        }
+      </button>
+    </div>
+  </aside>
+
+  <!-- ─── Main Area ─────────────────────────────────────────────────────────── -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+    <!-- Top bar -->
+    <header
+      class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-5 py-3 flex items-center gap-4 flex-shrink-0 min-h-[64px]"
+    >
+      <!-- Search -->
+      <div class="flex-1 max-w-lg relative">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">🔍</span>
+        <input
+          type="text"
+          placeholder="Search topics, concepts, terms…"
+          class="w-full pl-9 pr-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg text-sm border border-transparent focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 focus:bg-white dark:focus:bg-gray-700 transition-all placeholder-gray-400 dark:placeholder-gray-500"
+          [value]="searchQuery()"
+          (input)="searchQuery.set($any($event.target).value)"
+        />
+      </div>
+
+      <!-- Breadcrumb hint -->
+      <a
+        routerLink="/learning"
+        class="hidden md:flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+      >
+        <span>Learning Hub</span>
+      </a>
+
+      <!-- Status pill -->
+      <div class="hidden sm:flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-full">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse flex-shrink-0"></span>
+        <span class="whitespace-nowrap">Wiki Active</span>
+      </div>
+    </header>
+
+    <!-- Routed child content -->
+    <main class="flex-1 overflow-y-auto">
+      <router-outlet />
+    </main>
+  </div>
+</div>

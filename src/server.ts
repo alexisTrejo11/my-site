@@ -4,13 +4,24 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
+import { ɵsetAngularAppEngineManifest } from '@angular/ssr';
 import express from 'express';
 import { join } from 'node:path';
+
+// @angular/build emits the engine manifest without allowedHosts; AngularAppEngine
+// requires it to be iterable when the server bundle is loaded during route extraction.
+// @ts-expect-error Generated at build time next to the server bundle output.
+import engineManifest from './angular-app-engine-manifest.mjs';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 /** Hostnames permitted for SSR requests (dev + production). Add your deploy domain here. */
 const ALLOWED_HOSTS = ['localhost', '127.0.0.1'];
+
+ɵsetAngularAppEngineManifest({
+  ...engineManifest,
+  allowedHosts: ALLOWED_HOSTS,
+});
 
 const app = express();
 const angularApp = new AngularNodeAppEngine({ allowedHosts: ALLOWED_HOSTS });

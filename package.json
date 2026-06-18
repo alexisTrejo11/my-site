@@ -9,7 +9,8 @@
     "test": "ng test",
     "serve:ssr:alexis-trejo-portfolio": "node dist/alexis-trejo-portfolio/server/server.mjs",
     "lint": "ng lint",
-    "parse-vault": "node parse-vault.js"
+    "parse-vault": "node parse-vault.js",
+    "parse-projects": "node parse-project-docs.js"
   },
   "prettier": {
     "printWidth": 100,

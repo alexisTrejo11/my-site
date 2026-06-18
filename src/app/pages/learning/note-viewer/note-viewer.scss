@@ -213,6 +213,16 @@
       background: #f9fafb;
     }
   }
+
+  .mermaid,
+  pre.mermaid {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+  }
 }
 
 // ── Dark mode ──────────────────────────────────────────────────────────────
@@ -313,5 +323,11 @@
     tr:hover td {
       background: #111827;
     }
+  }
+
+  .mermaid,
+  pre.mermaid {
+    background: #111827;
+    border: 1px solid #1f2937;
   }
 }

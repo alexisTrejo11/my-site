@@ -1,358 +1,4965 @@
 [
   {
-    "title": "Welcome to the Machine: Client-Server Architecture",
-    "category": "backend",
-    "subcategory": "introduction",
-    "slug": "welcome-to-the-machine",
-    "difficulty": "beginner",
-    "tags": [
-      "backend",
-      "introduction"
-    ],
-    "description": "Understanding the client-server model, the HTTP request/response lifecycle, and what really happens when you hit Enter in a browser.",
-    "filePath": "notes/introduction/welcome-to-the-machine.md"
-  },
-  {
-    "title": "The Ultimate Backend Cheat Sheet & Glossary",
-    "category": "backend",
-    "subcategory": "introduction",
-    "slug": "glossary",
-    "difficulty": "beginner",
-    "tags": [
-      "backend",
-      "introduction"
-    ],
-    "description": "Interactive technical dictionary establishing fundamental backend vocabulary. Each term links to its deep-dive note.",
-    "filePath": "notes/introduction/glossary.md"
-  },
-  {
-    "title": "History and Evolution of Backend Systems",
-    "category": "backend",
-    "subcategory": "introduction",
-    "slug": "history-and-evolution",
-    "difficulty": "beginner",
-    "tags": [
-      "backend",
-      "introduction"
-    ],
-    "description": "From CGI scripts to cloud-native serverless — how backend architecture evolved across four decades.",
-    "filePath": "notes/introduction/history-and-evolution.md"
-  },
-  {
-    "title": "The Perfect API Design",
-    "category": "backend",
-    "subcategory": "introduction",
-    "slug": "api-design",
-    "difficulty": "beginner",
-    "tags": [
-      "backend",
-      "introduction"
-    ],
-    "description": "Core API contracts, design philosophies, and the practical tradeoffs between REST, RPC, and GraphQL.",
-    "filePath": "notes/introduction/api-design.md"
-  },
-  {
-    "title": "Spring Boot: Enterprise Backend Engineering",
-    "category": "backend",
-    "subcategory": "spring-boot",
-    "slug": "spring-moc",
-    "difficulty": "beginner",
-    "tags": [
-      "java",
-      "spring-boot",
-      "spring-framework",
-      "ioc",
-      "enterprise",
-      "backend"
-    ],
-    "description": "Master hub for Spring Boot — IoC philosophy, ecosystem map, learning tracks, and links to Core, Data, Web, Security, and Testing pillars.",
-    "filePath": "notes/spring-boot/spring-moc.md"
-  },
-  {
-    "title": "Mastering Spring Core and IoC Containers",
-    "category": "backend",
-    "subcategory": "spring-boot",
-    "slug": "spring-core-ioc",
-    "difficulty": "intermediate",
-    "tags": [
-      "java",
-      "spring-boot",
-      "dependency-injection",
-      "ioc",
-      "beans",
-      "backend"
-    ],
-    "description": "Deep dive into the Spring ApplicationContext, bean lifecycles, scopes, and clean dependency injection architectures.",
-    "filePath": "notes/spring-boot/spring-core-ioc.md"
-  },
-  {
-    "title": "Spring Boot Auto-Configuration Lifecycle",
-    "category": "backend",
-    "subcategory": "spring-boot",
-    "slug": "spring-autoconfiguration",
-    "difficulty": "intermediate",
-    "tags": [
-      "java",
-      "spring-boot",
-      "autoconfiguration",
-      "conditional",
-      "backend"
-    ],
-    "description": "How @SpringBootApplication enables auto-configuration, classpath scanning, and @ConditionalOn* beans under the hood.",
-    "filePath": "notes/spring-boot/spring-autoconfiguration.md"
-  },
-  {
-    "title": "Properties, Profiles, and YAML Configuration",
-    "category": "backend",
-    "subcategory": "spring-boot",
-    "slug": "spring-properties-profiles-yaml",
-    "difficulty": "beginner",
-    "tags": [
-      "java",
-      "spring-boot",
-      "configuration",
-      "yaml",
-      "profiles",
-      "backend"
-    ],
-    "description": "Externalized configuration with application.yml, type-safe @ConfigurationProperties, Spring profiles, and multi-document YAML.",
-    "filePath": "notes/spring-boot/spring-properties-profiles-yaml.md"
-  },
-  {
-    "title": "JPA, Hibernate, and Spring Data JDBC",
-    "category": "backend",
-    "subcategory": "spring-boot",
-    "slug": "spring-jpa-hibernate",
-    "difficulty": "intermediate",
-    "tags": [
-      "java",
-      "spring-boot",
-      "jpa",
-      "hibernate",
-      "spring-data",
-      "backend"
-    ],
-    "description": "Spring Data JPA, entity lifecycle states, solving N+1 with fetch strategies, Hibernate proxies, and second-level caching.",
-    "filePath": "notes/spring-boot/spring-jpa-hibernate.md"
-  },
-  {
-    "title": "Declarative Transaction Management in Spring",
-    "category": "backend",
-    "subcategory": "spring-boot",
-    "slug": "spring-transaction-management",
-    "difficulty": "advanced",
-    "tags": [
-      "java",
-      "spring-boot",
-      "transactions",
-      "transactional",
-      "jpa",
-      "backend"
-    ],
-    "description": "@Transactional mechanics, proxy behavior, propagation (REQUIRED, REQUIRES_NEW), and isolation levels for production data integrity.",
-    "filePath": "notes/spring-boot/spring-transaction-management.md"
-  },
-  {
-    "title": "REST Controllers and Spring MVC",
-    "category": "backend",
-    "subcategory": "spring-boot",
-    "slug": "spring-rest-controllers-mvc",
-    "difficulty": "intermediate",
-    "tags": [
-      "java",
-      "spring-boot",
-      "rest",
-      "mvc",
-      "controllers",
-      "backend"
-    ],
-    "description": "@RestController design, request mapping, content negotiation, DTO patterns, path variables vs query parameters.",
-    "filePath": "notes/spring-boot/spring-rest-controllers-mvc.md"
-  },
-  {
-    "title": "Global Exception Handling in Spring Boot",
-    "category": "backend",
-    "subcategory": "spring-boot",
-    "slug": "spring-global-exception-handling",
-    "difficulty": "intermediate",
-    "tags": [
-      "java",
-      "spring-boot",
-      "exceptions",
-      "controller-advice",
-      "rfc7807",
-      "backend"
-    ],
-    "description": "Centralized errors with @ControllerAdvice, @ExceptionHandler, and RFC 7807 Problem Details JSON responses.",
-    "filePath": "notes/spring-boot/spring-global-exception-handling.md"
-  },
-  {
-    "title": "Spring Security Architecture",
-    "category": "backend",
-    "subcategory": "spring-boot",
-    "slug": "spring-security-architecture",
-    "difficulty": "advanced",
-    "tags": [
-      "java",
-      "spring-boot",
-      "security",
-      "jwt",
-      "oauth2",
-      "backend"
-    ],
-    "description": "SecurityFilterChain, DelegatingFilterProxy, stateless JWT authentication, @PreAuthorize, and OAuth2 Resource Server basics.",
-    "filePath": "notes/spring-boot/spring-security-architecture.md"
-  },
-  {
-    "title": "Spring Boot Testing and Slice Annotations",
-    "category": "backend",
-    "subcategory": "spring-boot",
-    "slug": "spring-testing-slices",
-    "difficulty": "intermediate",
-    "tags": [
-      "java",
-      "spring-boot",
-      "testing",
-      "mockmvc",
-      "junit",
-      "backend"
-    ],
-    "description": "Testing pyramid in Spring Boot, @SpringBootTest vs sliced tests, MockMvc, and @MockBean patterns.",
-    "filePath": "notes/spring-boot/spring-testing-slices.md"
-  },
-  {
-    "title": "Spring Boot Actuator and Metrics",
-    "category": "backend",
-    "subcategory": "spring-boot",
-    "slug": "spring-actuator-metrics",
-    "difficulty": "advanced",
-    "tags": [
-      "java",
-      "spring-boot",
-      "actuator",
-      "micrometer",
-      "prometheus",
-      "virtual-threads",
-      "backend"
-    ],
-    "description": "Securing Actuator endpoints, Micrometer Prometheus integration, and Java 21+ virtual threads configuration.",
-    "filePath": "notes/spring-boot/spring-actuator-metrics.md"
-  },
-  {
-    "title": "Monoliths vs Microservices",
+    "title": "Clean Architecture",
     "category": "backend",
     "subcategory": "architecture-patterns",
-    "slug": "monoliths-vs-microservices",
+    "slug": "architecture-patterns-clean-architecture",
     "difficulty": "beginner",
     "tags": [
       "backend",
       "architecture-patterns"
     ],
-    "description": "A rigorous comparison of monolithic and microservice architectures — when each is right, and the cost of each transition.",
-    "filePath": "notes/architecture-patterns/monoliths-vs-microservices.md"
+    "description": "The goal of Clean Architecture is to make the business rules independent of frameworks, databases, UI, and external agencies.",
+    "filePath": "notes/architecture-patterns/architecture-patterns-clean-architecture.md"
   },
   {
     "title": "Modular Monoliths",
     "category": "backend",
     "subcategory": "architecture-patterns",
-    "slug": "modular-monoliths",
+    "slug": "architecture-patterns-modular-monoliths",
     "difficulty": "beginner",
     "tags": [
       "backend",
       "architecture-patterns"
     ],
-    "description": "The architectural middle ground — a single deployable with strict internal module boundaries that enable future extraction.",
-    "filePath": "notes/architecture-patterns/modular-monoliths.md"
+    "description": "A modular monolith gives you 80% of the microservices benefits at 20% of the cost.",
+    "filePath": "notes/architecture-patterns/architecture-patterns-modular-monoliths.md"
   },
   {
-    "title": "Clean Architecture",
+    "title": "Monoliths vs Microservices",
     "category": "backend",
     "subcategory": "architecture-patterns",
-    "slug": "clean-architecture",
+    "slug": "architecture-patterns-monoliths-vs-microservices",
     "difficulty": "beginner",
     "tags": [
       "backend",
       "architecture-patterns"
     ],
-    "description": "Robert C. Martin's Clean Architecture — dependency rules, layer responsibilities, and how to apply it in a Spring Boot or FastAPI service.",
-    "filePath": "notes/architecture-patterns/clean-architecture.md"
-  },
-  {
-    "title": "Sync vs Async Communication",
-    "category": "backend",
-    "subcategory": "communication-patterns",
-    "slug": "sync-vs-async",
-    "difficulty": "beginner",
-    "tags": [
-      "backend",
-      "communication-patterns"
-    ],
-    "description": "Synchronous blocking calls vs asynchronous non-blocking patterns — thread models, concurrency, and when to use each.",
-    "filePath": "notes/communication-patterns/sync-vs-async.md"
+    "description": "The monolith is not the enemy. Premature decomposition is.",
+    "filePath": "notes/architecture-patterns/architecture-patterns-monoliths-vs-microservices.md"
   },
   {
     "title": "gRPC Deep Dive",
     "category": "backend",
     "subcategory": "communication-patterns",
-    "slug": "grpc-deep-dive",
+    "slug": "communication-patterns-grpc-deep-dive",
     "difficulty": "beginner",
     "tags": [
       "backend",
       "communication-patterns"
     ],
-    "description": "How gRPC works under the hood — Protobuf encoding, HTTP/2 framing, streaming modes, and when to use gRPC over REST.",
-    "filePath": "notes/communication-patterns/grpc-deep-dive.md"
+    "description": "gRPC is what happens when Google decides HTTP + JSON is too slow for 10 billion internal RPCs per day.",
+    "filePath": "notes/communication-patterns/communication-patterns-grpc-deep-dive.md"
   },
   {
     "title": "Serialization Protocols",
     "category": "backend",
     "subcategory": "communication-patterns",
-    "slug": "serialization-protocols",
+    "slug": "communication-patterns-serialization-protocols",
     "difficulty": "beginner",
     "tags": [
       "backend",
       "communication-patterns"
     ],
-    "description": "JSON, Protocol Buffers, and Apache Avro — encoding formats, tradeoffs, and when to use each in backend systems.",
-    "filePath": "notes/communication-patterns/serialization-protocols.md"
+    "description": "Serialization is the translation layer between in-memory objects and bytes on the wire (or disk).",
+    "filePath": "notes/communication-patterns/communication-patterns-serialization-protocols.md"
   },
   {
-    "title": "The Three Pillars of Observability",
+    "title": "Sync vs Async Communication",
     "category": "backend",
-    "subcategory": "observability-and-security",
-    "slug": "three-pillars-observability",
+    "subcategory": "communication-patterns",
+    "slug": "communication-patterns-sync-vs-async",
     "difficulty": "beginner",
     "tags": [
       "backend",
-      "observability-and-security"
+      "communication-patterns"
     ],
-    "description": "Metrics, Logs, and Traces — the observability triad that makes production systems debuggable and resilient.",
-    "filePath": "notes/observability-and-security/three-pillars-observability.md"
+    "description": "Blocking is not evil. But not knowing when to be non-blocking is.",
+    "filePath": "notes/communication-patterns/communication-patterns-sync-vs-async.md"
+  },
+  {
+    "title": "Advanced ORM Optimization",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-advanced-orm-optimization",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-advanced-orm-optimization.md"
+  },
+  {
+    "title": "API Views & ViewSets",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-api-views-and-viewsets",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-api-views-and-viewsets.md"
+  },
+  {
+    "title": "Async Django & Channels",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-async-django-and-channels",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-async-django-and-channels.md"
+  },
+  {
+    "title": "Authentication & Permissions in DRF",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-authentication-permissions",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-authentication-permissions.md"
+  },
+  {
+    "title": "Class-Based Views (CBV)",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-class-based-views",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-class-based-views.md"
+  },
+  {
+    "title": "Database Migrations",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-database-migrations",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "Use `apps.get_model()` in migrations — not direct model imports.",
+    "filePath": "notes/django/django-database-migrations.md"
+  },
+  {
+    "title": "Django CLI & manage.py",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-cli-and-manage",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-cli-and-manage.md"
+  },
+  {
+    "title": "Django Signals",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-signals",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-signals.md"
+  },
+  {
+    "title": "Django: Batteries-Included Web Framework",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-master-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "django",
+      "python",
+      "web",
+      "orm",
+      "backend"
+    ],
+    "description": "Learning path for Django project structure, MVT, ORM, views, DRF, and ecosystem patterns.",
+    "filePath": "notes/django/django-master-moc.md"
+  },
+  {
+    "title": "DRF Architecture Overview",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-drf-architecture-overview",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-drf-architecture-overview.md"
+  },
+  {
+    "title": "Function-Based Views (FBV)",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-function-based-views",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-function-based-views.md"
+  },
+  {
+    "title": "Middleware Chain",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-middleware-chain",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-middleware-chain.md"
+  },
+  {
+    "title": "Model Definitions & Fields",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-model-definitions-fields",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-model-definitions-fields.md"
+  },
+  {
+    "title": "Project vs App Structure",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-project-vs-app-structure",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-project-vs-app-structure.md"
+  },
+  {
+    "title": "QuerySets & Managers",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-querysets-and-managers",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-querysets-and-managers.md"
+  },
+  {
+    "title": "Security Best Practices",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-security-best-practices",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-security-best-practices.md"
+  },
+  {
+    "title": "Serializers Deep Dive",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-serializers-deep-dive",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-serializers-deep-dive.md"
+  },
+  {
+    "title": "The MVT Pattern",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-the-mvt-pattern",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-the-mvt-pattern.md"
+  },
+  {
+    "title": "URL Routing & Resolvers",
+    "category": "backend",
+    "subcategory": "django",
+    "slug": "django-url-routing-and-resolvers",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "django"
+    ],
+    "description": "",
+    "filePath": "notes/django/django-url-routing-and-resolvers.md"
+  },
+  {
+    "title": "ASGI vs WSGI",
+    "category": "backend",
+    "subcategory": "fastapi",
+    "slug": "fastapi-asgi-vs-wsgi",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "fastapi"
+    ],
+    "description": "",
+    "filePath": "notes/fastapi/fastapi-asgi-vs-wsgi.md"
+  },
+  {
+    "title": "Async Database Sessions",
+    "category": "backend",
+    "subcategory": "fastapi",
+    "slug": "fastapi-async-database-sessions",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "fastapi"
+    ],
+    "description": "",
+    "filePath": "notes/fastapi/fastapi-async-database-sessions.md"
+  },
+  {
+    "title": "Async/Await Deep Dive",
+    "category": "backend",
+    "subcategory": "fastapi",
+    "slug": "fastapi-async-await-deep-dive",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "fastapi"
+    ],
+    "description": "",
+    "filePath": "notes/fastapi/fastapi-async-await-deep-dive.md"
+  },
+  {
+    "title": "Background Tasks",
+    "category": "backend",
+    "subcategory": "fastapi",
+    "slug": "fastapi-background-tasks",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "fastapi"
+    ],
+    "description": "",
+    "filePath": "notes/fastapi/fastapi-background-tasks.md"
+  },
+  {
+    "title": "Custom Validators",
+    "category": "backend",
+    "subcategory": "fastapi",
+    "slug": "fastapi-custom-validators",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "fastapi"
+    ],
+    "description": "",
+    "filePath": "notes/fastapi/fastapi-custom-validators.md"
+  },
+  {
+    "title": "Data Shaping: Input vs Output Schemas",
+    "category": "backend",
+    "subcategory": "fastapi",
+    "slug": "fastapi-data-shaping-schemas",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "fastapi"
+    ],
+    "description": "",
+    "filePath": "notes/fastapi/fastapi-data-shaping-schemas.md"
+  },
+  {
+    "title": "Declaring Endpoints",
+    "category": "backend",
+    "subcategory": "fastapi",
+    "slug": "fastapi-declaring-endpoints",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "fastapi"
+    ],
+    "description": "",
+    "filePath": "notes/fastapi/fastapi-declaring-endpoints.md"
+  },
+  {
+    "title": "Decoupling the ORM",
+    "category": "backend",
+    "subcategory": "fastapi",
+    "slug": "fastapi-decoupling-the-orm",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "fastapi"
+    ],
+    "description": "",
+    "filePath": "notes/fastapi/fastapi-decoupling-the-orm.md"
+  },
+  {
+    "title": "FastAPI: High-Performance Async APIs",
+    "category": "backend",
+    "subcategory": "fastapi",
+    "slug": "fastapi-master-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "fastapi",
+      "python",
+      "async",
+      "pydantic",
+      "backend"
+    ],
+    "description": "Engineering guide for FastAPI routing, Pydantic validation, dependency injection, and async database access.",
+    "filePath": "notes/fastapi/fastapi-master-moc.md"
+  },
+  {
+    "title": "Global Error Handling",
+    "category": "backend",
+    "subcategory": "fastapi",
+    "slug": "fastapi-global-error-handling",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "fastapi"
+    ],
+    "description": "",
+    "filePath": "notes/fastapi/fastapi-global-error-handling.md"
+  },
+  {
+    "title": "Migrations with Alembic",
+    "category": "backend",
+    "subcategory": "fastapi",
+    "slug": "fastapi-migrations-with-alembic",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "fastapi"
+    ],
+    "description": "",
+    "filePath": "notes/fastapi/fastapi-migrations-with-alembic.md"
+  },
+  {
+    "title": "Pydantic V2 Foundations",
+    "category": "backend",
+    "subcategory": "fastapi",
+    "slug": "fastapi-pydantic-v2-foundations",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "fastapi"
+    ],
+    "description": "",
+    "filePath": "notes/fastapi/fastapi-pydantic-v2-foundations.md"
+  },
+  {
+    "title": "The Dependency Injection System (`Depends`)",
+    "category": "backend",
+    "subcategory": "fastapi",
+    "slug": "fastapi-the-dependency-injection",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "fastapi"
+    ],
+    "description": "",
+    "filePath": "notes/fastapi/fastapi-the-dependency-injection.md"
+  },
+  {
+    "title": "History and Evolution of Backend Systems",
+    "category": "backend",
+    "subcategory": "introduction",
+    "slug": "introduction-history-and-evolution",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "introduction"
+    ],
+    "description": "Understanding where we came from makes the decisions we make today legible.",
+    "filePath": "notes/introduction/introduction-history-and-evolution.md"
+  },
+  {
+    "title": "The Perfect API Design",
+    "category": "backend",
+    "subcategory": "introduction",
+    "slug": "introduction-api-design",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "introduction"
+    ],
+    "description": "An API is a contract. Bad contracts create debt. Great contracts create ecosystems.",
+    "filePath": "notes/introduction/introduction-api-design.md"
+  },
+  {
+    "title": "Welcome to the Machine: Client-Server Architecture",
+    "category": "backend",
+    "subcategory": "introduction",
+    "slug": "introduction-welcome-to-the-machine",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "introduction"
+    ],
+    "description": "Every backend system is fundamentally a machine that listens, processes, and responds. This note maps the core model.",
+    "filePath": "notes/introduction/introduction-welcome-to-the-machine.md"
+  },
+  {
+    "title": "Kafka Core Concepts",
+    "category": "backend",
+    "subcategory": "kafka",
+    "slug": "kafka-core-concepts",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "kafka"
+    ],
+    "description": "",
+    "filePath": "notes/kafka/kafka-core-concepts.md"
+  },
+  {
+    "title": "What is Kafka?",
+    "category": "backend",
+    "subcategory": "kafka",
+    "slug": "kafka-what-is-kafka",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "kafka"
+    ],
+    "description": "",
+    "filePath": "notes/kafka/kafka-what-is-kafka.md"
+  },
+  {
+    "title": "Backend Engineering Master Roadmap",
+    "category": "backend",
+    "subcategory": "moc.md",
+    "slug": "backend",
+    "difficulty": "beginner",
+    "tags": [
+      "index",
+      "roadmap",
+      "backend"
+    ],
+    "description": "A structured learning path for backend engineering covering frameworks, architecture patterns, communication protocols, databases, messaging, and observability.",
+    "filePath": "notes/moc.md/backend.md"
   },
   {
     "title": "Authentication & Authorization",
     "category": "backend",
     "subcategory": "observability-and-security",
-    "slug": "authentication-authorization",
+    "slug": "observability-and-security-authentication-authorization",
     "difficulty": "beginner",
     "tags": [
       "backend",
       "observability-and-security"
     ],
-    "description": "JWT, OAuth2, session management — the difference between AuthN and AuthZ, and how to implement them correctly.",
-    "filePath": "notes/observability-and-security/authentication-authorization.md"
+    "description": "Authentication answers \"Who are you?\" Authorization answers \"What are you allowed to do?\"",
+    "filePath": "notes/observability-and-security/observability-and-security-authentication-authorization.md"
   },
   {
     "title": "Rate Limiting & CORS",
     "category": "backend",
     "subcategory": "observability-and-security",
-    "slug": "rate-limiting-cors",
+    "slug": "observability-and-security-rate-limiting-cors",
     "difficulty": "beginner",
     "tags": [
       "backend",
       "observability-and-security"
     ],
-    "description": "Protecting APIs with rate limiting strategies and understanding Cross-Origin Resource Sharing (CORS) security boundaries.",
-    "filePath": "notes/observability-and-security/rate-limiting-cors.md"
+    "description": "Two of the most commonly misconfigured — and misunderstood — web security mechanisms.",
+    "filePath": "notes/observability-and-security/observability-and-security-rate-limiting-cors.md"
+  },
+  {
+    "title": "The Three Pillars of Observability",
+    "category": "backend",
+    "subcategory": "observability-and-security",
+    "slug": "observability-and-security-three-pillars-observability",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "observability-and-security"
+    ],
+    "description": "You cannot debug what you cannot see. Observability turns a black box into a glass box.",
+    "filePath": "notes/observability-and-security/observability-and-security-three-pillars-observability.md"
+  },
+  {
+    "title": "Declarative Transaction Management in Spring",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-boot-spring-transaction-management",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "spring-boot"
+    ],
+    "description": "@Transactional gives you declarative ACID boundaries. Understand proxies and propagation — or you'll debug \"transaction not rolling back\" at 2 AM.",
+    "filePath": "notes/spring-boot/spring-boot-spring-transaction-management.md"
+  },
+  {
+    "title": "Global Exception Handling in Spring Boot",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-boot-spring-global-exception-handling",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "spring-boot"
+    ],
+    "description": "Clients deserve **predictable error JSON**. Scatter `try/catch` in every controller and you'll ship inconsistent APIs. Use **`@ControllerAdvice`** once, handle everything centrally.",
+    "filePath": "notes/spring-boot/spring-boot-spring-global-exception-handling.md"
+  },
+  {
+    "title": "JPA, Hibernate, and Spring Data JDBC",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-boot-spring-jpa-hibernate",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "spring-boot"
+    ],
+    "description": "**Spring Data JPA** hides boilerplate CRUD behind repositories. **Hibernate** is the default JPA provider — powerful, but you must understand lazy loading and the session.",
+    "filePath": "notes/spring-boot/spring-boot-spring-jpa-hibernate.md"
+  },
+  {
+    "title": "Mastering Spring Core and IoC Containers",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-boot-spring-core-ioc",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "spring-boot"
+    ],
+    "description": "**Inversion of Control** means the framework creates and wires your objects — you describe *what* you need, not *how* to build the graph.",
+    "filePath": "notes/spring-boot/spring-boot-spring-core-ioc.md"
+  },
+  {
+    "title": "Properties, Profiles, and YAML Configuration",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-boot-spring-properties-profiles-yaml",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "spring-boot"
+    ],
+    "description": "**Externalized configuration** lets you change behavior per environment without recompiling. Spring Boot loads config from files, env vars, and command-line args — with a clear precedence order.",
+    "filePath": "notes/spring-boot/spring-boot-spring-properties-profiles-yaml.md"
+  },
+  {
+    "title": "REST Controllers and Spring MVC",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-boot-spring-rest-controllers-mvc",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "spring-boot"
+    ],
+    "description": "Spring MVC maps HTTP requests to controller methods. **`@RestController`** = `@Controller` + `@ResponseBody` — every return value is serialized to JSON (by default).",
+    "filePath": "notes/spring-boot/spring-boot-spring-rest-controllers-mvc.md"
+  },
+  {
+    "title": "Spring Boot Actuator and Metrics",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-boot-spring-actuator-metrics",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "spring-boot"
+    ],
+    "description": "You can't fix what you can't see. **Spring Boot Actuator** exposes health, metrics, and diagnostics — wire them to **Prometheus/Grafana** and protect them like production credentials.",
+    "filePath": "notes/spring-boot/spring-boot-spring-actuator-metrics.md"
+  },
+  {
+    "title": "Spring Boot Auto-Configuration Lifecycle",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-boot-spring-autoconfiguration",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "spring-boot"
+    ],
+    "description": "Spring Boot's magic is **conditional configuration** — beans appear only when the right classes and properties are on the classpath.",
+    "filePath": "notes/spring-boot/spring-boot-spring-autoconfiguration.md"
+  },
+  {
+    "title": "Spring Boot Testing and Slice Annotations",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-boot-spring-testing-slices",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "spring-boot"
+    ],
+    "description": "Not every test needs the full application context. **Slice tests** load only the layer you care about — faster CI, clearer failures.",
+    "filePath": "notes/spring-boot/spring-boot-spring-testing-slices.md"
+  },
+  {
+    "title": "Spring Boot: Enterprise Application Framework",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-boot-master-moc",
+    "difficulty": "advanced",
+    "tags": [
+      "java",
+      "spring-boot",
+      "enterprise",
+      "backend"
+    ],
+    "description": "Spring Boot learning path — IoC, configuration, JPA, web layer, security, testing, and observability.",
+    "filePath": "notes/spring-boot/spring-boot-master-moc.md"
+  },
+  {
+    "title": "Spring Security Architecture",
+    "category": "backend",
+    "subcategory": "spring-boot",
+    "slug": "spring-boot-spring-security-architecture",
+    "difficulty": "beginner",
+    "tags": [
+      "backend",
+      "spring-boot"
+    ],
+    "description": "Security in Spring is a **filter chain** in front of your servlets. You configure rules, authentication mechanisms, and method-level checks — the framework handles the rest.",
+    "filePath": "notes/spring-boot/spring-boot-spring-security-architecture.md"
+  },
+  {
+    "title": "PyTorch",
+    "category": "data-science",
+    "subcategory": "pytorch",
+    "slug": "pytorch-overview",
+    "difficulty": "beginner",
+    "tags": [
+      "data_science_and_ai",
+      "pytorch"
+    ],
+    "description": "Deep learning framework",
+    "filePath": "notes/pytorch/pytorch-overview.md"
+  },
+  {
+    "title": "Database & Persistence Knowledge Hub",
+    "category": "databases",
+    "subcategory": "databases",
+    "slug": "database-master-moc",
+    "difficulty": "beginner",
+    "tags": [
+      "databases",
+      "postgresql",
+      "redis",
+      "mongodb"
+    ],
+    "description": "Curated path from storage fundamentals to PostgreSQL, MongoDB, Redis, and production optimization.",
+    "filePath": "notes/databases/database-master-moc.md"
+  },
+  {
+    "title": "Interacting with Databases: Raw Queries vs Query Builders vs ORMs",
+    "category": "databases",
+    "subcategory": "databases",
+    "slug": "databases-database-interaction-abstractions",
+    "difficulty": "beginner",
+    "tags": [
+      "databases",
+      "foundations"
+    ],
+    "description": "",
+    "filePath": "notes/databases/databases-database-interaction-abstractions.md"
+  },
+  {
+    "title": "SQL vs NoSQL: Models, Tradeoffs, and When to Use Each",
+    "category": "databases",
+    "subcategory": "databases",
+    "slug": "databases-sql-vs-nosql",
+    "difficulty": "beginner",
+    "tags": [
+      "databases",
+      "foundations"
+    ],
+    "description": "There is no universal winner—only fit for your consistency, scale, and query patterns.",
+    "filePath": "notes/databases/databases-sql-vs-nosql.md"
+  },
+  {
+    "title": "What Is a Database? History and Evolution",
+    "category": "databases",
+    "subcategory": "databases",
+    "slug": "databases-database-history",
+    "difficulty": "beginner",
+    "tags": [
+      "databases",
+      "foundations"
+    ],
+    "description": "A database is an **organized** collection of structured information, stored and managed by a **Database Management System (DBMS)**.",
+    "filePath": "notes/databases/databases-database-history.md"
+  },
+  {
+    "title": "MongoDB Architecture and Schema Design",
+    "category": "databases",
+    "subcategory": "mongodb",
+    "slug": "mongodb-mongo-architecture",
+    "difficulty": "beginner",
+    "tags": [
+      "databases",
+      "mongodb"
+    ],
+    "description": "Deep dive placeholder—flexible schemas, replica sets, sharding, and aggregation for analytics.",
+    "filePath": "notes/mongodb/mongodb-mongo-architecture.md"
+  },
+  {
+    "title": "PostgreSQL Architecture and Internals",
+    "category": "databases",
+    "subcategory": "postgresql",
+    "slug": "postgresql-postgres-architecture",
+    "difficulty": "beginner",
+    "tags": [
+      "databases",
+      "postgresql"
+    ],
+    "description": "Deep dive placeholder—processes, shared buffers, WAL, B-tree vs GiST indexes, and EXPLAIN ANALYZE workflows.",
+    "filePath": "notes/postgresql/postgresql-postgres-architecture.md"
+  },
+  {
+    "title": "Redis Architecture: Why Single-Threaded is Ultra-Fast",
+    "category": "databases",
+    "subcategory": "redis",
+    "slug": "redis-architecture-and-caching",
+    "difficulty": "beginner",
+    "tags": [
+      "databases",
+      "redis"
+    ],
+    "description": "",
+    "filePath": "notes/redis/redis-architecture-and-caching.md"
+  },
+  {
+    "title": "EC2",
+    "category": "devops",
+    "subcategory": "aws",
+    "slug": "aws-ec2",
+    "difficulty": "beginner",
+    "tags": [
+      "devops",
+      "aws"
+    ],
+    "description": "400 Gbps Ethernet networking max performance gap",
+    "filePath": "notes/aws/aws-ec2.md"
+  },
+  {
+    "title": "Lambda",
+    "category": "devops",
+    "subcategory": "aws",
+    "slug": "aws-lambda",
+    "difficulty": "beginner",
+    "tags": [
+      "devops",
+      "aws"
+    ],
+    "description": "",
+    "filePath": "notes/aws/aws-lambda.md"
+  },
+  {
+    "title": "1. What is it and what is it for?",
+    "category": "devops",
+    "subcategory": "containers",
+    "slug": "containers-devops-cloud-overview",
+    "difficulty": "beginner",
+    "tags": [
+      "devops",
+      "containers"
+    ],
+    "description": "Docker is software plattform that allows create, deploy and execute application inside of containers. Basically, it's the tool that made the classic programmer phrase, \"But it worked on my computer,\" obsolete.",
+    "filePath": "notes/containers/containers-devops-cloud-overview.md"
+  },
+  {
+    "title": "Docker Engine",
+    "category": "devops",
+    "subcategory": "containers",
+    "slug": "containers-docker-engine",
+    "difficulty": "beginner",
+    "tags": [
+      "devops",
+      "containers"
+    ],
+    "description": "",
+    "filePath": "notes/containers/containers-docker-engine.md"
+  },
+  {
+    "title": "DevOps & Cloud Master Roadmap",
+    "category": "devops-cloud",
+    "subcategory": "moc.md",
+    "slug": "devops-cloud",
+    "difficulty": "beginner",
+    "tags": [
+      "index",
+      "roadmap",
+      "devops"
+    ],
+    "description": "A structured learning path for DevOps and Cloud engineering covering containers, cloud providers, CI/CD pipelines, and infrastructure automation.",
+    "filePath": "notes/moc.md/devops-cloud.md"
+  },
+  {
+    "title": "BIOS",
+    "category": "fundamentals",
+    "subcategory": "computer-architecture",
+    "slug": "computer-architecture-bios",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "computer-architecture"
+    ],
+    "description": "",
+    "filePath": "notes/computer-architecture/computer-architecture-bios.md"
+  },
+  {
+    "title": "Bit",
+    "category": "fundamentals",
+    "subcategory": "computer-architecture",
+    "slug": "computer-architecture-bit",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "computer-architecture"
+    ],
+    "description": "",
+    "filePath": "notes/computer-architecture/computer-architecture-bit.md"
+  },
+  {
+    "title": "Boot sequence",
+    "category": "fundamentals",
+    "subcategory": "computer-architecture",
+    "slug": "computer-architecture-boot-sequence",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "computer-architecture"
+    ],
+    "description": "",
+    "filePath": "notes/computer-architecture/computer-architecture-boot-sequence.md"
+  },
+  {
+    "title": "Byte",
+    "category": "fundamentals",
+    "subcategory": "computer-architecture",
+    "slug": "computer-architecture-byte",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "computer-architecture"
+    ],
+    "description": "",
+    "filePath": "notes/computer-architecture/computer-architecture-byte.md"
+  },
+  {
+    "title": "Computing Master Index",
+    "category": "fundamentals",
+    "subcategory": "computer-architecture",
+    "slug": "moc",
+    "difficulty": "beginner",
+    "tags": [
+      "index",
+      "roadmap",
+      "fundamentals",
+      "computer-architecture"
+    ],
+    "description": "Navigable map of core computing concepts (hardware, boot, networking, storage, operating systems)",
+    "filePath": "notes/computer-architecture/moc.md"
+  },
+  {
+    "title": "Computing overview",
+    "category": "fundamentals",
+    "subcategory": "computer-architecture",
+    "slug": "computer-architecture-computing-overview",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "computer-architecture"
+    ],
+    "description": "",
+    "filePath": "notes/computer-architecture/computer-architecture-computing-overview.md"
+  },
+  {
+    "title": "CPU",
+    "category": "fundamentals",
+    "subcategory": "computer-architecture",
+    "slug": "computer-architecture-cpu",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "computer-architecture"
+    ],
+    "description": "",
+    "filePath": "notes/computer-architecture/computer-architecture-cpu.md"
+  },
+  {
+    "title": "Electronic circuits",
+    "category": "fundamentals",
+    "subcategory": "computer-architecture",
+    "slug": "computer-architecture-electronic-circuits",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "computer-architecture"
+    ],
+    "description": "",
+    "filePath": "notes/computer-architecture/computer-architecture-electronic-circuits.md"
+  },
+  {
+    "title": "Memory, storage, filesystems, and paths",
+    "category": "fundamentals",
+    "subcategory": "computer-architecture",
+    "slug": "computer-architecture-memory-storage-filesystems-and-paths",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "computer-architecture"
+    ],
+    "description": "",
+    "filePath": "notes/computer-architecture/computer-architecture-memory-storage-filesystems-and-paths.md"
+  },
+  {
+    "title": "SoC and GPU",
+    "category": "fundamentals",
+    "subcategory": "computer-architecture",
+    "slug": "computer-architecture-soc-and-gpu",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "computer-architecture"
+    ],
+    "description": "",
+    "filePath": "notes/computer-architecture/computer-architecture-soc-and-gpu.md"
+  },
+  {
+    "title": "UEFI",
+    "category": "fundamentals",
+    "subcategory": "computer-architecture",
+    "slug": "computer-architecture-uefi",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "computer-architecture"
+    ],
+    "description": "",
+    "filePath": "notes/computer-architecture/computer-architecture-uefi.md"
+  },
+  {
+    "title": "Linux Fundamentals Master Node",
+    "category": "fundamentals",
+    "subcategory": "linux",
+    "slug": "linux-home",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "linux"
+    ],
+    "description": "",
+    "filePath": "notes/linux/linux-home.md"
+  },
+  {
+    "title": "Process Management",
+    "category": "fundamentals",
+    "subcategory": "linux",
+    "slug": "linux-process-management",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "linux"
+    ],
+    "description": "",
+    "filePath": "notes/linux/linux-process-management.md"
+  },
+  {
+    "title": "DNS",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-dns",
+    "difficulty": "beginner",
+    "tags": [
+      "networking",
+      "dns",
+      "naming",
+      "resolution",
+      "fundamentals"
+    ],
+    "description": "Domain Name System — distributed name resolution, resolver chain, record types, and security considerations.",
+    "filePath": "notes/networking/networking-dns.md"
+  },
+  {
+    "title": "gRPC",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-grpc",
+    "difficulty": "advanced",
+    "tags": [
+      "networking",
+      "grpc",
+      "rpc",
+      "protobuf",
+      "http2",
+      "fundamentals"
+    ],
+    "description": "High-performance RPC framework over HTTP/2 — Protocol Buffers, streaming, and when to choose gRPC over REST.",
+    "filePath": "notes/networking/networking-grpc.md"
+  },
+  {
+    "title": "How the Internet Works",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-how-the-internet-works",
+    "difficulty": "beginner",
+    "tags": [
+      "networking",
+      "internet",
+      "fundamentals"
+    ],
+    "description": "End-to-end mental map — from user input to bits on the wire, through ISPs, DNS, IP routing, encryption, and CDNs.",
+    "filePath": "notes/networking/networking-how-the-internet-works.md"
+  },
+  {
+    "title": "HTTP",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-http",
+    "difficulty": "beginner",
+    "tags": [
+      "networking",
+      "http",
+      "web",
+      "rest",
+      "fundamentals"
+    ],
+    "description": "Hypertext Transfer Protocol — request/response semantics, methods, headers, status codes, and HTTP/1.1 vs HTTP/2.",
+    "filePath": "notes/networking/networking-http.md"
+  },
+  {
+    "title": "HTTPS",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-https",
+    "difficulty": "intermediate",
+    "tags": [
+      "networking",
+      "https",
+      "tls",
+      "web",
+      "security",
+      "fundamentals"
+    ],
+    "description": "HTTP secured with TLS — encryption on the wire, certificates, port 443, and HSTS.",
+    "filePath": "notes/networking/networking-https.md"
+  },
+  {
+    "title": "IP (Internet Protocol)",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-ip",
+    "difficulty": "beginner",
+    "tags": [
+      "networking",
+      "ip",
+      "ipv4",
+      "ipv6",
+      "routing",
+      "fundamentals"
+    ],
+    "description": "Internet Protocol — datagram delivery, headers, IPv4 vs IPv6, and its role in the network layer.",
+    "filePath": "notes/networking/networking-ip.md"
+  },
+  {
+    "title": "IP Addresses and Protocols",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-ip-addresses-and-protocols",
+    "difficulty": "beginner",
+    "tags": [
+      "networking",
+      "ip",
+      "ipv4",
+      "ipv6",
+      "addressing",
+      "fundamentals"
+    ],
+    "description": "IPv4 and IPv6 address formats, public vs private space, loopback, and how IANA/RIRs allocate addresses.",
+    "filePath": "notes/networking/networking-ip-addresses-and-protocols.md"
+  },
+  {
+    "title": "NAT",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-nat",
+    "difficulty": "beginner",
+    "tags": [
+      "networking",
+      "nat",
+      "ipv4",
+      "routing",
+      "firewall",
+      "fundamentals"
+    ],
+    "description": "Network Address Translation — sharing public IPv4, NAT tables, port forwarding, and developer implications.",
+    "filePath": "notes/networking/networking-nat.md"
+  },
+  {
+    "title": "Network Protocols Index",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-protocols-moc",
+    "difficulty": "beginner",
+    "tags": [
+      "networking",
+      "protocols",
+      "index",
+      "fundamentals"
+    ],
+    "description": "Categorized index of protocol notes in this vault, organized by OSI-style layers.",
+    "filePath": "notes/networking/networking-protocols-moc.md"
+  },
+  {
+    "title": "Networking: Fundamentals & Protocols",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-master-moc",
+    "difficulty": "beginner",
+    "tags": [
+      "networking",
+      "protocols",
+      "index",
+      "roadmap",
+      "fundamentals"
+    ],
+    "description": "Learning path from how the Internet works through the OSI model to individual protocol deep dives.",
+    "filePath": "notes/networking/networking-master-moc.md"
+  },
+  {
+    "title": "OSI Model",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-osi-model",
+    "difficulty": "beginner",
+    "tags": [
+      "networking",
+      "osi",
+      "layers",
+      "fundamentals"
+    ],
+    "description": "The seven-layer OSI reference model — what each layer does and how TCP/IP protocols map to it.",
+    "filePath": "notes/networking/networking-osi-model.md"
+  },
+  {
+    "title": "TCP",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-tcp",
+    "difficulty": "intermediate",
+    "tags": [
+      "networking",
+      "tcp",
+      "transport",
+      "reliability",
+      "fundamentals"
+    ],
+    "description": "Transmission Control Protocol — connection-oriented, reliable, ordered byte streams over IP.",
+    "filePath": "notes/networking/networking-tcp.md"
+  },
+  {
+    "title": "TLS",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-tls",
+    "difficulty": "intermediate",
+    "tags": [
+      "networking",
+      "tls",
+      "security",
+      "encryption",
+      "https",
+      "fundamentals"
+    ],
+    "description": "Transport Layer Security — handshake, certificates, symmetric encryption, and TLS 1.3 essentials.",
+    "filePath": "notes/networking/networking-tls.md"
+  },
+  {
+    "title": "UDP",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-udp",
+    "difficulty": "beginner",
+    "tags": [
+      "networking",
+      "udp",
+      "transport",
+      "datagram",
+      "fundamentals"
+    ],
+    "description": "User Datagram Protocol — connectionless transport, trade-offs vs TCP, and common use cases.",
+    "filePath": "notes/networking/networking-udp.md"
+  },
+  {
+    "title": "WebRTC",
+    "category": "fundamentals",
+    "subcategory": "networking",
+    "slug": "networking-webrtc",
+    "difficulty": "advanced",
+    "tags": [
+      "networking",
+      "webrtc",
+      "udp",
+      "p2p",
+      "real-time",
+      "fundamentals"
+    ],
+    "description": "Browser real-time communication — peer connections, ICE/STUN/TURN, media over UDP, and data channels.",
+    "filePath": "notes/networking/networking-webrtc.md"
+  },
+  {
+    "title": "Kernel",
+    "category": "fundamentals",
+    "subcategory": "operating-systems",
+    "slug": "operating-systems-kernel",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "operating-systems"
+    ],
+    "description": "",
+    "filePath": "notes/operating-systems/operating-systems-kernel.md"
+  },
+  {
+    "title": "macOS",
+    "category": "fundamentals",
+    "subcategory": "operating-systems",
+    "slug": "operating-systems-macos",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "operating-systems"
+    ],
+    "description": "",
+    "filePath": "notes/operating-systems/operating-systems-macos.md"
+  },
+  {
+    "title": "Operating system overview",
+    "category": "fundamentals",
+    "subcategory": "operating-systems",
+    "slug": "operating-systems-operating-system-overview",
+    "difficulty": "beginner",
+    "tags": [
+      "fundamentals",
+      "operating-systems"
+    ],
+    "description": "",
+    "filePath": "notes/operating-systems/operating-systems-operating-system-overview.md"
+  },
+  {
+    "title": "ACID",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-acid",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "consistency-models",
+      "fundamentals"
+    ],
+    "description": "Atomicity, Consistency, Isolation, Durability — transactional guarantees in RDBMS.",
+    "filePath": "notes/software-engineer/software-engineer-acid.md"
+  },
+  {
+    "title": "Analytics & Data Platforms",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-analytics-data-platforms-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "analytics-data-platforms",
+      "index",
+      "fundamentals"
+    ],
+    "description": "Large-scale analytics storage — data lakes vs warehouses.",
+    "filePath": "notes/software-engineer/software-engineer-analytics-data-platforms-moc.md"
+  },
+  {
+    "title": "B-Tree",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-b-tree",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "indexing-query-optimization",
+      "fundamentals"
+    ],
+    "description": "Balanced tree index — default for most relational databases.",
+    "filePath": "notes/software-engineer/software-engineer-b-tree.md"
+  },
+  {
+    "title": "Backpressure",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-backpressure",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "scalability-performance",
+      "fundamentals"
+    ],
+    "description": "Slow producers when consumers are overloaded.",
+    "filePath": "notes/software-engineer/software-engineer-backpressure.md"
+  },
+  {
+    "title": "BASE",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-base",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "distributed-systems-fundamentals",
+      "fundamentals"
+    ],
+    "description": "Basically Available, Soft state, Eventually consistent — pragmatic alternative to ACID at scale.",
+    "filePath": "notes/software-engineer/software-engineer-base.md"
+  },
+  {
+    "title": "Bloom Filter",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-bloom-filter",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "indexing-query-optimization",
+      "fundamentals"
+    ],
+    "description": "Probabilistic structure: quickly tells you a key is **definitely not** present.",
+    "filePath": "notes/software-engineer/software-engineer-bloom-filter.md"
+  },
+  {
+    "title": "Caching",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-caching",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "scalability-performance",
+      "fundamentals"
+    ],
+    "description": "Store frequently accessed data in faster tier (memory, CDN).",
+    "filePath": "notes/software-engineer/software-engineer-caching.md"
+  },
+  {
+    "title": "CAP Theorem",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-cap-theorem",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "distributed-systems-fundamentals",
+      "fundamentals"
+    ],
+    "description": "Under partition, a system must choose between consistency and availability.",
+    "filePath": "notes/software-engineer/software-engineer-cap-theorem.md"
+  },
+  {
+    "title": "Change Data Capture",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-change-data-capture",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "data-integration-change-propagation",
+      "fundamentals"
+    ],
+    "description": "CDC — stream database changes to downstream systems in real time.",
+    "filePath": "notes/software-engineer/software-engineer-change-data-capture.md"
+  },
+  {
+    "title": "Checkpointing",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-checkpointing",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "storage-engine-internals",
+      "fundamentals"
+    ],
+    "description": "Flushing dirty pages to disk so recovery replays less WAL.",
+    "filePath": "notes/software-engineer/software-engineer-checkpointing.md"
+  },
+  {
+    "title": "Circuit Breaker",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-circuit-breaker",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "resilience-reliability-availability",
+      "fundamentals"
+    ],
+    "description": "Stop calling a failing dependency after threshold — fail fast.",
+    "filePath": "notes/software-engineer/software-engineer-circuit-breaker.md"
+  },
+  {
+    "title": "Clustering",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-clustering",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "partitioning-sharding-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Physically ordering or grouping related rows on disk or nodes.",
+    "filePath": "notes/software-engineer/software-engineer-clustering.md"
+  },
+  {
+    "title": "Columnar Storage",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-columnar-storage",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "storage-engine-internals",
+      "fundamentals"
+    ],
+    "description": "Store each column contiguously — analytics optimized.",
+    "filePath": "notes/software-engineer/software-engineer-columnar-storage.md"
+  },
+  {
+    "title": "Compaction",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-compaction",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "storage-engine-internals",
+      "fundamentals"
+    ],
+    "description": "Merging SSTables or reclaiming space in LSM and append-only stores.",
+    "filePath": "notes/software-engineer/software-engineer-compaction.md"
+  },
+  {
+    "title": "Composite Index",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-composite-index",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "indexing-query-optimization",
+      "fundamentals"
+    ],
+    "description": "Single index spanning multiple columns in defined order.",
+    "filePath": "notes/software-engineer/software-engineer-composite-index.md"
+  },
+  {
+    "title": "Concurrency Control & Locking",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-concurrency-control-locking-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "concurrency-control-locking",
+      "index",
+      "fundamentals"
+    ],
+    "description": "How databases serialize concurrent access — deadlocks and lock strategies.",
+    "filePath": "notes/software-engineer/software-engineer-concurrency-control-locking-moc.md"
+  },
+  {
+    "title": "Connection Pooling",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-connection-pooling",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "scalability-performance",
+      "fundamentals"
+    ],
+    "description": "Reuse DB connections instead of opening per request.",
+    "filePath": "notes/software-engineer/software-engineer-connection-pooling.md"
+  },
+  {
+    "title": "Consensus",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-consensus",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "distributed-systems-fundamentals",
+      "fundamentals"
+    ],
+    "description": "Agreement among nodes on a single value or log order despite failures.",
+    "filePath": "notes/software-engineer/software-engineer-consensus.md"
+  },
+  {
+    "title": "Consistency Models",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-consistency-models-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "consistency-models",
+      "index",
+      "fundamentals"
+    ],
+    "description": "Guarantees readers see — ACID, eventual vs strong, snapshots, and MVCC.",
+    "filePath": "notes/software-engineer/software-engineer-consistency-models-moc.md"
+  },
+  {
+    "title": "Consistent Hashing",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-consistent-hashing",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "partitioning-sharding-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Hash ring mapping keys to nodes with minimal remapping when nodes change.",
+    "filePath": "notes/software-engineer/software-engineer-consistent-hashing.md"
+  },
+  {
+    "title": "Cost-Based Optimizer",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-cost-based-optimizer",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "indexing-query-optimization",
+      "fundamentals"
+    ],
+    "description": "Planner that picks the lowest-estimated-cost plan using table statistics.",
+    "filePath": "notes/software-engineer/software-engineer-cost-based-optimizer.md"
+  },
+  {
+    "title": "Covering Index",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-covering-index",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "indexing-query-optimization",
+      "fundamentals"
+    ],
+    "description": "Index that contains all columns needed by a query — no heap fetch.",
+    "filePath": "notes/software-engineer/software-engineer-covering-index.md"
+  },
+  {
+    "title": "Data Integration & Change Propagation",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-data-integration-change-propagation-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "data-integration-change-propagation",
+      "index",
+      "fundamentals"
+    ],
+    "description": "Moving and syncing data — CDC, migration, idempotency, exactly-once.",
+    "filePath": "notes/software-engineer/software-engineer-data-integration-change-propagation-moc.md"
+  },
+  {
+    "title": "Data Lake",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-data-lake",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "analytics-data-platforms",
+      "fundamentals"
+    ],
+    "description": "Central repository for raw structured and unstructured data at scale.",
+    "filePath": "notes/software-engineer/software-engineer-data-lake.md"
+  },
+  {
+    "title": "Data Locality",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-data-locality",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "partitioning-sharding-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Keeping compute close to the data it processes to cut network cost.",
+    "filePath": "notes/software-engineer/software-engineer-data-locality.md"
+  },
+  {
+    "title": "Data Migration",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-data-migration",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "data-integration-change-propagation",
+      "fundamentals"
+    ],
+    "description": "Moving data between schemas, engines, or regions.",
+    "filePath": "notes/software-engineer/software-engineer-data-migration.md"
+  },
+  {
+    "title": "Data Modeling & Schema Design",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-data-modeling-schema-design-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "data-modeling-schema-design",
+      "index",
+      "fundamentals"
+    ],
+    "description": "How to structure data — normalization, evolution, and precomputed views.",
+    "filePath": "notes/software-engineer/software-engineer-data-modeling-schema-design-moc.md"
+  },
+  {
+    "title": "Data Skew",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-data-skew",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "partitioning-sharding-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Uneven data or query distribution across partitions or workers.",
+    "filePath": "notes/software-engineer/software-engineer-data-skew.md"
+  },
+  {
+    "title": "Data Warehouse",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-data-warehouse",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "analytics-data-platforms",
+      "fundamentals"
+    ],
+    "description": "Structured, curated store optimized for SQL analytics and BI.",
+    "filePath": "notes/software-engineer/software-engineer-data-warehouse.md"
+  },
+  {
+    "title": "Deadlock",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-deadlock",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "concurrency-control-locking",
+      "fundamentals"
+    ],
+    "description": "Circular wait — each transaction holds a lock the other needs.",
+    "filePath": "notes/software-engineer/software-engineer-deadlock.md"
+  },
+  {
+    "title": "Denormalization",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-denormalization",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "data-modeling-schema-design",
+      "fundamentals"
+    ],
+    "description": "Intentionally duplicating data to speed reads at the cost of write complexity.",
+    "filePath": "notes/software-engineer/software-engineer-denormalization.md"
+  },
+  {
+    "title": "Dirty Read",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-dirty-read",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "transaction-anomalies",
+      "fundamentals"
+    ],
+    "description": "Reading uncommitted data from another transaction.",
+    "filePath": "notes/software-engineer/software-engineer-dirty-read.md"
+  },
+  {
+    "title": "Distributed Systems Fundamentals",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-distributed-systems-fundamentals-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "distributed-systems-fundamentals",
+      "index",
+      "fundamentals"
+    ],
+    "description": "Core ideas for multiple nodes — consensus, quorums, CAP, and split-brain.",
+    "filePath": "notes/software-engineer/software-engineer-distributed-systems-fundamentals-moc.md"
+  },
+  {
+    "title": "Distributed Transactions",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-distributed-transactions-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "distributed-transactions",
+      "index",
+      "fundamentals"
+    ],
+    "description": "Coordinating commits across multiple nodes — 2PC and 3PC.",
+    "filePath": "notes/software-engineer/software-engineer-distributed-transactions-moc.md"
+  },
+  {
+    "title": "Eventual Consistency",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-eventual-consistency",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "consistency-models",
+      "fundamentals"
+    ],
+    "description": "Replicas converge over time if no new writes — no immediate global truth.",
+    "filePath": "notes/software-engineer/software-engineer-eventual-consistency.md"
+  },
+  {
+    "title": "Exactly-Once Semantics",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-exactly-once-semantics",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "data-integration-change-propagation",
+      "fundamentals"
+    ],
+    "description": "Each message/effect processed once despite retries and failures.",
+    "filePath": "notes/software-engineer/software-engineer-exactly-once-semantics.md"
+  },
+  {
+    "title": "Failover",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-failover",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "resilience-reliability-availability",
+      "fundamentals"
+    ],
+    "description": "Automatic or manual switch to standby when primary fails.",
+    "filePath": "notes/software-engineer/software-engineer-failover.md"
+  },
+  {
+    "title": "Federation",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-federation",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "replication-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Splitting databases by domain or tenant across independent systems.",
+    "filePath": "notes/software-engineer/software-engineer-federation.md"
+  },
+  {
+    "title": "General Concept Glossary (legacy index)",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "general-concept-glossary",
+    "difficulty": "beginner",
+    "tags": [
+      "software-engineer",
+      "index",
+      "fundamentals"
+    ],
+    "description": "Legacy flat list — see 00_Software_Engineer_MOC for the organized concept library.",
+    "filePath": "notes/software-engineer/general-concept-glossary.md"
+  },
+  {
+    "title": "Geo-Replication",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-geo-replication",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "replication-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Replicating data across geographic regions for latency and DR.",
+    "filePath": "notes/software-engineer/software-engineer-geo-replication.md"
+  },
+  {
+    "title": "Hash Partitioning",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-hash-partitioning",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "partitioning-sharding-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Assign rows to partitions via hash(partition_key) mod N.",
+    "filePath": "notes/software-engineer/software-engineer-hash-partitioning.md"
+  },
+  {
+    "title": "High Availability",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-high-availability",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "resilience-reliability-availability",
+      "fundamentals"
+    ],
+    "description": "HA — designing for continued service through component failure.",
+    "filePath": "notes/software-engineer/software-engineer-high-availability.md"
+  },
+  {
+    "title": "Horizontal Scaling",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-horizontal-scaling",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "scalability-performance",
+      "fundamentals"
+    ],
+    "description": "Add more machines/nodes to handle load — scale out.",
+    "filePath": "notes/software-engineer/software-engineer-horizontal-scaling.md"
+  },
+  {
+    "title": "Hot Partition",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-hot-partition",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "partitioning-sharding-data-distribution",
+      "fundamentals"
+    ],
+    "description": "One shard receiving disproportionate traffic — bottleneck for the whole system.",
+    "filePath": "notes/software-engineer/software-engineer-hot-partition.md"
+  },
+  {
+    "title": "Idempotency",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-idempotency",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "data-integration-change-propagation",
+      "fundamentals"
+    ],
+    "description": "Same operation applied multiple times has the same effect as once.",
+    "filePath": "notes/software-engineer/software-engineer-idempotency.md"
+  },
+  {
+    "title": "Indexing",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-indexing",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "indexing-query-optimization",
+      "fundamentals"
+    ],
+    "description": "Auxiliary data structures that let the engine find rows without full table scans.",
+    "filePath": "notes/software-engineer/software-engineer-indexing.md"
+  },
+  {
+    "title": "Indexing & Query Optimization",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-indexing-query-optimization-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "indexing-query-optimization",
+      "index",
+      "fundamentals"
+    ],
+    "description": "How indexes and planners make queries fast — B-trees, LSM, and bloom filters.",
+    "filePath": "notes/software-engineer/software-engineer-indexing-query-optimization-moc.md"
+  },
+  {
+    "title": "Leader-Follower Replication",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-leader-follower-replication",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "replication-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Single leader accepts writes; followers replicate the log.",
+    "filePath": "notes/software-engineer/software-engineer-leader-follower-replication.md"
+  },
+  {
+    "title": "Load Balancing",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-load-balancing",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "scalability-performance",
+      "fundamentals"
+    ],
+    "description": "Distribute requests across healthy backends.",
+    "filePath": "notes/software-engineer/software-engineer-load-balancing.md"
+  },
+  {
+    "title": "Lock Escalation",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-lock-escalation",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "concurrency-control-locking",
+      "fundamentals"
+    ],
+    "description": "Engine upgrades many row locks to table lock to save memory.",
+    "filePath": "notes/software-engineer/software-engineer-lock-escalation.md"
+  },
+  {
+    "title": "Logical Replication",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-logical-replication",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "replication-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Replicate row/change events (INSERT/UPDATE/DELETE) at logical level.",
+    "filePath": "notes/software-engineer/software-engineer-logical-replication.md"
+  },
+  {
+    "title": "LSM Tree",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-lsm-tree",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "indexing-query-optimization",
+      "fundamentals"
+    ],
+    "description": "Log-Structured Merge tree — write-optimized storage used in Cassandra, RocksDB, LevelDB.",
+    "filePath": "notes/software-engineer/software-engineer-lsm-tree.md"
+  },
+  {
+    "title": "Materialized Views",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-materialized-views",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "data-modeling-schema-design",
+      "fundamentals"
+    ],
+    "description": "Persisted query results refreshed on a schedule or on change.",
+    "filePath": "notes/software-engineer/software-engineer-materialized-views.md"
+  },
+  {
+    "title": "Multi-Leader Replication",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-multi-leader-replication",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "replication-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Multiple nodes accept writes — conflicts possible.",
+    "filePath": "notes/software-engineer/software-engineer-multi-leader-replication.md"
+  },
+  {
+    "title": "MVCC",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-mvcc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "consistency-models",
+      "fundamentals"
+    ],
+    "description": "Multi-Version Concurrency Control — keep old row versions for concurrent readers.",
+    "filePath": "notes/software-engineer/software-engineer-mvcc.md"
+  },
+  {
+    "title": "Normalization",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-normalization",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "data-modeling-schema-design",
+      "fundamentals"
+    ],
+    "description": "Organizing data into tables to reduce redundancy and update anomalies.",
+    "filePath": "notes/software-engineer/software-engineer-normalization.md"
+  },
+  {
+    "title": "Optimistic Locking",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-optimistic-locking",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "concurrency-control-locking",
+      "fundamentals"
+    ],
+    "description": "Assume no conflict; check version at commit time.",
+    "filePath": "notes/software-engineer/software-engineer-optimistic-locking.md"
+  },
+  {
+    "title": "Partitioning, Sharding & Data Distribution",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-partitioning-sharding-data-distribution-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "partitioning-sharding-data-distribution",
+      "index",
+      "fundamentals"
+    ],
+    "description": "Splitting data across nodes — hash/range keys, hot spots, and rebalancing.",
+    "filePath": "notes/software-engineer/software-engineer-partitioning-sharding-data-distribution-moc.md"
+  },
+  {
+    "title": "Pessimistic Locking",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-pessimistic-locking",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "concurrency-control-locking",
+      "fundamentals"
+    ],
+    "description": "Acquire locks before modifying — SELECT FOR UPDATE.",
+    "filePath": "notes/software-engineer/software-engineer-pessimistic-locking.md"
+  },
+  {
+    "title": "Phantom Read",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-phantom-read",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "transaction-anomalies",
+      "fundamentals"
+    ],
+    "description": "Same query returns different rows because another txn inserted/deleted.",
+    "filePath": "notes/software-engineer/software-engineer-phantom-read.md"
+  },
+  {
+    "title": "Physical Replication",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-physical-replication",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "replication-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Copy WAL/storage pages block-by-block to standby.",
+    "filePath": "notes/software-engineer/software-engineer-physical-replication.md"
+  },
+  {
+    "title": "Query Planner",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-query-planner",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "indexing-query-optimization",
+      "fundamentals"
+    ],
+    "description": "Engine component that chooses execution strategy for a SQL query.",
+    "filePath": "notes/software-engineer/software-engineer-query-planner.md"
+  },
+  {
+    "title": "Quorum",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-quorum",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "distributed-systems-fundamentals",
+      "fundamentals"
+    ],
+    "description": "Minimum number of nodes that must agree for a read or write to proceed.",
+    "filePath": "notes/software-engineer/software-engineer-quorum.md"
+  },
+  {
+    "title": "Range Partitioning",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-range-partitioning",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "partitioning-sharding-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Split data by contiguous key ranges (dates, IDs).",
+    "filePath": "notes/software-engineer/software-engineer-range-partitioning.md"
+  },
+  {
+    "title": "Rate Limiting",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-rate-limiting",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "resilience-reliability-availability",
+      "fundamentals"
+    ],
+    "description": "Cap requests per client/IP/key in a time window.",
+    "filePath": "notes/software-engineer/software-engineer-rate-limiting.md"
+  },
+  {
+    "title": "Read Replicas",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-read-replicas",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "replication-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Secondary copies that serve read traffic while leader handles writes.",
+    "filePath": "notes/software-engineer/software-engineer-read-replicas.md"
+  },
+  {
+    "title": "Read Skew",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-read-skew",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "transaction-anomalies",
+      "fundamentals"
+    ],
+    "description": "Reading two related rows at different points in time — inconsistent snapshot.",
+    "filePath": "notes/software-engineer/software-engineer-read-skew.md"
+  },
+  {
+    "title": "Rebalancing",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-rebalancing",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "partitioning-sharding-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Moving partitions or hash ranges between nodes to equalize load.",
+    "filePath": "notes/software-engineer/software-engineer-rebalancing.md"
+  },
+  {
+    "title": "Replication & Data Distribution",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-replication-data-distribution-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "replication-data-distribution",
+      "index",
+      "fundamentals"
+    ],
+    "description": "Copies of data across nodes — leader/follower, geo-replication, and federation.",
+    "filePath": "notes/software-engineer/software-engineer-replication-data-distribution-moc.md"
+  },
+  {
+    "title": "Resharding",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-resharding",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "partitioning-sharding-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Changing the number of shards or partition scheme.",
+    "filePath": "notes/software-engineer/software-engineer-resharding.md"
+  },
+  {
+    "title": "Resilience, Reliability & Availability",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-resilience-reliability-availability-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "resilience-reliability-availability",
+      "index",
+      "fundamentals"
+    ],
+    "description": "Staying up under failure — failover, HA, circuit breakers, and throttling.",
+    "filePath": "notes/software-engineer/software-engineer-resilience-reliability-availability-moc.md"
+  },
+  {
+    "title": "Row-Based Storage",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-row-based-storage",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "storage-engine-internals",
+      "fundamentals"
+    ],
+    "description": "Store all columns of a row together — OLTP default.",
+    "filePath": "notes/software-engineer/software-engineer-row-based-storage.md"
+  },
+  {
+    "title": "Scalability & Performance",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-scalability-performance-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "scalability-performance",
+      "index",
+      "fundamentals"
+    ],
+    "description": "Growing systems — horizontal vs vertical scale, pooling, cache, backpressure.",
+    "filePath": "notes/software-engineer/software-engineer-scalability-performance-moc.md"
+  },
+  {
+    "title": "Schema Evolution",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-schema-evolution",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "data-modeling-schema-design",
+      "fundamentals"
+    ],
+    "description": "Changing database schema over time without breaking running applications.",
+    "filePath": "notes/software-engineer/software-engineer-schema-evolution.md"
+  },
+  {
+    "title": "Schema Registry",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-schema-registry",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "data-modeling-schema-design",
+      "fundamentals"
+    ],
+    "description": "Central store for data schemas (often Avro/Protobuf/JSON Schema) in streaming pipelines.",
+    "filePath": "notes/software-engineer/software-engineer-schema-registry.md"
+  },
+  {
+    "title": "Secondary Indexes",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-secondary-indexes",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "indexing-query-optimization",
+      "fundamentals"
+    ],
+    "description": "Indexes on non-primary-key columns for alternate lookup paths.",
+    "filePath": "notes/software-engineer/software-engineer-secondary-indexes.md"
+  },
+  {
+    "title": "Snapshot Isolation",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-snapshot-isolation",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "consistency-models",
+      "fundamentals"
+    ],
+    "description": "Each transaction reads from a consistent snapshot as of transaction start.",
+    "filePath": "notes/software-engineer/software-engineer-snapshot-isolation.md"
+  },
+  {
+    "title": "Software Engineer: Data & Systems Concepts",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-master-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "index",
+      "roadmap",
+      "fundamentals"
+    ],
+    "description": "Master index of 73 core concepts for backend and data engineering — modeling, indexing, distribution, consistency, and operations.",
+    "filePath": "notes/software-engineer/software-engineer-master-moc.md"
+  },
+  {
+    "title": "Split-Brain",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-split-brain",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "distributed-systems-fundamentals",
+      "fundamentals"
+    ],
+    "description": "Two partitions both believe they are the leader — risk of divergent writes.",
+    "filePath": "notes/software-engineer/software-engineer-split-brain.md"
+  },
+  {
+    "title": "Storage Engine Internals",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-storage-engine-internals-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "storage-engine-internals",
+      "index",
+      "fundamentals"
+    ],
+    "description": "How data hits disk — WAL, compaction, row vs columnar layouts.",
+    "filePath": "notes/software-engineer/software-engineer-storage-engine-internals-moc.md"
+  },
+  {
+    "title": "Strong Consistency",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-strong-consistency",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "consistency-models",
+      "fundamentals"
+    ],
+    "description": "After a write completes, all readers see the new value.",
+    "filePath": "notes/software-engineer/software-engineer-strong-consistency.md"
+  },
+  {
+    "title": "Three-Phase Commit",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-three-phase-commit",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "distributed-transactions",
+      "fundamentals"
+    ],
+    "description": "3PC — adds pre-commit phase to reduce blocking vs 2PC.",
+    "filePath": "notes/software-engineer/software-engineer-three-phase-commit.md"
+  },
+  {
+    "title": "Throttling",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-throttling",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "resilience-reliability-availability",
+      "fundamentals"
+    ],
+    "description": "Gradually slow request rate to protect system capacity.",
+    "filePath": "notes/software-engineer/software-engineer-throttling.md"
+  },
+  {
+    "title": "Time-Series Partitioning",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-time-series-partitioning",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "partitioning-sharding-data-distribution",
+      "fundamentals"
+    ],
+    "description": "Range partitioning by time — common for metrics and logs.",
+    "filePath": "notes/software-engineer/software-engineer-time-series-partitioning.md"
+  },
+  {
+    "title": "Transaction Anomalies",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-transaction-anomalies-moc",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "transaction-anomalies",
+      "index",
+      "fundamentals"
+    ],
+    "description": "Isolation failures — dirty reads, phantoms, and skew patterns.",
+    "filePath": "notes/software-engineer/software-engineer-transaction-anomalies-moc.md"
+  },
+  {
+    "title": "Two-Phase Commit",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-two-phase-commit",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "distributed-transactions",
+      "fundamentals"
+    ],
+    "description": "2PC — coordinator prepares then commits all participants atomically.",
+    "filePath": "notes/software-engineer/software-engineer-two-phase-commit.md"
+  },
+  {
+    "title": "Vertical Scaling",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-vertical-scaling",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "scalability-performance",
+      "fundamentals"
+    ],
+    "description": "Bigger CPU/RAM/disk on one machine — scale up.",
+    "filePath": "notes/software-engineer/software-engineer-vertical-scaling.md"
+  },
+  {
+    "title": "Write Skew",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-write-skew",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "transaction-anomalies",
+      "fundamentals"
+    ],
+    "description": "Two transactions read overlapping state and write disjoint rows — invariant breaks.",
+    "filePath": "notes/software-engineer/software-engineer-write-skew.md"
+  },
+  {
+    "title": "Write-Ahead Logging",
+    "category": "fundamentals",
+    "subcategory": "software-engineer",
+    "slug": "software-engineer-write-ahead-logging",
+    "difficulty": "intermediate",
+    "tags": [
+      "software-engineer",
+      "storage-engine-internals",
+      "fundamentals"
+    ],
+    "description": "WAL — log changes before applying to data pages for crash recovery.",
+    "filePath": "notes/software-engineer/software-engineer-write-ahead-logging.md"
+  },
+  {
+    "title": "ConfigMaps and Secrets",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-configmaps-secrets",
+    "difficulty": "beginner",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "Decouple configuration and sensitive values from container images using ConfigMaps and Secrets.",
+    "filePath": "notes/kubernetes/k8s-configmaps-secrets.md"
+  },
+  {
+    "title": "Declarative vs Imperative in Kubernetes",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-declarative-vs-imperative",
+    "difficulty": "beginner",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "YAML manifests and GitOps-style declarative workflows versus imperative kubectl commands.",
+    "filePath": "notes/kubernetes/k8s-declarative-vs-imperative.md"
+  },
+  {
+    "title": "Deployments and Rollout Strategies",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-deployments",
+    "difficulty": "intermediate",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "Deployments, rolling updates, recreate strategy, and rolling back container image versions.",
+    "filePath": "notes/kubernetes/k8s-deployments.md"
+  },
+  {
+    "title": "Ingress and Ingress Controllers",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-ingress-controllers",
+    "difficulty": "intermediate",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "HTTP routing into the cluster with Ingress resources and controllers such as NGINX and Traefik.",
+    "filePath": "notes/kubernetes/k8s-ingress-controllers.md"
+  },
+  {
+    "title": "Kubernetes Control Plane Components",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-control-plane-components",
+    "difficulty": "intermediate",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "How the API Server, etcd, Scheduler, and Controller Manager coordinate cluster state.",
+    "filePath": "notes/kubernetes/k8s-control-plane-components.md"
+  },
+  {
+    "title": "Kubernetes Master Roadmap",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-master-moc",
+    "difficulty": "beginner",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure",
+      "containers",
+      "docker"
+    ],
+    "description": "Home hub for Kubernetes: learning path, kubectl cheat sheet, glossary, and links from Docker containers to cluster orchestration.",
+    "filePath": "notes/kubernetes/k8s-master-moc.md"
+  },
+  {
+    "title": "Kubernetes Probes: Liveness, Readiness and Startup",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-probes-healthchecks",
+    "difficulty": "intermediate",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure",
+      "reliability"
+    ],
+    "description": "Configure Liveness, Readiness, and Startup probes for self-healing and zero-downtime deployments of containerized backends.",
+    "filePath": "notes/kubernetes/k8s-probes-healthchecks.md"
+  },
+  {
+    "title": "Namespaces and RBAC",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-namespaces-rbac",
+    "difficulty": "intermediate",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "Logical cluster isolation with namespaces and role-based access control for teams and services.",
+    "filePath": "notes/kubernetes/k8s-namespaces-rbac.md"
+  },
+  {
+    "title": "Persistent Volumes, Claims and StorageClasses",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-persistent-volumes-pvc",
+    "difficulty": "intermediate",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "PV, PVC, and StorageClass for durable storage decoupled from Pod lifecycle.",
+    "filePath": "notes/kubernetes/k8s-persistent-volumes-pvc.md"
+  },
+  {
+    "title": "Pod Networking and CNI",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-pod-networking-cni",
+    "difficulty": "advanced",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "The IP-per-Pod model, CNI plugins, and how cluster networking relates to container network namespaces.",
+    "filePath": "notes/kubernetes/k8s-pod-networking-cni.md"
+  },
+  {
+    "title": "Pods and Lifecycle",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-pods-lifecycle",
+    "difficulty": "beginner",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "The Pod as the smallest deployable unit, container states, restart policies, and init containers.",
+    "filePath": "notes/kubernetes/k8s-pods-lifecycle.md"
+  },
+  {
+    "title": "ReplicaSets",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-replicasets",
+    "difficulty": "beginner",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "How ReplicaSets maintain a stable set of Pod replicas and enable self-healing.",
+    "filePath": "notes/kubernetes/k8s-replicasets.md"
+  },
+  {
+    "title": "Resource Requests, Limits and OOM",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-resource-management",
+    "difficulty": "intermediate",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "CPU and memory requests/limits, QoS classes, and handling OOMKilled containers.",
+    "filePath": "notes/kubernetes/k8s-resource-management.md"
+  },
+  {
+    "title": "Services: ClusterIP, NodePort and LoadBalancer",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-clusterip-nodeport-loadbalancer",
+    "difficulty": "intermediate",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "Kubernetes Service types for stable cluster networking and exposing workloads inside and outside the cluster.",
+    "filePath": "notes/kubernetes/k8s-clusterip-nodeport-loadbalancer.md"
+  },
+  {
+    "title": "StatefulSets, Jobs and CronJobs",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-statefulsets-jobs",
+    "difficulty": "advanced",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "Stateful workloads with stable identity and batch Jobs/CronJobs for one-off or scheduled tasks.",
+    "filePath": "notes/kubernetes/k8s-statefulsets-jobs.md"
+  },
+  {
+    "title": "Volumes and Mounts",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-volumes-mounts",
+    "difficulty": "beginner",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "Ephemeral and shared storage inside Pods: emptyDir, hostPath, and volume mounts.",
+    "filePath": "notes/kubernetes/k8s-volumes-mounts.md"
+  },
+  {
+    "title": "Worker Nodes: Kubelet, kube-proxy and Container Runtime",
+    "category": "infrastructure",
+    "subcategory": "kubernetes",
+    "slug": "k8s-worker-nodes-anatomy",
+    "difficulty": "intermediate",
+    "tags": [
+      "kubernetes",
+      "devops",
+      "infrastructure"
+    ],
+    "description": "Anatomy of worker nodes: kubelet, kube-proxy, and the CRI runtime that runs OCI images from Docker-style builds.",
+    "filePath": "notes/kubernetes/k8s-worker-nodes-anatomy.md"
+  },
+  {
+    "title": ".NET CLI Essentials",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-dotnet-cli-essentials",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "",
+    "filePath": "notes/csharp/csharp-dotnet-cli-essentials.md"
+  },
+  {
+    "title": "Arrays and Lists",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-arrays-and-lists",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "",
+    "filePath": "notes/csharp/csharp-arrays-and-lists.md"
+  },
+  {
+    "title": "C#: Fundamentals and .NET Essentials",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-master-moc",
+    "difficulty": "beginner",
+    "tags": [
+      "csharp",
+      "dotnet",
+      "oop",
+      "fundamentals",
+      "languages"
+    ],
+    "description": "Beginner-to-intermediate path for C#—types, OOP, collections, LINQ, exceptions, and the .NET CLI.",
+    "filePath": "notes/csharp/csharp-master-moc.md"
+  },
+  {
+    "title": "Classes and Objects",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-classes-and-objects",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "",
+    "filePath": "notes/csharp/csharp-classes-and-objects.md"
+  },
+  {
+    "title": "Control Flow and Loops",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-control-flow-and-loops",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "",
+    "filePath": "notes/csharp/csharp-control-flow-and-loops.md"
+  },
+  {
+    "title": "Dictionaries and Sets",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-dictionaries-and-sets",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "",
+    "filePath": "notes/csharp/csharp-dictionaries-and-sets.md"
+  },
+  {
+    "title": "Exception Handling in C#",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-exception-handling",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "",
+    "filePath": "notes/csharp/csharp-exception-handling.md"
+  },
+  {
+    "title": "Inheritance and Polymorphism",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-inheritance-and-polymorphism",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "",
+    "filePath": "notes/csharp/csharp-inheritance-and-polymorphism.md"
+  },
+  {
+    "title": "Interfaces and Abstract Classes",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-interfaces-and-abstract-classes",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "",
+    "filePath": "notes/csharp/csharp-interfaces-and-abstract-classes.md"
+  },
+  {
+    "title": "LINQ Basics",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-linq-basics",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "**LINQ** (Language Integrated Query) queries collections with a SQL-like fluent API.",
+    "filePath": "notes/csharp/csharp-linq-basics.md"
+  },
+  {
+    "title": "Methods and Parameters",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-methods-and-parameters",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "",
+    "filePath": "notes/csharp/csharp-methods-and-parameters.md"
+  },
+  {
+    "title": "Namespaces and Projects",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-namespaces-and-projects",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "",
+    "filePath": "notes/csharp/csharp-namespaces-and-projects.md"
+  },
+  {
+    "title": "Nullability and Type Safety",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-nullability-and-types",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "**Nullable reference types** (NRT) help document whether `string` can be `null`—the compiler warns you when you forget checks.",
+    "filePath": "notes/csharp/csharp-nullability-and-types.md"
+  },
+  {
+    "title": "Properties and Encapsulation",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-properties-and-encapsulation",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "**Properties** are C#'s idiomatic way to expose data with optional validation—prefer them over public fields.",
+    "filePath": "notes/csharp/csharp-properties-and-encapsulation.md"
+  },
+  {
+    "title": "Types and Variables in C#",
+    "category": "languages",
+    "subcategory": "csharp",
+    "slug": "csharp-types-and-variables",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "csharp"
+    ],
+    "description": "C# is **statically typed**—the compiler knows types at build time. That catches many bugs before runtime.",
+    "filePath": "notes/csharp/csharp-types-and-variables.md"
+  },
+  {
+    "title": "Channels and Buffering",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-channels-and-buffering",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "**Don't communicate by sharing memory; share memory by communicating.** Channels are typed conduits for sending values between goroutines.",
+    "filePath": "notes/go/go-channels-and-buffering.md"
+  },
+  {
+    "title": "Garbage Collector Tuning",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-garbage-collector-tuning",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "Go uses a **non-generational, concurrent, tri-color mark-and-sweep** collector—designed for low pause times in server workloads.",
+    "filePath": "notes/go/go-garbage-collector-tuning.md"
+  },
+  {
+    "title": "Gin Framework Architecture",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-gin-framework-architecture",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "**Gin** is a high-performance HTTP web framework built on `httprouter`—minimal API, middleware chains, JSON binding.",
+    "filePath": "notes/go/go-gin-framework-architecture.md"
+  },
+  {
+    "title": "Go Modules and Tooling",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-modules-and-tooling",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "Modules are the unit of dependency management—`go.mod` declares your module path and requirements.",
+    "filePath": "notes/go/go-modules-and-tooling.md"
+  },
+  {
+    "title": "Go: Simplicity, Concurrency, and Systems Engineering",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-master-moc",
+    "difficulty": "advanced",
+    "tags": [
+      "go",
+      "golang",
+      "concurrency",
+      "csp",
+      "backend",
+      "gin",
+      "languages"
+    ],
+    "description": "Master roadmap for Go—from pointers and composition to goroutines, the GMP scheduler, GC tuning, and production APIs with Gin.",
+    "filePath": "notes/go/go-master-moc.md"
+  },
+  {
+    "title": "Goroutines vs OS Threads",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-goroutines-vs-threads",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "Goroutines are lightweight, multiplexed onto fewer OS threads by the Go scheduler—not a 1:1 mapping.",
+    "filePath": "notes/go/go-goroutines-vs-threads.md"
+  },
+  {
+    "title": "Idiomatic Error Handling in Go",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-error-handling-idiomatic",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "Errors are **values**, not exceptions. Control flow is explicit: `if err != nil`.",
+    "filePath": "notes/go/go-error-handling-idiomatic.md"
+  },
+  {
+    "title": "Implicit Interfaces and Duck Typing",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-implicit-interfaces",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "If it walks like a duck and quacks like a duck—Go doesn't need an `implements` keyword. Satisfaction is **implicit**.",
+    "filePath": "notes/go/go-implicit-interfaces.md"
+  },
+  {
+    "title": "Memory Allocation and Escape Analysis",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-memory-escape-analysis",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "The compiler decides **stack** vs **heap** allocation via **escape analysis**—not every `new` hits the GC.",
+    "filePath": "notes/go/go-memory-escape-analysis.md"
+  },
+  {
+    "title": "Pointers and Memory: Value vs Reference",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-pointers-and-memory",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "When to pass by value vs by pointer—and how Go keeps memory semantics explicit without manual malloc/free.",
+    "filePath": "notes/go/go-pointers-and-memory.md"
+  },
+  {
+    "title": "Slices and Arrays: Internals",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-slices-and-arrays-internals",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "Arrays are fixed-size; slices are the dynamic view everyone uses daily. Understanding the slice header prevents subtle bugs.",
+    "filePath": "notes/go/go-slices-and-arrays-internals.md"
+  },
+  {
+    "title": "Structs, Embedding, and Composition",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-structs-and-composition",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "Go has **no inheritance**. Behavior and data are composed with structs, embedding, and interfaces.",
+    "filePath": "notes/go/go-structs-and-composition.md"
+  },
+  {
+    "title": "sync Package: WaitGroup, Mutex, and When to Use What",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-sync-package-and-mutex",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "Channels orchestrate; `sync` primitives protect shared memory. Know when to use each.",
+    "filePath": "notes/go/go-sync-package-and-mutex.md"
+  },
+  {
+    "title": "The Go Scheduler: G-M-P Model",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-scheduler-gmp",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "**G**oroutine, **M**achine (OS thread), **P**rocessor (logical CPU context)—the runtime multiplexes many Gs onto fewer Ms.",
+    "filePath": "notes/go/go-scheduler-gmp.md"
+  },
+  {
+    "title": "The Select Statement",
+    "category": "languages",
+    "subcategory": "go",
+    "slug": "go-select-statement",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "go"
+    ],
+    "description": "`select` waits on multiple channel operations—Go's answer to multiplexed I/O and timeouts.",
+    "filePath": "notes/go/go-select-statement.md"
+  },
+  {
+    "title": "☕ Java - Complete Overview",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-overview",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "",
+    "filePath": "notes/java/java-overview.md"
+  },
+  {
+    "title": "🍳 Java Practical Examples",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-practical-examples",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Real-world examples inspired by cooking and cuisine to master OOP concepts",
+    "filePath": "notes/java/java-practical-examples.md"
+  },
+  {
+    "title": "🍽️ Java Best Practices",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-best-practices",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Chef-quality code using cooking analogies",
+    "filePath": "notes/java/java-best-practices.md"
+  },
+  {
+    "title": "🔧 Java JVM Internals - GC, Bytecode and More",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-jvm-internals",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "\"In Java there are no memory leaks\"",
+    "filePath": "notes/java/java-jvm-internals.md"
+  },
+  {
+    "title": "Abstract Classes and Interfaces",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-abstract-interfaces",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Abstract types and contracts",
+    "filePath": "notes/java/java-abstract-interfaces.md"
+  },
+  {
+    "title": "Arrays",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-arrays",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Single and multidimensional arrays in Java",
+    "filePath": "notes/java/java-arrays.md"
+  },
+  {
+    "title": "Atomic Classes",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-atomic-classes",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Thread-safe counters",
+    "filePath": "notes/java/java-atomic-classes.md"
+  },
+  {
+    "title": "Basic Input/Output",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-basic-io",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Console I/O in Java",
+    "filePath": "notes/java/java-basic-io.md"
+  },
+  {
+    "title": "Basic Threads",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-basic-threads",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Thread creation and execution",
+    "filePath": "notes/java/java-basic-threads.md"
+  },
+  {
+    "title": "Checked vs Unchecked Exceptions",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-checked-vs-unchecked",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Exception classification",
+    "filePath": "notes/java/java-checked-vs-unchecked.md"
+  },
+  {
+    "title": "Classes and Objects",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-classes-objects",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "OOP basics: class and object definition",
+    "filePath": "notes/java/java-classes-objects.md"
+  },
+  {
+    "title": "Code Conventions",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-code-conventions",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Naming and style guidelines",
+    "filePath": "notes/java/java-code-conventions.md"
+  },
+  {
+    "title": "Collections Framework",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-collections-framework",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Overview of Java Collections",
+    "filePath": "notes/java/java-collections-framework.md"
+  },
+  {
+    "title": "Common Annotations",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-common-annotations",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Built-in Java annotations",
+    "filePath": "notes/java/java-common-annotations.md"
+  },
+  {
+    "title": "Comparable and Comparator",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-comparable-comparator",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Sorting interfaces",
+    "filePath": "notes/java/java-comparable-comparator.md"
+  },
+  {
+    "title": "Constructors",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-constructors",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Object initialization with constructors",
+    "filePath": "notes/java/java-constructors.md"
+  },
+  {
+    "title": "Control Structures",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-control-structures",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Decision making and loops in Java",
+    "filePath": "notes/java/java-control-structures.md"
+  },
+  {
+    "title": "Custom Exceptions",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-custom-exceptions",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Creating your own exceptions",
+    "filePath": "notes/java/java-custom-exceptions.md"
+  },
+  {
+    "title": "Data Types",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-data-types",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Java data types: primitives and references",
+    "filePath": "notes/java/java-data-types.md"
+  },
+  {
+    "title": "DateTime API",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-datetime-api",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "java.time (Java 8+)",
+    "filePath": "notes/java/java-datetime-api.md"
+  },
+  {
+    "title": "Default Methods",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-default-methods",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Methods in interfaces (Java 8+)",
+    "filePath": "notes/java/java-default-methods.md"
+  },
+  {
+    "title": "Design Patterns",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-design-patterns-java",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Common OOP patterns",
+    "filePath": "notes/java/java-design-patterns-java.md"
+  },
+  {
+    "title": "Encapsulation",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-encapsulation",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Data hiding with access modifiers",
+    "filePath": "notes/java/java-encapsulation.md"
+  },
+  {
+    "title": "Exceptions",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-exceptions",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Exception hierarchy in Java",
+    "filePath": "notes/java/java-exceptions.md"
+  },
+  {
+    "title": "Executor Framework",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-executor-framework",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Thread pool management",
+    "filePath": "notes/java/java-executor-framework.md"
+  },
+  {
+    "title": "Future and CompletableFuture",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-future-completablefuture",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Asynchronous results",
+    "filePath": "notes/java/java-future-completablefuture.md"
+  },
+  {
+    "title": "Generics",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-generics",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Type parameters and generic types",
+    "filePath": "notes/java/java-generics.md"
+  },
+  {
+    "title": "Gradle",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-gradle",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Build tool alternative",
+    "filePath": "notes/java/java-gradle.md"
+  },
+  {
+    "title": "Inheritance",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-inheritance",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Class inheritance in Java",
+    "filePath": "notes/java/java-inheritance.md"
+  },
+  {
+    "title": "Inner Classes",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-inner-classes",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Nested and inner classes in Java",
+    "filePath": "notes/java/java-inner-classes.md"
+  },
+  {
+    "title": "Java SE: The Complete Core & Runtime Encyclopedia",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-master-moc",
+    "difficulty": "advanced",
+    "tags": [
+      "java",
+      "jvm",
+      "backend",
+      "architecture",
+      "languages"
+    ],
+    "description": "Master roadmap covering Java fundamentals, OOP design, JVM internals, concurrency, and Modern Java 21 virtual threads.",
+    "filePath": "notes/java/java-master-moc.md"
+  },
+  {
+    "title": "java.io",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-io",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Classic input/output",
+    "filePath": "notes/java/java-io.md"
+  },
+  {
+    "title": "java.lang.Math",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-lang-math",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Math utilities",
+    "filePath": "notes/java/java-lang-math.md"
+  },
+  {
+    "title": "java.lang.String",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-lang-string",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "The String class",
+    "filePath": "notes/java/java-lang-string.md"
+  },
+  {
+    "title": "java.lang.System",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-lang-system",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "System class utilities",
+    "filePath": "notes/java/java-lang-system.md"
+  },
+  {
+    "title": "java.nio",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-nio",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "New I/O API",
+    "filePath": "notes/java/java-nio.md"
+  },
+  {
+    "title": "java.util.Date and Time",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-util-date-time",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Legacy date handling (use java.time instead)",
+    "filePath": "notes/java/java-util-date-time.md"
+  },
+  {
+    "title": "java.util.Optional",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-util-optional",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Null-safe container",
+    "filePath": "notes/java/java-util-optional.md"
+  },
+  {
+    "title": "JUnit",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-junit",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Testing framework",
+    "filePath": "notes/java/java-junit.md"
+  },
+  {
+    "title": "JVM Commands",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-jvm-commands",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Command-line tools",
+    "filePath": "notes/java/java-jvm-commands.md"
+  },
+  {
+    "title": "Lambdas",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-lambdas",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Anonymous functions (Java 8+)",
+    "filePath": "notes/java/java-lambdas.md"
+  },
+  {
+    "title": "List Implementations",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-list-arraylist-linkedlist",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "ArrayList and LinkedList",
+    "filePath": "notes/java/java-list-arraylist-linkedlist.md"
+  },
+  {
+    "title": "Locks",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-locks",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Explicit locking",
+    "filePath": "notes/java/java-locks.md"
+  },
+  {
+    "title": "Log4j and SLF4J",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-log4j-slf4j",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Logging frameworks",
+    "filePath": "notes/java/java-log4j-slf4j.md"
+  },
+  {
+    "title": "Logging",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-util-logging",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "java.util.logging",
+    "filePath": "notes/java/java-util-logging.md"
+  },
+  {
+    "title": "Lombok",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-lombok",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Code generation",
+    "filePath": "notes/java/java-lombok.md"
+  },
+  {
+    "title": "Map Implementations",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-map-hashmap-treemap",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "HashMap and TreeMap",
+    "filePath": "notes/java/java-map-hashmap-treemap.md"
+  },
+  {
+    "title": "MapStruct",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-mapstruct",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Object mapping",
+    "filePath": "notes/java/java-mapstruct.md"
+  },
+  {
+    "title": "Maven",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-maven",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Build tool",
+    "filePath": "notes/java/java-maven.md"
+  },
+  {
+    "title": "Method References",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-method-references",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Compact lambda syntax (Java 8+)",
+    "filePath": "notes/java/java-method-references.md"
+  },
+  {
+    "title": "Optional Deep Dive",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-optional-deep",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Null-safe container (Java 8+)",
+    "filePath": "notes/java/java-optional-deep.md"
+  },
+  {
+    "title": "Polymorphism",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-polymorphism",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Method overriding in Java",
+    "filePath": "notes/java/java-polymorphism.md"
+  },
+  {
+    "title": "Queue and Deque",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-queue-deque",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Queue and Double-Ended Queue",
+    "filePath": "notes/java/java-queue-deque.md"
+  },
+  {
+    "title": "Records (Java 14+)",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-records-java-14+",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Immutable data carriers",
+    "filePath": "notes/java/java-records-java-14+.md"
+  },
+  {
+    "title": "Records (Java 14+)",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-records-java-14",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Immutable data carriers",
+    "filePath": "notes/java/java-records-java-14.md"
+  },
+  {
+    "title": "Regular Expressions",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-util-regex",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Pattern matching with java.util.regex",
+    "filePath": "notes/java/java-util-regex.md"
+  },
+  {
+    "title": "Sealed Classes (Java 17+)",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-sealed-classes-java-17",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Controlled inheritance",
+    "filePath": "notes/java/java-sealed-classes-java-17.md"
+  },
+  {
+    "title": "Set Implementations",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-set-hashset-treeset",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "HashSet and TreeSet",
+    "filePath": "notes/java/java-set-hashset-treeset.md"
+  },
+  {
+    "title": "Streams API",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-streams-api",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Functional operations on collections",
+    "filePath": "notes/java/java-streams-api.md"
+  },
+  {
+    "title": "Strings & StringBuilder",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-strings-stringbuilder",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "String manipulation in Java",
+    "filePath": "notes/java/java-strings-stringbuilder.md"
+  },
+  {
+    "title": "Switch Expressions (Java 14+)",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-switch-expressions-java-14",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Enhanced switch",
+    "filePath": "notes/java/java-switch-expressions-java-14.md"
+  },
+  {
+    "title": "Synchronization",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-synchronization",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Thread synchronization",
+    "filePath": "notes/java/java-synchronization.md"
+  },
+  {
+    "title": "Text Blocks (Java 13+)",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-text-blocks-java-13",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Multiline strings",
+    "filePath": "notes/java/java-text-blocks-java-13.md"
+  },
+  {
+    "title": "Try-Catch-Finally",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-try-catch-finally",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Exception handling",
+    "filePath": "notes/java/java-try-catch-finally.md"
+  },
+  {
+    "title": "Try-with-Resources Statement",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-try-with-resources",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Auto-closeable resources",
+    "filePath": "notes/java/java-try-with-resources.md"
+  },
+  {
+    "title": "Useful Methods",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-useful-methods",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Important utility methods",
+    "filePath": "notes/java/java-useful-methods.md"
+  },
+  {
+    "title": "Var (Java 10+)",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-var-java-10",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Local variable type inference",
+    "filePath": "notes/java/java-var-java-10.md"
+  },
+  {
+    "title": "Variables and Constants",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-variables-constants",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Variable declaration, constants (final), and scope",
+    "filePath": "notes/java/java-variables-constants.md"
+  },
+  {
+    "title": "Virtual Threads (Java 21+)",
+    "category": "languages",
+    "subcategory": "java",
+    "slug": "java-virtual-threads-java-21",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "Lightweight threads",
+    "filePath": "notes/java/java-virtual-threads-java-21.md"
+  },
+  {
+    "title": "Async and Await",
+    "category": "languages",
+    "subcategory": "javascript",
+    "slug": "javascript-async-await",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "`async`/`await` is **syntactic sugar** over Promises—easier to read sequential async code.",
+    "filePath": "notes/javascript/javascript-async-await.md"
+  },
+  {
+    "title": "Callbacks and Promises",
+    "category": "languages",
+    "subcategory": "javascript",
+    "slug": "javascript-callbacks-and-promises",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "JavaScript is **non-blocking**—I/O uses callbacks or Promises instead of freezing the thread.",
+    "filePath": "notes/javascript/javascript-callbacks-and-promises.md"
+  },
+  {
+    "title": "Control Flow and Error Handling",
+    "category": "languages",
+    "subcategory": "javascript",
+    "slug": "javascript-control-flow-and-errors",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "",
+    "filePath": "notes/javascript/javascript-control-flow-and-errors.md"
+  },
+  {
+    "title": "Event Loop Basics",
+    "category": "languages",
+    "subcategory": "javascript",
+    "slug": "javascript-event-loop-basics",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "You don't need V8 internals yet—just know **why** `setTimeout(fn, 0)` doesn't run immediately and why order matters.",
+    "filePath": "notes/javascript/javascript-event-loop-basics.md"
+  },
+  {
+    "title": "Functions and Scope",
+    "category": "languages",
+    "subcategory": "javascript",
+    "slug": "javascript-functions-and-scope",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "",
+    "filePath": "notes/javascript/javascript-functions-and-scope.md"
+  },
+  {
+    "title": "JavaScript & TypeScript: Web Language Fundamentals",
+    "category": "languages",
+    "subcategory": "javascript",
+    "slug": "javascript-master-moc",
+    "difficulty": "beginner",
+    "tags": [
+      "javascript",
+      "typescript",
+      "frontend",
+      "nodejs",
+      "fundamentals",
+      "languages",
+      "java"
+    ],
+    "description": "Basic-to-intermediate path for JavaScript and TypeScript—syntax, async, and typed tooling for backend and full-stack work.",
+    "filePath": "notes/javascript/javascript-master-moc.md"
+  },
+  {
+    "title": "Objects and Arrays",
+    "category": "languages",
+    "subcategory": "javascript",
+    "slug": "javascript-objects-and-arrays",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "",
+    "filePath": "notes/javascript/javascript-objects-and-arrays.md"
+  },
+  {
+    "title": "Variables and Data Types in JavaScript",
+    "category": "languages",
+    "subcategory": "javascript",
+    "slug": "javascript-variables-and-data-types",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "JavaScript is **dynamically typed**—variables don't declare a fixed type; the value carries the type at runtime.",
+    "filePath": "notes/javascript/javascript-variables-and-data-types.md"
+  },
+  {
+    "title": "Abstract Base Classes",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-abstract-base-classes",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "ABCs from abc module",
+    "filePath": "notes/python/python-abstract-base-classes.md"
+  },
+  {
+    "title": "any(), all(), zip()",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-any-all-zip",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Boolean and pairing operations",
+    "filePath": "notes/python/python-any-all-zip.md"
+  },
+  {
+    "title": "Booleans",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-booleans",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "bool type: True/False",
+    "filePath": "notes/python/python-booleans.md"
+  },
+  {
+    "title": "Built-in Functions",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-built-in-functions",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Commonly used built-in functions",
+    "filePath": "notes/python/python-built-in-functions.md"
+  },
+  {
+    "title": "Bytes and Bytearray",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-bytes-bytearray",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Binary data",
+    "filePath": "notes/python/python-bytes-bytearray.md"
+  },
+  {
+    "title": "Classes",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-classes",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Class definition in Python",
+    "filePath": "notes/python/python-classes.md"
+  },
+  {
+    "title": "collections Module",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-collections-module",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Specialized container datatypes",
+    "filePath": "notes/python/python-collections-module.md"
+  },
+  {
+    "title": "Common Patterns",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-common-patterns",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Useful patterns in Python",
+    "filePath": "notes/python/python-common-patterns.md"
+  },
+  {
+    "title": "Control Flow",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-control-flow",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Conditionals and loops",
+    "filePath": "notes/python/python-control-flow.md"
+  },
+  {
+    "title": "Custom Exceptions",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-languages-custom-exceptions",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Creating your own exceptions",
+    "filePath": "notes/python/python-languages-custom-exceptions.md"
+  },
+  {
+    "title": "Data Types",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-languages-data-types",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Basic data types in Python",
+    "filePath": "notes/python/python-languages-data-types.md"
+  },
+  {
+    "title": "Dataclasses",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-dataclasses",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Auto-generated __init__, __repr__, etc.",
+    "filePath": "notes/python/python-dataclasses.md"
+  },
+  {
+    "title": "Deque",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-deque",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Double-ended queue",
+    "filePath": "notes/python/python-deque.md"
+  },
+  {
+    "title": "Descriptors",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-descriptors",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Property descriptors",
+    "filePath": "notes/python/python-descriptors.md"
+  },
+  {
+    "title": "Dictionaries",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-dictionaries",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Key-value mappings",
+    "filePath": "notes/python/python-dictionaries.md"
+  },
+  {
+    "title": "Dunder Methods",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-dunder-methods",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Special (double-underscore) methods",
+    "filePath": "notes/python/python-dunder-methods.md"
+  },
+  {
+    "title": "Encapsulation",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-languages-encapsulation",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Private attributes (convention)",
+    "filePath": "notes/python/python-languages-encapsulation.md"
+  },
+  {
+    "title": "Enum",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-enums",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Enumerated constants",
+    "filePath": "notes/python/python-enums.md"
+  },
+  {
+    "title": "Everything Is Object",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-everything-is-object",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Python's object model",
+    "filePath": "notes/python/python-everything-is-object.md"
+  },
+  {
+    "title": "Exceptions",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-languages-exceptions",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Exception hierarchy",
+    "filePath": "notes/python/python-languages-exceptions.md"
+  },
+  {
+    "title": "Functions",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-functions",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Function definition and parameters",
+    "filePath": "notes/python/python-functions.md"
+  },
+  {
+    "title": "functools Module",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-functools",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Higher-order functions",
+    "filePath": "notes/python/python-functools.md"
+  },
+  {
+    "title": "Generator Expressions",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-generator-expressions",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Memory-efficient iteration",
+    "filePath": "notes/python/python-generator-expressions.md"
+  },
+  {
+    "title": "Import System",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-import-system",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Import and from statements",
+    "filePath": "notes/python/python-import-system.md"
+  },
+  {
+    "title": "Inheritance",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-languages-inheritance",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Class inheritance in Python",
+    "filePath": "notes/python/python-languages-inheritance.md"
+  },
+  {
+    "title": "List Comprehension",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-list-comprehension",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Concise list creation",
+    "filePath": "notes/python/python-list-comprehension.md"
+  },
+  {
+    "title": "Lists",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-lists",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Ordered, mutable sequences",
+    "filePath": "notes/python/python-lists.md"
+  },
+  {
+    "title": "map, reduce, filter",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-map-reduce-filter",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Functional operations",
+    "filePath": "notes/python/python-map-reduce-filter.md"
+  },
+  {
+    "title": "Method Resolution Order (MRO)",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-mro",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Diamond inheritance",
+    "filePath": "notes/python/python-mro.md"
+  },
+  {
+    "title": "Mutability",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-mutability",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Mutable vs immutable objects",
+    "filePath": "notes/python/python-mutability.md"
+  },
+  {
+    "title": "Namespaces",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-namespaces",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "LEGB rule (Local, Enclosing, Global, Built-in)",
+    "filePath": "notes/python/python-namespaces.md"
+  },
+  {
+    "title": "Numbers",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-numbers",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "int, float, complex",
+    "filePath": "notes/python/python-numbers.md"
+  },
+  {
+    "title": "Operators",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-languages-operators",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Arithmetic, comparison, and logical",
+    "filePath": "notes/python/python-languages-operators.md"
+  },
+  {
+    "title": "Packages",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-packages",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Directory as module",
+    "filePath": "notes/python/python-packages.md"
+  },
+  {
+    "title": "PIP and Virtual Environment",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-pip-virtualenv",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Package management",
+    "filePath": "notes/python/python-pip-virtualenv.md"
+  },
+  {
+    "title": "Polymorphism",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-languages-polymorphism",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Duck typing in Python",
+    "filePath": "notes/python/python-languages-polymorphism.md"
+  },
+  {
+    "title": "Python Overview",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-overview",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Python: readable, versatile, and powerful",
+    "filePath": "notes/python/python-overview.md"
+  },
+  {
+    "title": "Python Virtual Machine (PVM)",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-vm",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "CPython interpreter",
+    "filePath": "notes/python/python-vm.md"
+  },
+  {
+    "title": "Python: The Complete Language Encyclopedia",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-master-moc",
+    "difficulty": "advanced",
+    "tags": [
+      "python",
+      "stdlib",
+      "oop",
+      "backend",
+      "languages"
+    ],
+    "description": "Master roadmap covering Python fundamentals, the object model, OOP, collections, functional programming, and the standard library.",
+    "filePath": "notes/python/python-master-moc.md"
+  },
+  {
+    "title": "raise and try/except",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-raise-try-except",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Exception handling",
+    "filePath": "notes/python/python-raise-try-except.md"
+  },
+  {
+    "title": "Sets",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-sets",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Unordered, unique elements",
+    "filePath": "notes/python/python-sets.md"
+  },
+  {
+    "title": "sorted() and key Functions",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-sorted",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Sorting with custom order",
+    "filePath": "notes/python/python-sorted.md"
+  },
+  {
+    "title": "Standard Library",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-standard-library",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Key modules",
+    "filePath": "notes/python/python-standard-library.md"
+  },
+  {
+    "title": "Strings",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-strings",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "String operations",
+    "filePath": "notes/python/python-strings.md"
+  },
+  {
+    "title": "Style Guide (PEP 8)",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-style-guide",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Python coding conventions",
+    "filePath": "notes/python/python-style-guide.md"
+  },
+  {
+    "title": "Tuples",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-tuples",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Ordered, immutable sequences",
+    "filePath": "notes/python/python-tuples.md"
+  },
+  {
+    "title": "Types and Classes",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-types-classes",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Type annotations and classes",
+    "filePath": "notes/python/python-types-classes.md"
+  },
+  {
+    "title": "Variables and Constants",
+    "category": "languages",
+    "subcategory": "python",
+    "slug": "python-languages-variables-constants",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "python"
+    ],
+    "description": "Variable assignment and naming",
+    "filePath": "notes/python/python-languages-variables-constants.md"
+  },
+  {
+    "title": "Basic Types and Interfaces in TypeScript",
+    "category": "languages",
+    "subcategory": "typescript",
+    "slug": "typescript-basic-types-and-interfaces",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "TypeScript adds **compile-time** types to JavaScript—errors show in the editor before you run code.",
+    "filePath": "notes/typescript/typescript-basic-types-and-interfaces.md"
+  },
+  {
+    "title": "TypeScript Config and Tooling",
+    "category": "languages",
+    "subcategory": "typescript",
+    "slug": "typescript-config-and-tooling",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "",
+    "filePath": "notes/typescript/typescript-config-and-tooling.md"
+  },
+  {
+    "title": "Unions, Generics, and Type Narrowing",
+    "category": "languages",
+    "subcategory": "typescript",
+    "slug": "typescript-unions-generics-narrowing",
+    "difficulty": "beginner",
+    "tags": [
+      "languages",
+      "java"
+    ],
+    "description": "",
+    "filePath": "notes/typescript/typescript-unions-generics-narrowing.md"
   }
 ]

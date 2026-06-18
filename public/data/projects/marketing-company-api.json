@@ -1,0 +1,1399 @@
+{
+  "projectId": "marketing-company-api",
+  "featured": true,
+  "name": "Marketing Company API",
+  "language": "Java",
+  "category": "Backend API",
+  "framework": "Spring Boot 3.4",
+  "version": "0.0.1-SNAPSHOT",
+  "repositoryUrl": "https://github.com/alexisTrejo11/marketing-company-api",
+  "liveDemoUrl": "https://{{YOUR_EC2_OR_ALB_HOST}}/api/actuator/health",
+  "description": "Minimalist GraphQL backend for CRM and marketing operations. Hexagonal architecture on Java 23 and Spring Boot, deployed on AWS (EC2, RDS, Upstash Redis) with external Kafka consumption and Prometheus-ready observability.",
+  "techStack": [
+    "Java 23",
+    "Spring Boot 3.4.2",
+    "Spring GraphQL",
+    "Spring Security + JWT",
+    "PostgreSQL 16 (AWS RDS in production)",
+    "Redis (Upstash in production, local/Docker for dev)",
+    "Flyway",
+    "Gradle 8.11",
+    "Docker",
+    "AWS EC2",
+    "AWS RDS",
+    "Upstash Redis",
+    "Apache Kafka (cloud-managed, external consumer)",
+    "Prometheus / Spring Actuator"
+  ],
+  "status": "deployed",
+  "createdAt": "2025-01-01",
+  "updatedAt": "2026-06-05",
+  "docs": {
+    "overview": {
+      "problemStatement": {
+        "problemTitle": "Unified CRM and marketing data without a monolithic frontend lock-in",
+        "problemDescription": "Marketing agencies and CRM teams need a single backend that models customers, sales pipelines, campaigns, and attribution — while staying API-first, secure, and deployable to cloud infrastructure without coupling to a specific UI framework.",
+        "problemList": [
+          "Fragmented CRM and marketing data across spreadsheets and ad-hoc tools",
+          "Need for JWT-authenticated, rate-limited APIs suitable for multiple clients",
+          "Session and cache requirements that differ between local Docker and cloud (Upstash)",
+          "Operational need for health checks, metrics, and event consumption from managed Kafka"
+        ]
+      },
+      "solution": {
+        "solutionTitle": "GraphQL CRM + marketing API on hexagonal Spring Boot",
+        "solutionList": [
+          {
+            "title": "Single GraphQL entrypoint",
+            "description": "One schema spanning account, CRM, customer, and marketing bounded contexts at `/api/graphql`."
+          },
+          {
+            "title": "Hexagonal / DDD modules",
+            "description": "Ports and adapters per domain — GraphQL in, JPA/Redis out — keeping business logic testable."
+          },
+          {
+            "title": "JWT + Redis sessions",
+            "description": "Access/refresh tokens with session state stored in Redis (Upstash in AWS)."
+          },
+          {
+            "title": "Cloud-native deployment",
+            "description": "App on EC2, PostgreSQL on RDS, Redis on Upstash, Kafka consumed from a cloud broker; Actuator exposes Prometheus metrics."
+          }
+        ]
+      },
+      "keyMetrics": {
+        "metricsTitle": "At a glance",
+        "metricsList": [
+          "22 GraphQL schema modules under src/main/resources/graphql/",
+          "750+ Java source files across CRM, marketing, account, and shared layers",
+          "GraphQL API prefix /api with context path and Actuator at /api/actuator/*",
+          "Deployed on AWS — EC2 application tier, RDS PostgreSQL, Upstash Redis",
+          "External observability via Spring Actuator (health, metrics, prometheus)"
+        ]
+      },
+      "links": {
+        "github": "https://github.com/alexisTrejo11/marketing-company-api",
+        "demo": "https://{{YOUR_EC2_OR_ALB_HOST}}/api/actuator/health",
+        "documentation": "docs/project/generated/README.md",
+        "dockerHub": null
+      },
+      "mediaGallery": {
+        "title": "Architecture & API",
+        "description": "Placeholder gallery — add screenshots or diagrams when available.",
+        "items": []
+      },
+      "mediaItems": [],
+      "metrics": [
+        {
+          "label": "API style",
+          "value": "GraphQL",
+          "description": "Spring GraphQL with schema-first `.graphqls` files"
+        },
+        {
+          "label": "Runtime",
+          "value": "Java 23",
+          "description": "Eclipse Temurin JRE in Docker; EC2 in production"
+        },
+        {
+          "label": "Database",
+          "value": "PostgreSQL 16",
+          "description": "AWS RDS in production; Docker/local for development"
+        },
+        {
+          "label": "Cache / sessions",
+          "value": "Redis",
+          "description": "Upstash in production; Docker Redis for local full stack"
+        },
+        {
+          "label": "Messaging",
+          "value": "Kafka (external)",
+          "description": "Consumed from cloud-managed broker — bootstrap URL via env (not in repo)"
+        },
+        {
+          "label": "Status",
+          "value": "Deployed",
+          "description": "Live on AWS; minimalist feature set, production wiring"
+        }
+      ]
+    },
+    "architecture": {
+      "layers": [
+        {
+          "name": "Input adapters (GraphQL)",
+          "description": "GraphQL controllers map schema operations to application commands and queries.",
+          "color": "#3B82F6",
+          "components": [
+            "AuthController",
+            "UserController / UserManagerController",
+            "CompanyController",
+            "OpportunityQueryController / OpportunityMutationController",
+            "DealController",
+            "QuoteQueryController / QuoteCommandController",
+            "TaskController",
+            "InteractionController (CRM)",
+            "ServicePackageController",
+            "MarketingCampaignQueryController / MarketingCampaignMutationController",
+            "MarketingChannelController",
+            "ActivityQueryController / ActivityMutationController",
+            "CampaignMetricQueryController / CampaignMetricMutationController",
+            "AssetQueryController / AssetMutationController",
+            "AbTestQueryController / AbTestMutationController",
+            "CampaignInteractionController / CampaignInteractionMutationController"
+          ],
+          "responsibilities": [
+            "Validate GraphQL inputs (Jakarta Validation)",
+            "Map DTOs to commands/queries",
+            "Apply rate-limit and security directives"
+          ],
+          "technologies": [
+            "Spring GraphQL",
+            "graphql-java-tools"
+          ]
+        },
+        {
+          "name": "Application layer",
+          "description": "Use-case orchestration — command handlers, query services, mappers.",
+          "color": "#10B981",
+          "components": [
+            "AuthCommandHandler",
+            "UserCommandServiceImpl",
+            "Domain command/query services per bounded context"
+          ],
+          "responsibilities": [
+            "Transaction boundaries",
+            "Authorization checks at use-case level",
+            "Coordinate domain entities and ports"
+          ],
+          "technologies": [
+            "Spring @Service",
+            "@Transactional"
+          ]
+        },
+        {
+          "name": "Domain layer",
+          "description": "Business rules, entities, value objects, domain exceptions, and events.",
+          "color": "#8B5CF6",
+          "components": [
+            "account (User, AuthSession, Role, passwords)",
+            "customer (CustomerCompany, CompanyName, ContactPerson)",
+            "crm (Opportunity, Deal, Quote, Task, Interaction, ServicePackage)",
+            "marketing (Campaign, Channel, Activity, Metric, Asset, AbTest, Attribution)"
+          ],
+          "responsibilities": [
+            "Invariants and validation",
+            "Aggregate consistency",
+            "Domain-specific exceptions"
+          ],
+          "technologies": [
+            "Plain Java records and classes",
+            "DDD patterns"
+          ]
+        },
+        {
+          "name": "Output adapters (persistence & external)",
+          "description": "JPA repositories, Redis session store, JWT provider, future Kafka listeners.",
+          "color": "#F59E0B",
+          "components": [
+            "JPA entities and repository adapters",
+            "RedisAuthSessionRepositoryImpl",
+            "JwtTokenProvider",
+            "Flyway migrations"
+          ],
+          "responsibilities": [
+            "Persist aggregates to PostgreSQL (RDS)",
+            "Store auth sessions in Redis (Upstash)",
+            "Issue and validate JWTs"
+          ],
+          "technologies": [
+            "Spring Data JPA",
+            "Spring Data Redis",
+            "Flyway",
+            "PostgreSQL"
+          ]
+        },
+        {
+          "name": "Cross-cutting (config)",
+          "description": "Security, CORS, rate limits, logging, GraphQL wiring.",
+          "color": "#6B7280",
+          "components": [
+            "SecurityConfig",
+            "JwtAuthenticationFilter",
+            "CorsConfig / CorsProperties",
+            "GraphQLRateLimit / RateLimitProperties",
+            "GlobalGraphQLExceptionHandler",
+            "GraphQlAuditInterceptor"
+          ],
+          "responsibilities": [
+            "Stateless JWT security filter chain",
+            "CORS from env (`CORS_ALLOWED_ORIGINS`)",
+            "Audit and error shaping"
+          ],
+          "technologies": [
+            "Spring Security",
+            "Spring AOP",
+            "Actuator"
+          ]
+        }
+      ],
+      "designPatterns": [
+        {
+          "title": "Hexagonal Architecture",
+          "emoji": "⬡",
+          "description": "Ports and adapters isolate domain from GraphQL, JPA, and Redis.",
+          "category": "Structural",
+          "badge": "Core"
+        },
+        {
+          "title": "Domain-Driven Design",
+          "emoji": "🏛",
+          "description": "Bounded contexts for account, CRM, customer, and marketing.",
+          "category": "Strategic",
+          "badge": "Core"
+        },
+        {
+          "title": "CQRS (light)",
+          "emoji": "↔",
+          "description": "Separate command and query types per use case without event sourcing.",
+          "category": "Behavioral",
+          "badge": "Applied"
+        },
+        {
+          "title": "Repository",
+          "emoji": "📦",
+          "description": "Output ports abstract persistence behind adapter implementations.",
+          "category": "Structural",
+          "badge": "Core"
+        },
+        {
+          "title": "Value Object",
+          "emoji": "💎",
+          "description": "Immutable types (Email, DealStatus, UTMParameters, etc.) enforce invariants.",
+          "category": "Domain",
+          "badge": "Core"
+        }
+      ],
+      "scalabilityStrategies": [
+        {
+          "title": "Stateless API tier",
+          "description": "JWT + Redis sessions allow horizontal scaling of EC2 instances behind a load balancer."
+        },
+        {
+          "title": "Managed data stores",
+          "description": "RDS and Upstash handle connection pooling and replication outside the app."
+        },
+        {
+          "title": "Connection pooling",
+          "description": "HikariCP (max 20 connections) tuned for RDS limits."
+        }
+      ],
+      "securityStrategies": [
+        {
+          "title": "JWT dual secrets",
+          "description": "Separate access and refresh signing keys (`JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`)."
+        },
+        {
+          "title": "BCrypt passwords",
+          "description": "Passwords hashed before persistence; plain passwords validated at domain level."
+        },
+        {
+          "title": "Rate limiting",
+          "description": "Redis-backed limits on sensitive GraphQL operations."
+        },
+        {
+          "title": "CORS allow-list",
+          "description": "Origins from environment; credentials enabled for SPA clients."
+        },
+        {
+          "title": "Prod hardening",
+          "description": "GraphiQL off, reduced stack traces, SQL logging disabled in `prod` profile."
+        }
+      ],
+      "cacheStrategies": [
+        {
+          "name": "Redis auth sessions",
+          "description": "Refresh tokens and user session sets",
+          "ttl": "Session TTL (refresh token expiry, default 30 days)",
+          "coverage": "Authentication"
+        },
+        {
+          "name": "Redis rate limits",
+          "description": "Counters for global and per-operation limits",
+          "ttl": "60s – 1h depending on profile",
+          "coverage": "API protection"
+        },
+        {
+          "name": "Caffeine (in-process)",
+          "description": "Company and customer entity caches",
+          "ttl": "300–600 seconds",
+          "coverage": "Read-heavy lookups"
+        }
+      ],
+      "architectureFeatures": [
+        {
+          "title": "Schema-first GraphQL",
+          "emoji": "📜",
+          "description": "SDL files in `graphql/` loaded automatically by Spring GraphQL."
+        },
+        {
+          "title": "Flyway migrations",
+          "emoji": "🔄",
+          "description": "Versioned SQL migrations; ddl-auto validate mode in production."
+        },
+        {
+          "title": "Profile-based config",
+          "emoji": "⚙",
+          "description": "dev, docker, prod, and test profiles in `application.yml`."
+        },
+        {
+          "title": "External observability",
+          "emoji": "📊",
+          "description": "Actuator health and Prometheus metrics scraped from EC2."
+        }
+      ],
+      "architectureDiagram": {
+        "legendItems": [
+          {
+            "type": "client",
+            "label": "Client (SPA / tools)",
+            "color": "#3B82F6",
+            "icon": "monitor"
+          },
+          {
+            "type": "gateway",
+            "label": "ALB / EC2",
+            "color": "#10B981",
+            "icon": "server"
+          },
+          {
+            "type": "service",
+            "label": "Spring Boot API",
+            "color": "#8B5CF6",
+            "icon": "box"
+          },
+          {
+            "type": "database",
+            "label": "RDS PostgreSQL",
+            "color": "#F59E0B",
+            "icon": "database"
+          },
+          {
+            "type": "database",
+            "label": "Upstash Redis",
+            "color": "#EF4444",
+            "icon": "redis"
+          },
+          {
+            "type": "queue",
+            "label": "Cloud Kafka",
+            "color": "#6366F1",
+            "icon": "kafka"
+          },
+          {
+            "type": "monitoring",
+            "label": "Prometheus / logs",
+            "color": "#64748B",
+            "icon": "chart"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "spa",
+            "label": "Frontend / GraphQL client",
+            "type": "client",
+            "x": 0,
+            "y": 0,
+            "status": "healthy"
+          },
+          {
+            "id": "alb",
+            "label": "ALB or EC2 public",
+            "type": "gateway",
+            "x": 1,
+            "y": 0,
+            "status": "healthy"
+          },
+          {
+            "id": "api",
+            "label": "Marketing Company API",
+            "type": "service",
+            "x": 2,
+            "y": 0,
+            "status": "healthy"
+          },
+          {
+            "id": "rds",
+            "label": "AWS RDS PostgreSQL",
+            "type": "database",
+            "x": 3,
+            "y": -1,
+            "status": "healthy"
+          },
+          {
+            "id": "upstash",
+            "label": "Upstash Redis",
+            "type": "database",
+            "x": 3,
+            "y": 1,
+            "status": "healthy"
+          },
+          {
+            "id": "kafka",
+            "label": "Cloud Kafka broker",
+            "type": "queue",
+            "x": 2,
+            "y": 1,
+            "status": "healthy"
+          },
+          {
+            "id": "prom",
+            "label": "External observability",
+            "type": "monitoring",
+            "x": 3,
+            "y": 0,
+            "status": "healthy"
+          }
+        ],
+        "connections": [
+          {
+            "id": "c1",
+            "from": "spa",
+            "to": "alb",
+            "label": "HTTPS GraphQL",
+            "protocol": "HTTPS",
+            "isActive": true
+          },
+          {
+            "id": "c2",
+            "from": "alb",
+            "to": "api",
+            "label": "/api/graphql",
+            "protocol": "HTTP",
+            "isActive": true
+          },
+          {
+            "id": "c3",
+            "from": "api",
+            "to": "rds",
+            "label": "JDBC",
+            "protocol": "TCP",
+            "isActive": true
+          },
+          {
+            "id": "c4",
+            "from": "api",
+            "to": "upstash",
+            "label": "Sessions / rate limit",
+            "protocol": "TLS",
+            "isActive": true
+          },
+          {
+            "id": "c5",
+            "from": "api",
+            "to": "kafka",
+            "label": "Consume events",
+            "protocol": "Kafka",
+            "isActive": true
+          },
+          {
+            "id": "c6",
+            "from": "prom",
+            "to": "api",
+            "label": "Scrape metrics",
+            "protocol": "HTTP",
+            "isActive": true
+          }
+        ]
+      },
+      "dataFlow": {
+        "requestFlow": [
+          {
+            "number": 1,
+            "title": "Client request",
+            "description": "POST /api/graphql with optional Bearer token",
+            "icon": "send"
+          },
+          {
+            "number": 2,
+            "title": "Security filter",
+            "description": "JwtAuthenticationFilter validates access token and loads roles",
+            "icon": "lock"
+          },
+          {
+            "number": 3,
+            "title": "Rate limit check",
+            "description": "GraphQLRateLimit aspect enforces Redis counters",
+            "icon": "gauge"
+          },
+          {
+            "number": 4,
+            "title": "Controller → command",
+            "description": "GraphQL controller maps input to application command/query",
+            "icon": "arrow-right"
+          },
+          {
+            "number": 5,
+            "title": "Domain + persistence",
+            "description": "Handler executes domain logic via output port adapters (JPA/Redis)",
+            "icon": "database"
+          },
+          {
+            "number": 6,
+            "title": "Response",
+            "description": "Mapped DTO returned as GraphQL data or structured error",
+            "icon": "reply"
+          }
+        ],
+        "eventFlow": [
+          {
+            "number": 1,
+            "title": "External event published",
+            "description": "Upstream system produces message to cloud Kafka topic",
+            "icon": "kafka"
+          },
+          {
+            "number": 2,
+            "title": "Consumer on EC2",
+            "description": "App instance consumes via KAFKA_BOOTSTRAP_SERVERS (env)",
+            "icon": "server"
+          },
+          {
+            "number": 3,
+            "title": "Domain handler",
+            "description": "Event mapped to application command (integration boundary)",
+            "icon": "cog"
+          },
+          {
+            "number": 4,
+            "title": "Side effects",
+            "description": "Persist to RDS and/or invalidate Redis cache as needed",
+            "icon": "database"
+          }
+        ]
+      },
+      "techDecisions": {
+        "decisions": [
+          {
+            "title": "GraphQL over REST",
+            "problem": "Multiple CRM and marketing clients need flexible reads without version explosion.",
+            "solution": "Single GraphQL schema with modular SDL and Spring GraphQL controllers.",
+            "alternatives": [
+              "OpenAPI REST with many DTO permutations",
+              "gRPC for internal-only clients"
+            ],
+            "outcome": "One endpoint, strong typing, GraphiQL for developer experience.",
+            "icon": "graphql"
+          },
+          {
+            "title": "Hexagonal modules per domain",
+            "problem": "Marketing and CRM logic must stay testable as the system grows.",
+            "solution": "package-by-domain with explicit ports (input/output) and adapters.",
+            "alternatives": [
+              "Layered package-by-technical-concern",
+              "Monolithic service class"
+            ],
+            "outcome": "Clear boundaries; swap GraphQL or JPA without touching domain rules.",
+            "icon": "layers"
+          },
+          {
+            "title": "Upstash Redis instead of self-hosted on EC2",
+            "problem": "Session and rate-limit state must survive app restarts and scale horizontally.",
+            "solution": "Managed Upstash Redis with TLS; configured via SPRING_REDIS_HOST in production.",
+            "alternatives": [
+              "Redis container on same EC2",
+              "ElastiCache"
+            ],
+            "outcome": "No Redis ops on EC2; suitable for minimalist deployment.",
+            "icon": "redis"
+          },
+          {
+            "title": "AWS RDS for PostgreSQL",
+            "problem": "Need durable relational storage with backups for CRM/marketing data.",
+            "solution": "RDS PostgreSQL 16; Flyway migrations on startup.",
+            "alternatives": [
+              "PostgreSQL in Docker on EC2",
+              "Aurora Serverless"
+            ],
+            "outcome": "Managed backups and patching; app connects via JDBC env vars.",
+            "icon": "database"
+          }
+        ]
+      }
+    },
+    "codeShowcase": {
+      "codeExamples": [
+        {
+          "id": "hexagonal-auth",
+          "title": "Auth command handler (application core)",
+          "description": "Login flow orchestrates user lookup, password validation, token generation, and Redis session persistence — domain stays free of GraphQL/JPA details.",
+          "category": "authentication",
+          "duration": "5 min read",
+          "tags": [
+            "hexagonal",
+            "jwt",
+            "redis"
+          ],
+          "files": [
+            {
+              "name": "AuthCommandHandler.java",
+              "path": "src/main/java/at/backend/MarketingCompany/account/auth/core/application/AuthCommandHandler.java",
+              "language": "java",
+              "explanation": "Core use case — validates credentials and creates session via ports.",
+              "content": "@Transactional\npublic AuthResult handleLogin(LoginCommand command) {\n  var user = userRepository.findByEmail(command.email())\n      .orElseThrow(InvalidCredentialsException::new);\n  validatePassword(command.password(), user.getHashedPassword());\n  var accessToken = tokenProvider.generateAccessToken(\n      user.getId().value(), user.getEmail().value(), user.getRoles());\n  var refreshToken = tokenProvider.generateRefreshToken(user.getId().value());\n  authSessionRepository.save(buildSession(user, refreshToken, command));\n  return AuthResult.of(accessToken, refreshToken, user);\n}\n"
+            }
+          ]
+        },
+        {
+          "id": "graphql-auth-controller",
+          "title": "GraphQL auth mutations",
+          "description": "Input adapter exposing signUp, login, refresh, and logout with sensitive rate limits.",
+          "category": "api",
+          "duration": "3 min read",
+          "tags": [
+            "graphql",
+            "spring"
+          ],
+          "files": [
+            {
+              "name": "AuthController.java",
+              "path": "src/main/java/at/backend/MarketingCompany/account/auth/adapters/inbound/controller/AuthController.java",
+              "language": "java",
+              "explanation": "Maps GraphQL mutations to commands; captures client IP and user agent.",
+              "content": "@MutationMapping\n@GraphQLRateLimit(\"sensitive\")\npublic AuthResponse login(\n    @Valid @Argument LoginInput input,\n    @ContextValue(name = \"userAgent\") String userAgent,\n    @ContextValue(name = \"clientIp\") String clientIp) {\n  LoginCommand command = input.toCommand(userAgent, clientIp);\n  AuthResult result = authService.handleLogin(command);\n  return authResponseMapper.toAuthResponse(result);\n}\n"
+            }
+          ]
+        },
+        {
+          "id": "docker-host-overrides",
+          "title": "Docker Compose host overrides",
+          "description": "Full local stack forces postgres/redis service names so the app container never connects to localhost for data stores.",
+          "category": "integration",
+          "duration": "2 min read",
+          "tags": [
+            "docker",
+            "devops"
+          ],
+          "files": [
+            {
+              "name": "compose.full.yml (excerpt)",
+              "path": "docker/compose.full.yml",
+              "language": "yaml",
+              "explanation": "Environment block overrides .env localhost values inside the app service.",
+              "content": "app:\n  environment:\n    SPRING_PROFILES_ACTIVE: docker\n    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}\n    SPRING_REDIS_HOST: redis\n    DB_HOST: postgres\n"
+            }
+          ]
+        },
+        {
+          "id": "env-configuration",
+          "title": "Environment-driven secrets",
+          "description": "JWT, database, Redis, CORS, and Kafka settings come from .env — loaded by spring-dotenv locally and passed to EC2/Docker in production.",
+          "category": "security",
+          "duration": "2 min read",
+          "tags": [
+            "config",
+            "aws"
+          ],
+          "files": [
+            {
+              "name": "application.yml (auth excerpt)",
+              "path": "src/main/resources/application.yml",
+              "language": "yaml",
+              "explanation": "Production profile requires JWT secrets without insecure defaults.",
+              "content": "app:\n  auth:\n    jwt:\n      access-secret: ${JWT_ACCESS_SECRET}\n      refresh-secret: ${JWT_REFRESH_SECRET}\n      access-expiration-minutes: ${JWT_ACCESS_EXPIRATION_MINUTES:15}\n      refresh-expiration-days: ${JWT_REFRESH_EXPIRATION_DAYS:30}\n"
+            }
+          ]
+        },
+        {
+          "id": "redis-sessions",
+          "title": "Redis session repository",
+          "description": "Refresh tokens are session IDs; user session sets enable logout-all.",
+          "category": "caching",
+          "duration": "4 min read",
+          "tags": [
+            "redis",
+            "upstash"
+          ],
+          "files": [
+            {
+              "name": "RedisAuthSessionRepositoryImpl.java (excerpt)",
+              "path": "src/main/java/at/backend/MarketingCompany/account/auth/adapters/outbound/persistence/RedisAuthSessionRepositoryImpl.java",
+              "language": "java",
+              "explanation": "Session keys prefixed with session: and indexed per user in Redis sets.",
+              "content": "private static final String SESSION_KEY_PREFIX = \"session:\";\nprivate static final String USER_SESSIONS_PREFIX = \"user_sessions:\";\n\npublic void save(AuthSession session) {\n  String refreshToken = session.getSessionId().value();\n  redisTemplate.opsForValue().set(getSessionKey(refreshToken), entity);\n  redisTemplate.opsForSet().add(getUserSessionsKey(userId), refreshToken);\n}\n"
+            }
+          ]
+        }
+      ]
+    },
+    "features": {
+      "features": [
+        {
+          "id": "graphql-api",
+          "title": "GraphQL API",
+          "description": "Schema-first GraphQL with modular `.graphqls` files for account, CRM, customer, and marketing domains. Single endpoint at `/api/graphql` with GraphiQL in dev.",
+          "icon": "graphql",
+          "category": "api",
+          "status": "stable",
+          "highlights": [
+            "22 schema files organized by bounded context",
+            "Extended scalars (Date, DateTime, etc.)",
+            "Global exception handler for GraphQL errors",
+            "Subscriptions scaffold at `/api/subscriptions`"
+          ],
+          "techStack": [
+            "Spring GraphQL",
+            "graphql-java-extended-scalars"
+          ],
+          "metrics": [
+            {
+              "label": "Controllers",
+              "value": "25+",
+              "trend": "stable"
+            }
+          ]
+        },
+        {
+          "id": "jwt-auth",
+          "title": "JWT authentication & sessions",
+          "description": "Dual-token JWT (access + refresh) with BCrypt passwords and Redis-backed session storage. Separate secrets for access and refresh tokens.",
+          "icon": "lock",
+          "category": "authentication",
+          "status": "stable",
+          "highlights": [
+            "Access token default 15 minutes; refresh 30 days",
+            "Max 5 concurrent sessions per user (configurable)",
+            "GraphQL directives for authentication and roles",
+            "Sensitive endpoints rate-limited"
+          ],
+          "techStack": [
+            "jjwt 0.12",
+            "Spring Security",
+            "Redis / Upstash"
+          ],
+          "codeSnippet": {
+            "language": "java",
+            "filename": "JwtTokenProvider.java",
+            "code": "@Value(\"${app.auth.jwt.access-secret}\")\nprivate String accessTokenSecret;\n\npublic String generateAccessToken(String userId, String email, Set<Role> roles) {\n    return Jwts.builder()\n        .subject(userId)\n        .claim(\"email\", email)\n        .claim(\"roles\", roles.stream().map(Enum::name).toList())\n        .signWith(getAccessSigningKey())\n        .compact();\n}\n"
+          }
+        },
+        {
+          "id": "crm-module",
+          "title": "CRM domain",
+          "description": "Sales pipeline management — companies, opportunities, deals, quotes, tasks, CRM interactions, and service packages.",
+          "icon": "briefcase",
+          "category": "database",
+          "status": "stable",
+          "highlights": [
+            "Opportunity lifecycle (open, won, lost, reopen)",
+            "Deal and quote workflows with line items",
+            "Task statistics and CRM interaction analytics",
+            "Hexagonal adapters (GraphQL → application → JPA)"
+          ],
+          "techStack": [
+            "Spring Data JPA",
+            "PostgreSQL / RDS",
+            "Flyway migrations"
+          ]
+        },
+        {
+          "id": "marketing-module",
+          "title": "Marketing domain",
+          "description": "Campaign management, channels, activities, metrics, assets, A/B tests, campaign interactions, and attribution tracking.",
+          "icon": "megaphone",
+          "category": "integration",
+          "status": "stable",
+          "highlights": [
+            "Campaign CRUD and performance metrics",
+            "UTM and conversion tracking on interactions",
+            "A/B test management",
+            "Marketing asset catalog"
+          ],
+          "techStack": [
+            "Spring Data JPA",
+            "GraphQL mutations and queries"
+          ]
+        },
+        {
+          "id": "rate-limiting",
+          "title": "GraphQL rate limiting",
+          "description": "Annotation-driven rate limits with global and per-operation profiles, backed by Redis counters and exposed via response headers.",
+          "icon": "shield",
+          "category": "security",
+          "status": "stable",
+          "highlights": [
+            "Profiles sensitive (7/min), standard (30/min), strict (5/5min), public (500/min)",
+            "Global cap 5000 requests per hour",
+            "X-RateLimit-* headers on responses"
+          ],
+          "techStack": [
+            "Spring AOP",
+            "Redis"
+          ]
+        },
+        {
+          "id": "redis-cache",
+          "title": "Redis sessions & cache",
+          "description": "Auth sessions and rate-limit state in Redis. Production uses Upstash; local development uses Docker Redis or Upstash tunnel.",
+          "icon": "database",
+          "category": "caching",
+          "status": "stable",
+          "highlights": [
+            "Refresh token as session key",
+            "User session sets for logout-all",
+            "Caffeine in-process cache for app-level TTLs"
+          ],
+          "techStack": [
+            "Spring Data Redis",
+            "Jedis",
+            "Upstash (production)"
+          ]
+        },
+        {
+          "id": "observability",
+          "title": "Observability & health",
+          "description": "Spring Boot Actuator with health probes, metrics, and Prometheus export for external monitoring on EC2.",
+          "icon": "activity",
+          "category": "monitoring",
+          "status": "stable",
+          "highlights": [
+            "/api/actuator/health for ALB/EC2 checks",
+            "Prometheus scrape at /api/actuator/prometheus",
+            "Structured logging to `/app/logs`",
+            "GraphQL audit interceptor"
+          ],
+          "techStack": [
+            "Spring Actuator",
+            "Prometheus",
+            "Logback"
+          ]
+        },
+        {
+          "id": "kafka-integration",
+          "title": "Kafka event consumption",
+          "description": "Consumes events from a cloud-managed Kafka cluster (AWS MSK or external broker). Bootstrap servers configured via environment — not hardcoded in repository.",
+          "icon": "message-square",
+          "category": "messaging",
+          "status": "beta",
+          "highlights": [
+            "External broker URL via `KAFKA_BOOTSTRAP_SERVERS`",
+            "Intended for async domain events and integrations",
+            "Decoupled from HTTP GraphQL flow"
+          ],
+          "techStack": [
+            "Apache Kafka (cloud instance)"
+          ],
+          "metrics": [
+            {
+              "label": "Broker",
+              "value": "{{YOUR_KAFKA_BROKER}}",
+              "trend": "stable"
+            }
+          ]
+        },
+        {
+          "id": "docker-local",
+          "title": "Docker local development",
+          "description": "Multi-stage Dockerfile and two Compose files — full stack or infra-only — with explicit host overrides for container networking.",
+          "icon": "box",
+          "category": "performance",
+          "status": "stable",
+          "highlights": [
+            "docker/compose.full.yml — app + Postgres + Redis",
+            "docker/compose.infra.yml — DBs only for ./gradlew bootRun",
+            "Healthcheck on /api/actuator/health"
+          ],
+          "techStack": [
+            "Docker",
+            "Docker Compose v2"
+          ]
+        }
+      ]
+    },
+    "infrastructure": {
+      "metrics": [
+        {
+          "label": "Compute",
+          "value": "AWS EC2",
+          "icon": "server",
+          "description": "Spring Boot JAR deployed on EC2 (minimalist single-tier or behind ALB)"
+        },
+        {
+          "label": "Database",
+          "value": "AWS RDS PostgreSQL 16",
+          "icon": "database",
+          "description": "Managed relational store for CRM and marketing data"
+        },
+        {
+          "label": "Cache / sessions",
+          "value": "Upstash Redis",
+          "icon": "redis",
+          "description": "TLS Redis for auth sessions and rate-limit counters"
+        },
+        {
+          "label": "Messaging",
+          "value": "Cloud Kafka",
+          "icon": "kafka",
+          "description": "External broker — bootstrap via KAFKA_BOOTSTRAP_SERVERS on EC2"
+        },
+        {
+          "label": "Observability",
+          "value": "Actuator + Prometheus",
+          "icon": "chart",
+          "description": "Health and metrics scraped by external monitoring from EC2"
+        },
+        {
+          "label": "Local dev",
+          "value": "Docker Compose",
+          "icon": "docker",
+          "description": "Full stack or infra-only compose under docker/"
+        }
+      ],
+      "cloudServices": [
+        {
+          "name": "AWS EC2",
+          "purpose": "Runs the Spring Boot API (Docker or JAR). Exposes /api/graphql and /api/actuator/*",
+          "icon": "aws-ec2",
+          "cost": "~$10–40/mo (instance dependent) — {{VERIFY_BILLING}}"
+        },
+        {
+          "name": "AWS RDS (PostgreSQL 16)",
+          "purpose": "Primary database — companies, deals, campaigns, users, Flyway schema",
+          "icon": "aws-rds",
+          "cost": "~$15–50/mo (db.t4g.micro+) — {{VERIFY_BILLING}}"
+        },
+        {
+          "name": "Upstash Redis",
+          "purpose": "Auth sessions, refresh-token index, GraphQL rate limiting",
+          "icon": "upstash",
+          "cost": "Free tier / pay-as-you-go — {{VERIFY_BILLING}}"
+        },
+        {
+          "name": "Cloud Kafka (MSK or external)",
+          "purpose": "Async event consumption from upstream marketing/CRM systems",
+          "icon": "kafka",
+          "cost": "{{YOUR_KAFKA_PROVIDER_COST}}"
+        },
+        {
+          "name": "External observability",
+          "purpose": "Prometheus scrape of /api/actuator/prometheus; health checks for ALB",
+          "icon": "prometheus",
+          "cost": "Depends on stack (Grafana Cloud, self-hosted, etc.)"
+        }
+      ],
+      "deploymentLayers": [
+        {
+          "name": "Edge & compute",
+          "color": "#3B82F6",
+          "components": [
+            {
+              "name": "ALB (optional)",
+              "icon": "load-balancer",
+              "description": "{{OPTIONAL_ALB}} — HTTPS termination and health checks to EC2 targets"
+            },
+            {
+              "name": "EC2 instance",
+              "icon": "server",
+              "description": "Hosts marketing-company-api JAR or Docker container; Java 23 JRE"
+            },
+            {
+              "name": "Security group",
+              "icon": "shield",
+              "description": "Inbound 443/8080 from ALB or trusted IPs; outbound to RDS, Upstash, Kafka"
+            }
+          ]
+        },
+        {
+          "name": "Data & messaging",
+          "color": "#10B981",
+          "components": [
+            {
+              "name": "RDS PostgreSQL",
+              "icon": "database",
+              "description": "JDBC URL via DB_HOST / SPRING_DATASOURCE_URL — not localhost in prod"
+            },
+            {
+              "name": "Upstash Redis",
+              "icon": "redis",
+              "description": "SPRING_REDIS_HOST set to Upstash endpoint; TLS enabled"
+            },
+            {
+              "name": "Kafka cluster",
+              "icon": "kafka",
+              "description": "Cloud broker; consumer group on EC2 app — KAFKA_BOOTSTRAP_SERVERS env"
+            }
+          ]
+        },
+        {
+          "name": "Observability",
+          "color": "#8B5CF6",
+          "components": [
+            {
+              "name": "Spring Actuator",
+              "icon": "heart",
+              "description": "/api/actuator/health, /metrics, /prometheus on EC2"
+            },
+            {
+              "name": "Log files",
+              "icon": "file",
+              "description": "/app/logs on container or EC2 volume; audit subdirectory"
+            },
+            {
+              "name": "External scraper",
+              "icon": "chart",
+              "description": "Prometheus or cloud agent polls EC2 — not bundled in minimalist deploy"
+            }
+          ]
+        },
+        {
+          "name": "Local development",
+          "color": "#F59E0B",
+          "components": [
+            {
+              "name": "docker/compose.full.yml",
+              "icon": "docker",
+              "description": "App + Postgres + Redis with service-name host overrides"
+            },
+            {
+              "name": "docker/compose.infra.yml",
+              "icon": "docker",
+              "description": "Postgres + Redis only; app via ./gradlew bootRun on localhost ports"
+            },
+            {
+              "name": ".env",
+              "icon": "key",
+              "description": "Secrets and connection strings — copied from .env.example"
+            }
+          ]
+        }
+      ],
+      "dockerFiles": [
+        {
+          "service": "Dockerfile",
+          "description": "Multi-stage build — Gradle 8.11 + JDK 23 compile, Temurin 24 JRE runtime.",
+          "content": "# Build: gradle bootJar\n# Runtime: non-root spring user, healthcheck GET /api/actuator/health\n# Context: project root (..) when built from compose\nFROM gradle:8.11-jdk23 AS build\n...\nFROM eclipse-temurin:24-jre-alpine\nHEALTHCHECK CMD curl -f http://localhost:8080/api/actuator/health\n"
+        },
+        {
+          "service": "compose.full.yml",
+          "description": "Full local stack — overrides DB/Redis hosts to postgres/redis service names.",
+          "content": "services:\n  app:\n    environment:\n      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}\n      SPRING_REDIS_HOST: redis\n    build:\n      context: ..\n      dockerfile: docker/Dockerfile\n"
+        },
+        {
+          "service": "compose.infra.yml",
+          "description": "Infrastructure only — use DB_HOST=localhost and mapped ports for host-run app.",
+          "content": "services:\n  postgres:\n    ports: [\"5431:5432\"]\n  redis:\n    ports: [\"6378:6379\"]\n"
+        }
+      ]
+    },
+    "apiSchema": {
+      "type": "GraphQL",
+      "httpEndpoints": [
+        {
+          "id": "graphql-main",
+          "method": "POST",
+          "urlPath": "/api/graphql",
+          "summary": "GraphQL API (queries, mutations, subscriptions)",
+          "description": "Primary API. Send JSON body `{ \"query\": \"...\", \"variables\": {} }`. Authentication via `Authorization: Bearer <accessToken>` header. Domains include account (auth, users), CRM (companies, opportunities, deals, quotes, tasks, interactions, service packages), and marketing (campaigns, channels, activities, metrics, assets, A/B tests, interactions, attribution).",
+          "tags": [
+            "graphql"
+          ],
+          "authenticated": false,
+          "rateLimit": "Global 5000 req/h + per-operation profiles (sensitive 7/min, standard 30/min)",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "string"
+                },
+                "variables": {
+                  "type": "object"
+                },
+                "operationName": {
+                  "type": "string"
+                }
+              }
+            },
+            "example": {
+              "query": "query { healthCheck version }"
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "GraphQL response (data and/or errors array)",
+              "example": {
+                "data": {
+                  "healthCheck": true,
+                  "version": "2.0.0"
+                }
+              }
+            },
+            {
+              "status": 401,
+              "description": "Missing or invalid JWT on protected fields",
+              "example": {
+                "errors": [
+                  {
+                    "message": "Unauthorized"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-signup",
+          "method": "POST",
+          "urlPath": "/api/graphql",
+          "summary": "Mutation signUp",
+          "description": "Register a new user. Returns access and refresh tokens. Rate limit profile `sensitive`.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": false,
+          "rateLimit": "7 requests / 60 seconds (sensitive)",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "type": "object"
+            },
+            "example": {
+              "query": "mutation($input: SignUpInput!) { signUp(input: $input) { accessToken refreshToken user { id email } } }",
+              "variables": {
+                "input": {
+                  "email": "user@example.com",
+                  "password": "SecurePass1!",
+                  "firstName": "Jane",
+                  "lastName": "Doe",
+                  "gender": "FEMALE",
+                  "dateOfBirth": "1990-01-01"
+                }
+              }
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "AuthResponse with tokens",
+              "example": {
+                "data": {
+                  "signUp": {
+                    "accessToken": "{{jwt_access_token}}",
+                    "refreshToken": "{{jwt_refresh_token}}"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-login",
+          "method": "POST",
+          "urlPath": "/api/graphql",
+          "summary": "Mutation login",
+          "description": "Authenticate with email and password. Session stored in Redis.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": false,
+          "rateLimit": "7 requests / 60 seconds (sensitive)",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "type": "object"
+            },
+            "example": {
+              "query": "mutation($input: LoginInput!) { login(input: $input) { accessToken refreshToken } }",
+              "variables": {
+                "input": {
+                  "email": "user@example.com",
+                  "password": "SecurePass1!"
+                }
+              }
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "AuthResponse",
+              "example": {
+                "data": {
+                  "login": {
+                    "accessToken": "{{jwt_access_token}}"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-refresh",
+          "method": "POST",
+          "urlPath": "/api/graphql",
+          "summary": "Mutation refreshToken",
+          "description": "Exchange a valid refresh token for new access and refresh tokens.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": false,
+          "rateLimit": "30 requests / 60 seconds (standard)",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "type": "object"
+            },
+            "example": {
+              "query": "mutation($input: RefreshTokenInput!) { refreshToken(input: $input) { accessToken refreshToken } }",
+              "variables": {
+                "input": {
+                  "refreshToken": "{{jwt_refresh_token}}"
+                }
+              }
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "New token pair",
+              "example": {
+                "data": {
+                  "refreshToken": {
+                    "accessToken": "{{new_access_token}}"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-logout",
+          "method": "POST",
+          "urlPath": "/api/graphql",
+          "summary": "Mutation logout",
+          "description": "Invalidate the given refresh token (session).",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": true,
+          "rateLimit": "30 requests / 60 seconds",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "type": "object"
+            },
+            "example": {
+              "query": "mutation { logout(refreshToken: \"{{jwt_refresh_token}}\") }"
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Boolean success",
+              "example": {
+                "data": {
+                  "logout": true
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "graphql-health",
+          "method": "POST",
+          "urlPath": "/api/graphql",
+          "summary": "Query healthCheck / version",
+          "description": "Public health and version queries defined in schema.graphqls.",
+          "tags": [
+            "system"
+          ],
+          "authenticated": false,
+          "rateLimit": "500 requests / 60 seconds (public)",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "type": "object"
+            },
+            "example": {
+              "query": "query { healthCheck version }"
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Server operational",
+              "example": {
+                "data": {
+                  "healthCheck": true,
+                  "version": "2.0.0"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "actuator-health",
+          "method": "GET",
+          "urlPath": "/api/actuator/health",
+          "summary": "Spring Actuator health",
+          "description": "Liveness/readiness for load balancers and external monitoring. Used in production on EC2 and in Docker HEALTHCHECK.",
+          "tags": [
+            "observability"
+          ],
+          "authenticated": false,
+          "rateLimit": "none",
+          "responses": [
+            {
+              "status": 200,
+              "description": "UP when DB and Redis reachable",
+              "example": {
+                "status": "UP"
+              }
+            }
+          ]
+        },
+        {
+          "id": "actuator-prometheus",
+          "method": "GET",
+          "urlPath": "/api/actuator/prometheus",
+          "summary": "Prometheus metrics scrape endpoint",
+          "description": "Metrics export for external observability stack (Prometheus/Grafana or cloud agent on EC2).",
+          "tags": [
+            "observability"
+          ],
+          "authenticated": false,
+          "rateLimit": "none",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Prometheus text format",
+              "example": {
+                "status": "# HELP jvm_memory_used_bytes ..."
+              }
+            }
+          ]
+        },
+        {
+          "id": "graphiql-dev",
+          "method": "GET",
+          "urlPath": "/api/graphiql",
+          "summary": "GraphiQL IDE (development only)",
+          "description": "Interactive GraphQL explorer. Disabled in `prod` profile.",
+          "tags": [
+            "developer"
+          ],
+          "authenticated": false,
+          "rateLimit": "n/a",
+          "responses": [
+            {
+              "status": 200,
+              "description": "GraphiQL UI (dev/docker profiles only)",
+              "example": {
+                "status": "HTML UI"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

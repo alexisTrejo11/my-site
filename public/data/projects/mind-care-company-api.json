@@ -1,0 +1,1739 @@
+{
+  "projectId": "mind-care-company-api",
+  "featured": true,
+  "name": "MindCare Hub API",
+  "language": "Python",
+  "category": "backend",
+  "framework": "Django REST Framework",
+  "version": "2.0.0",
+  "repositoryUrl": "https://github.com/your-org/mind-care-company-api",
+  "liveDemoUrl": "https://api.mindcarehub.example.com/api/v2/health/",
+  "description": "REST API for small mental-health practices: patient onboarding, specialist scheduling, confidential medical records, billing, and notifications for psychologists, psychiatrists, and therapists.",
+  "techStack": [
+    "Django 5.1.5",
+    "Django REST Framework",
+    "PostgreSQL",
+    "Redis (django-redis)",
+    "Celery",
+    "SimpleJWT",
+    "Stripe",
+    "drf-spectacular",
+    "Docker",
+    "Gunicorn"
+  ],
+  "status": "stable",
+  "createdAt": "2025-06-01T00:00:00.000Z",
+  "updatedAt": "2026-05-30T00:00:00.000Z",
+  "docs": {
+    "overview": {
+      "problemStatement": {
+        "problemTitle": "Fragmented tools for small therapy practices",
+        "problemDescription": "Independent psychologists, psychiatrists, and therapists often juggle spreadsheets, paper notes, separate calendars, and ad-hoc billing. That creates scheduling conflicts, weak access control on sensitive clinical data, and no single view of a patient's care journey.",
+        "problemList": [
+          "Double bookings and unclear specialist availability across the week",
+          "Medical notes stored without role-based confidentiality rules",
+          "Patients, staff, and specialists using different systems for appointments and invoices",
+          "Manual follow-up for activation emails, reminders, and payment status",
+          "No unified API for a future patient portal or clinic admin dashboard"
+        ]
+      },
+      "solution": {
+        "solutionTitle": "One API built for mental-health workflows",
+        "solutionList": [
+          {
+            "title": "Role-based access for the whole clinic",
+            "description": "JWT authentication with user types (patient, specialist, staff, admin) and service-layer checks on appointments, records, and payments."
+          },
+          {
+            "title": "Scheduling that respects clinic rules",
+            "description": "Appointments enforce clinic hours (09:00–19:00), advance booking windows, overlap detection, and specialist daily caps."
+          },
+          {
+            "title": "Confidential medical records",
+            "description": "Records support standard, sensitive, and highly_sensitive levels; patients cannot read highly sensitive entries; specialists own their documentation."
+          },
+          {
+            "title": "Billing aligned with real practices",
+            "description": "Bills, cash and bank-transfer payments, Stripe online payments, refunds, and insurance claims in one billing module."
+          },
+          {
+            "title": "Production-ready container deploy",
+            "description": "Multi-stage Docker image, Gunicorn, health checks, and external PostgreSQL plus Redis for cache, rate limits, and Celery."
+          }
+        ]
+      },
+      "keyMetrics": {
+        "metricsTitle": "Platform snapshot",
+        "metricsList": [
+          "6 Django domain apps (users, specialists, appointments, medical, billing, notification)",
+          "REST API v2 under /api/v2/ (appointments router mounted at /appointments/)",
+          "129+ Python modules in apps/ excluding migrations and tests",
+          "Docker image Python 3.11 slim, Gunicorn 3 workers × 2 threads",
+          "OpenAPI docs at /api/v2/schema/swagger-ui/"
+        ]
+      },
+      "links": {
+        "github": "https://github.com/your-org/mind-care-company-api",
+        "demo": "https://api.mindcarehub.example.com/api/v2/health/",
+        "documentation": "https://api.mindcarehub.example.com/api/v2/schema/swagger-ui/",
+        "dockerHub": "https://hub.docker.com/r/your-org/mind-care-api"
+      },
+      "mediaGallery": {
+        "title": "MindCare Hub — product views",
+        "description": "Screenshots and diagrams for portfolio presentation. Replace placeholder image URLs with real assets from your deployed admin or Swagger UI.",
+        "items": [
+          {
+            "type": "image",
+            "url": "https://placehold.co/1200x630/092E20/ffffff?text=MindCare+Hub+API",
+            "thumbnail": "https://placehold.co/400x210/092E20/ffffff?text=MindCare",
+            "title": "API cover",
+            "description": "MindCare Hub REST API for mental-health practice management",
+            "alt": "MindCare Hub API branding placeholder",
+            "category": "screenshot"
+          },
+          {
+            "type": "image",
+            "url": "https://placehold.co/1200x800/316192/ffffff?text=Swagger+OpenAPI",
+            "thumbnail": "https://placehold.co/400x267/316192/ffffff?text=OpenAPI",
+            "title": "OpenAPI documentation",
+            "description": "Interactive API schema generated with drf-spectacular",
+            "alt": "OpenAPI Swagger UI placeholder",
+            "category": "demo"
+          }
+        ]
+      },
+      "mediaItems": [
+        {
+          "type": "image",
+          "url": "https://placehold.co/800x500/37814A/ffffff?text=Architecture",
+          "thumbnail": "https://placehold.co/320x200/37814A/ffffff?text=Arch",
+          "title": "Service architecture",
+          "description": "Django API behind Docker on EC2 with RDS PostgreSQL and managed Redis",
+          "alt": "Architecture diagram placeholder",
+          "category": "architecture"
+        },
+        {
+          "type": "image",
+          "url": "https://placehold.co/800x500/DC382D/ffffff?text=Docker+Deploy",
+          "thumbnail": "https://placehold.co/320x200/DC382D/ffffff?text=Docker",
+          "title": "Docker deployment",
+          "description": "docker-compose builds web service; database and cache are cloud-managed instances",
+          "alt": "Docker deployment placeholder",
+          "category": "diagram"
+        }
+      ],
+      "metrics": [
+        {
+          "label": "Django apps",
+          "value": "6",
+          "description": "users, specialists, appointments, medical, billing, notification"
+        },
+        {
+          "label": "API version",
+          "value": "v2",
+          "description": "Primary prefix /api/v2/"
+        },
+        {
+          "label": "Python (runtime image)",
+          "value": "3.11",
+          "description": "docker/dockerfile multi-stage build"
+        },
+        {
+          "label": "Auth",
+          "value": "JWT",
+          "description": "SimpleJWT with refresh rotation and blacklist on logout"
+        }
+      ]
+    },
+    "architecture": {
+      "layers": [
+        {
+          "name": "Presentation (clients)",
+          "description": "Web and mobile clients used by patients, therapists, and clinic staff.",
+          "color": "#6366F1",
+          "expanded": true,
+          "components": [
+            "Patient booking UI",
+            "Specialist schedule UI",
+            "Admin / staff dashboard"
+          ],
+          "responsibilities": [
+            "Collect user input and display API responses",
+            "Store JWT access token securely"
+          ],
+          "technologies": [
+            "HTTPS",
+            "REST JSON",
+            "OpenAPI client (optional)"
+          ]
+        },
+        {
+          "name": "API gateway & edge",
+          "description": "TLS termination and routing to the Django application on EC2.",
+          "color": "#10B981",
+          "expanded": false,
+          "components": [
+            "Nginx or AWS ALB",
+            "CORS / CSRF trusted origins"
+          ],
+          "responsibilities": [
+            "SSL and HSTS (SECURE_SSL_REDIRECT in production)",
+            "Route /api/v2/* and /appointments/* to Gunicorn"
+          ],
+          "technologies": [
+            "Nginx",
+            "Let's Encrypt or ACM"
+          ]
+        },
+        {
+          "name": "Application layer",
+          "description": "Django 5 + DRF monolith in Docker with domain apps and service classes.",
+          "color": "#F59E0B",
+          "expanded": true,
+          "components": [
+            "config.urls — routing",
+            "apps/users — auth",
+            "apps/specialists — providers",
+            "apps/appointments — scheduling",
+            "apps/medical — records",
+            "apps/billing — payments",
+            "apps/notification — async messages",
+            "apps/core — cross-cutting"
+          ],
+          "responsibilities": [
+            "Business rules in services, not views",
+            "Standardized APIResponse and exception handling",
+            "Rate limiting and audit middleware"
+          ],
+          "technologies": [
+            "Django REST Framework",
+            "SimpleJWT",
+            "drf-spectacular",
+            "Gunicorn WSGI"
+          ]
+        },
+        {
+          "name": "Data & cache",
+          "description": "Persistent storage and Redis for cache, limits, and task broker.",
+          "color": "#EF4444",
+          "expanded": true,
+          "components": [
+            "PostgreSQL (RDS)",
+            "Redis — cache DB 1",
+            "Redis — Celery broker DB 0"
+          ],
+          "responsibilities": [
+            "Transactional data for clinical and billing entities",
+            "Sliding-window rate limit keys",
+            "Short-lived activation / reset tokens"
+          ],
+          "technologies": [
+            "psycopg2",
+            "django-redis"
+          ]
+        },
+        {
+          "name": "Async & integrations",
+          "description": "Background work and third-party APIs.",
+          "color": "#8B5CF6",
+          "expanded": false,
+          "components": [
+            "Celery workers",
+            "Stripe",
+            "SMTP",
+            "Twilio"
+          ],
+          "responsibilities": [
+            "Send notifications and process pending deliveries",
+            "Payment intents and webhooks"
+          ],
+          "technologies": [
+            "Celery",
+            "stripe-python",
+            "Twilio SDK"
+          ]
+        }
+      ],
+      "designPatterns": [
+        {
+          "title": "Service layer",
+          "emoji": "🏗️",
+          "description": "Business logic in *Service classes (AppointmentService, MedicalRecordService, UserService) keeps views thin and testable.",
+          "category": "Structural",
+          "badge": "Core"
+        },
+        {
+          "title": "Repository (Django ORM)",
+          "emoji": "🗄️",
+          "description": "Models and custom managers encapsulate queries; services compose ORM access with transactions.",
+          "category": "Data",
+          "badge": "Django"
+        },
+        {
+          "title": "Decorator — cross-cutting",
+          "emoji": "🎀",
+          "description": "@api_error_handler and @rate_limit wrap views for consistent errors and throttling.",
+          "category": "Behavioral",
+          "badge": "DRF"
+        },
+        {
+          "title": "Strategy — payments",
+          "emoji": "💳",
+          "description": "Cash, bank transfer, and Stripe online flows share billing service abstractions with different processors.",
+          "category": "Behavioral",
+          "badge": "Billing"
+        },
+        {
+          "title": "Factory — notifications",
+          "emoji": "📨",
+          "description": "Notification factories build channel-specific messages from templates.",
+          "category": "Creational",
+          "badge": "Notification"
+        },
+        {
+          "title": "Observer — signals & tasks",
+          "emoji": "👁️",
+          "description": "Django signals and Celery tasks react to domain events (e.g. pending notifications beat task).",
+          "category": "Behavioral",
+          "badge": "Async"
+        }
+      ],
+      "scalabilityStrategies": [
+        {
+          "title": "Stateless API containers",
+          "description": "Run multiple Gunicorn workers per EC2 instance; scale horizontally with additional EC2 instances behind a load balancer."
+        },
+        {
+          "title": "Managed PostgreSQL",
+          "description": "RDS handles backups, storage growth, and read-replica option for reporting without blocking writes."
+        },
+        {
+          "title": "Redis for hot paths",
+          "description": "Offload rate-limit counters and cache to Upstash/Redis to reduce DB load on public specialist listings."
+        },
+        {
+          "title": "Async notification delivery",
+          "description": "Celery queues prevent SMTP/SMS latency from blocking HTTP request threads."
+        }
+      ],
+      "securityStrategies": [
+        {
+          "title": "JWT + role permissions",
+          "description": "IsPatient, IsSpecialist, IsAdminOrStaff combined with per-view get_permissions() and service-layer filters."
+        },
+        {
+          "title": "Medical confidentiality tiers",
+          "description": "standard / sensitive / highly_sensitive with explicit deny rules for patients and staff."
+        },
+        {
+          "title": "Production TLS & cookies",
+          "description": "SECURE_SSL_REDIRECT, HSTS, secure session and CSRF cookies in config.settings.production."
+        },
+        {
+          "title": "Audit middleware",
+          "description": "AuditLoggingMiddleware logs sensitive operations; filter reduces PII in log output."
+        },
+        {
+          "title": "Rate limit profiles",
+          "description": "SENSITIVE on login, PUBLIC on specialist browse, WRITE_OPERATION on mutations."
+        }
+      ],
+      "cacheStrategies": [
+        {
+          "name": "Default Django cache",
+          "description": "django-redis backend pointing to Redis DB 1 with KEY_PREFIX mind_care_hub",
+          "ttl": "900s default (CACHE_TIMEOUT)",
+          "coverage": "Rate limits, optional view caching, token storage patterns"
+        },
+        {
+          "name": "Activation & reset tokens",
+          "description": "Short-lived keys in cache via apps/core/shared.py helpers",
+          "ttl": "Configurable per flow",
+          "coverage": "Registration activation, password reset"
+        },
+        {
+          "name": "Celery broker",
+          "description": "Separate Redis database index 0 for task queue (base settings)",
+          "ttl": "N/A",
+          "coverage": "Notification and background jobs"
+        }
+      ],
+      "architectureFeatures": [
+        {
+          "title": "Unified API envelope",
+          "emoji": "📦",
+          "description": "APIResponse wraps status, message, data, pagination, and metadata for every client."
+        },
+        {
+          "title": "OpenAPI-first docs",
+          "emoji": "📖",
+          "description": "Spectacular generates schema from DRF viewsets for Swagger and ReDoc."
+        },
+        {
+          "title": "Health & app info",
+          "emoji": "💚",
+          "description": "Public /api/v2/health/ and /api/v2/app-documentation/ for probes and versioning."
+        },
+        {
+          "title": "Domain-driven apps",
+          "emoji": "🧩",
+          "description": "Each bounded context (users, specialists, appointments, medical, billing) is a Django app with its own services and serializers."
+        }
+      ],
+      "architectureDiagram": {
+        "legendItems": [
+          {
+            "type": "client",
+            "label": "Client",
+            "color": "#6366F1",
+            "icon": "monitor"
+          },
+          {
+            "type": "gateway",
+            "label": "Gateway",
+            "color": "#10B981",
+            "icon": "shield"
+          },
+          {
+            "type": "service",
+            "label": "API service",
+            "color": "#F59E0B",
+            "icon": "server"
+          },
+          {
+            "type": "database",
+            "label": "Database",
+            "color": "#EF4444",
+            "icon": "database"
+          },
+          {
+            "type": "queue",
+            "label": "Queue / cache",
+            "color": "#8B5CF6",
+            "icon": "layers"
+          },
+          {
+            "type": "monitoring",
+            "label": "Monitoring",
+            "color": "#64748B",
+            "icon": "activity"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "patient-app",
+            "label": "Patient / staff clients",
+            "type": "client",
+            "x": 80,
+            "y": 120,
+            "connections": [
+              "alb"
+            ],
+            "status": "healthy",
+            "traffic": 120
+          },
+          {
+            "id": "alb",
+            "label": "Nginx / ALB (TLS)",
+            "type": "gateway",
+            "x": 280,
+            "y": 120,
+            "connections": [
+              "api"
+            ],
+            "status": "healthy",
+            "traffic": 120
+          },
+          {
+            "id": "api",
+            "label": "MindCare API (Docker/Gunicorn)",
+            "type": "service",
+            "x": 480,
+            "y": 120,
+            "connections": [
+              "rds",
+              "redis",
+              "celery",
+              "stripe"
+            ],
+            "status": "healthy",
+            "traffic": 95
+          },
+          {
+            "id": "rds",
+            "label": "RDS PostgreSQL",
+            "type": "database",
+            "x": 680,
+            "y": 60,
+            "connections": [],
+            "status": "healthy",
+            "traffic": 70
+          },
+          {
+            "id": "redis",
+            "label": "Upstash Redis",
+            "type": "queue",
+            "x": 680,
+            "y": 180,
+            "connections": [],
+            "status": "healthy",
+            "traffic": 55
+          },
+          {
+            "id": "celery",
+            "label": "Celery worker",
+            "type": "service",
+            "x": 480,
+            "y": 260,
+            "connections": [
+              "redis",
+              "smtp"
+            ],
+            "status": "healthy",
+            "traffic": 30
+          },
+          {
+            "id": "stripe",
+            "label": "Stripe",
+            "type": "service",
+            "x": 680,
+            "y": 260,
+            "connections": [],
+            "status": "healthy",
+            "traffic": 15
+          },
+          {
+            "id": "smtp",
+            "label": "SMTP / Twilio",
+            "type": "monitoring",
+            "x": 280,
+            "y": 260,
+            "connections": [],
+            "status": "healthy",
+            "traffic": 20
+          },
+          {
+            "id": "sentry",
+            "label": "Sentry (optional)",
+            "type": "monitoring",
+            "x": 80,
+            "y": 260,
+            "connections": [
+              "api"
+            ],
+            "status": "healthy",
+            "traffic": 5
+          }
+        ],
+        "connections": [
+          {
+            "id": "c1",
+            "from": "patient-app",
+            "to": "alb",
+            "label": "HTTPS",
+            "protocol": "TLS 1.2+",
+            "isActive": true
+          },
+          {
+            "id": "c2",
+            "from": "alb",
+            "to": "api",
+            "label": "Proxy",
+            "protocol": "HTTP",
+            "isActive": true
+          },
+          {
+            "id": "c3",
+            "from": "api",
+            "to": "rds",
+            "label": "SQL",
+            "protocol": "PostgreSQL",
+            "isActive": true
+          },
+          {
+            "id": "c4",
+            "from": "api",
+            "to": "redis",
+            "label": "Cache / limits",
+            "protocol": "Redis",
+            "isActive": true
+          },
+          {
+            "id": "c5",
+            "from": "api",
+            "to": "celery",
+            "label": "Enqueue",
+            "protocol": "Redis broker",
+            "isActive": true
+          },
+          {
+            "id": "c6",
+            "from": "celery",
+            "to": "smtp",
+            "label": "Notify",
+            "protocol": "SMTP/SMS",
+            "isActive": true
+          },
+          {
+            "id": "c7",
+            "from": "api",
+            "to": "stripe",
+            "label": "Payments",
+            "protocol": "HTTPS",
+            "isActive": true
+          },
+          {
+            "id": "c8",
+            "from": "api",
+            "to": "sentry",
+            "label": "Errors",
+            "protocol": "HTTPS",
+            "isActive": true
+          }
+        ]
+      },
+      "dataFlow": {
+        "requestFlow": [
+          {
+            "number": 1,
+            "title": "Client request",
+            "description": "Patient or specialist calls REST endpoint with JWT in Authorization header (except public routes).",
+            "icon": "send"
+          },
+          {
+            "number": 2,
+            "title": "Gateway & DRF",
+            "description": "Nginx forwards to Gunicorn; DRF authentication, permissions, and @rate_limit execute.",
+            "icon": "filter"
+          },
+          {
+            "number": 3,
+            "title": "Service layer",
+            "description": "View delegates to domain service (e.g. AppointmentService.create) with validation and transactions.",
+            "icon": "cog"
+          },
+          {
+            "number": 4,
+            "title": "Persistence",
+            "description": "ORM writes to PostgreSQL; cache updated for tokens or rate counters in Redis.",
+            "icon": "database"
+          },
+          {
+            "number": 5,
+            "title": "Response envelope",
+            "description": "APIResponse returns JSON { status, message, data } to the client.",
+            "icon": "reply"
+          }
+        ],
+        "eventFlow": [
+          {
+            "number": 1,
+            "title": "Domain event",
+            "description": "Appointment booked, bill issued, or user registered triggers signal or explicit task call.",
+            "icon": "zap"
+          },
+          {
+            "number": 2,
+            "title": "Celery task",
+            "description": "Notification task queued on Redis broker for email/SMS rendering.",
+            "icon": "inbox"
+          },
+          {
+            "number": 3,
+            "title": "Template render",
+            "description": "NotificationTemplate + user preferences determine channel and content.",
+            "icon": "file-text"
+          },
+          {
+            "number": 4,
+            "title": "Delivery",
+            "description": "SMTP or Twilio sends message; failures logged to SystemLog / Sentry.",
+            "icon": "mail"
+          }
+        ]
+      },
+      "techDecisions": [
+        {
+          "title": "Django monolith vs microservices",
+          "problem": "Small therapy group needs fast delivery and simple ops, not distributed complexity.",
+          "solution": "Single Django codebase with clear app boundaries and service classes; one Docker image on EC2.",
+          "alternatives": [
+            "Microservices per domain",
+            "Serverless Lambda per endpoint"
+          ],
+          "outcome": "Lower operational overhead; scale vertically and with extra EC2 instances first.",
+          "icon": "layers"
+        },
+        {
+          "title": "PostgreSQL on RDS",
+          "problem": "Relational data with strict integrity for appointments, records, and billing.",
+          "solution": "Managed RDS PostgreSQL with connection pooling (CONN_MAX_AGE 600).",
+          "alternatives": [
+            "SQLite (dev only)",
+            "MongoDB for documents"
+          ],
+          "outcome": "ACID transactions for clinical and financial data; dev uses SQLite in development.py.",
+          "icon": "database"
+        },
+        {
+          "title": "SimpleJWT",
+          "problem": "SPA/mobile clients need stateless auth for patients and specialists.",
+          "solution": "JWT access + refresh with rotation; custom claims for user_type.",
+          "alternatives": [
+            "Session cookies only",
+            "OAuth2 provider"
+          ],
+          "outcome": "Works well for API-first clients; requires blacklist app for secure logout.",
+          "icon": "key"
+        },
+        {
+          "title": "External Redis (Upstash)",
+          "problem": "Rate limits and cache should survive API container restarts on EC2.",
+          "solution": "django-redis to cloud Redis; compose file does not bundle Redis container.",
+          "alternatives": [
+            "In-container Redis",
+            "Database-only rate limiting"
+          ],
+          "outcome": "Shared cache across multiple API instances behind ALB.",
+          "icon": "redis"
+        }
+      ]
+    },
+    "codeShowcase": {
+      "codeExamples": [
+        {
+          "id": "medical-record-access",
+          "title": "Medical record confidentiality & access control",
+          "description": "MedicalRecordService enforces who can read clinical notes—critical for therapist/patient trust and staff boundaries.",
+          "category": "security",
+          "duration": "4 min read",
+          "views": 0,
+          "tags": [
+            "medical",
+            "privacy",
+            "service-layer"
+          ],
+          "files": [
+            {
+              "name": "services.py",
+              "path": "apps/medical/services.py",
+              "language": "python",
+              "highlighted": true,
+              "explanation": "Central access matrix: admin all, patient own (except highly_sensitive), specialist own records, staff standard only.",
+              "content": "class MedicalRecordService:\n    CONFIDENTIALITY_LEVELS = {\"standard\": 1, \"sensitive\": 2, \"highly_sensitive\": 3}\n\n    @staticmethod\n    def can_access_record(user, medical_record):\n        if user.user_type == \"admin\":\n            return True\n        if user.user_type == \"patient\" and medical_record.patient == user:\n            if medical_record.confidentiality_level == \"highly_sensitive\":\n                return False\n            return True\n        if user.user_type == \"specialist\":\n            if medical_record.specialist == user.specialist_profile:\n                return True\n        if user.user_type == \"staff\":\n            return medical_record.confidentiality_level == \"standard\"\n        return False\n"
+            }
+          ]
+        },
+        {
+          "id": "rate-limit-profiles",
+          "title": "Profile-based API rate limiting",
+          "description": "Redis-backed sliding window limits protect login and public specialist endpoints from abuse.",
+          "category": "security",
+          "duration": "3 min read",
+          "views": 0,
+          "tags": [
+            "redis",
+            "decorator",
+            "drf"
+          ],
+          "files": [
+            {
+              "name": "profiles.py",
+              "path": "apps/core/decorators/profiles.py",
+              "language": "python",
+              "highlighted": true,
+              "explanation": "SENSITIVE uses email key for login; PUBLIC uses IP for unauthenticated browse endpoints.",
+              "content": "class RateLimitProfiles:\n    SENSITIVE = {\n        \"key_type\": \"email\",\n        \"rate\": \"5/1min\",\n        \"fallback_key\": \"ip\",\n        \"description\": \"Login, password reset\",\n    }\n    PUBLIC = {\n        \"key_type\": \"ip\",\n        \"rate\": \"30/1min\",\n        \"description\": \"Public specialist listings\",\n    }\n    WRITE_OPERATION = {\n        \"key_type\": \"user_id\",\n        \"rate\": \"20/1min\",\n        \"description\": \"POST/PUT/PATCH mutations\",\n    }\n"
+            },
+            {
+              "name": "rate_limit.py",
+              "path": "apps/core/decorators/rate_limit.py",
+              "language": "python",
+              "highlighted": false,
+              "explanation": "RateLimiter.parse_rate and cache-backed sliding window implementation.",
+              "content": "@classmethod\ndef is_limited(cls, key: str, rate: str, scope: str) -> bool:\n    limit, period = cls.parse_rate(rate)\n    # Sliding window via Django cache (Redis in production)\n"
+            }
+          ]
+        },
+        {
+          "id": "appointment-booking-rules",
+          "title": "Appointment booking business rules",
+          "description": "Validates clinic hours and booking windows before therapists accept new patients on the schedule.",
+          "category": "domain",
+          "duration": "5 min read",
+          "views": 0,
+          "tags": [
+            "appointments",
+            "validation"
+          ],
+          "files": [
+            {
+              "name": "services.py",
+              "path": "apps/appointments/services.py",
+              "language": "python",
+              "highlighted": true,
+              "explanation": "Clinic operates 09:00–19:00; bookings must be 1h to 90 days in advance.",
+              "content": "class AppointmentService:\n    CLINIC_OPEN_HOUR = 9\n    CLINIC_CLOSE_HOUR = 19\n    MIN_ADVANCE_BOOKING_HOURS = 1\n    MAX_ADVANCE_BOOKING_DAYS = 90\n\n    @staticmethod\n    def is_within_clinic_hours(appointment_time) -> bool:\n        hour = appointment_time.hour\n        return (\n            AppointmentService.CLINIC_OPEN_HOUR\n            <= hour\n            < AppointmentService.CLINIC_CLOSE_HOUR\n        )\n\n    @staticmethod\n    def validate_booking_time(appointment_datetime):\n        if appointment_datetime <= timezone.now():\n            raise BusinessRuleError(\n                detail=\"Appointment must be scheduled for a future time\"\n            )\n"
+            }
+          ]
+        },
+        {
+          "id": "standard-api-response",
+          "title": "Standardized API response envelope",
+          "description": "All successful auth and domain endpoints return a consistent JSON shape for frontends.",
+          "category": "api",
+          "duration": "2 min read",
+          "views": 0,
+          "tags": [
+            "drf",
+            "responses"
+          ],
+          "files": [
+            {
+              "name": "api_response.py",
+              "path": "apps/core/responses/api_response.py",
+              "language": "python",
+              "highlighted": true,
+              "explanation": "Success payloads include status, message, optional data, metadata, and pagination.",
+              "content": "class APIResponse:\n    @staticmethod\n    def success(message=\"Operation successful\", data=None, status_code=200, ...):\n        response_data = {\n            \"status\": ResponseStatus.SUCCESS.value,\n            \"message\": message,\n        }\n        if data is not None:\n            response_data[\"data\"] = data\n        return Response(response_data, status=status_code)\n"
+            }
+          ]
+        }
+      ]
+    },
+    "features": {
+      "features": [
+        {
+          "id": "jwt-auth-rbac",
+          "title": "JWT authentication & role-based access",
+          "description": "Email login with SimpleJWT access/refresh tokens, custom claims (user_type, full_name), and DRF permissions for patient, specialist, staff, and admin flows.",
+          "icon": "shield-lock",
+          "category": "authentication",
+          "status": "stable",
+          "highlights": [
+            "Login rate-limited per email (5/min)",
+            "Account activation and password reset via cache tokens",
+            "Admin user management at /api/v2/auth/users/"
+          ],
+          "techStack": [
+            "djangorestframework-simplejwt",
+            "apps/users",
+            "apps/core/permissions.py"
+          ],
+          "metrics": [
+            {
+              "label": "Access token TTL",
+              "value": "60 min",
+              "trend": "stable",
+              "icon": "clock"
+            },
+            {
+              "label": "Refresh token TTL",
+              "value": "7 days",
+              "trend": "stable",
+              "icon": "refresh"
+            }
+          ],
+          "codeSnippet": {
+            "language": "python",
+            "filename": "apps/users/views/auth_views.py",
+            "code": "@rate_limit(profile=\"SENSITIVE\", scope=\"login\")\ndef post(self, request):\n    user, tokens = UserService.authenticate_user(email, password)\n    return APIResponse.success(data={\"user\": ..., \"tokens\": tokens})\n"
+          }
+        },
+        {
+          "id": "specialist-scheduling",
+          "title": "Specialist profiles & availability",
+          "description": "Public discovery of psychologists, psychiatrists, and therapists with services, categories, and date-based available slots for patient booking.",
+          "icon": "calendar-heart",
+          "category": "api",
+          "status": "stable",
+          "highlights": [
+            "Public GET /api/v2/specialists/ and available-slots",
+            "Staff/admin manage specialists and clinic services",
+            "Weekly availability model per specialist"
+          ],
+          "techStack": [
+            "apps/specialists",
+            "Django ORM"
+          ],
+          "metrics": [
+            {
+              "label": "Public list rate",
+              "value": "30/min IP",
+              "trend": "stable",
+              "icon": "gauge"
+            }
+          ]
+        },
+        {
+          "id": "appointments-engine",
+          "title": "Appointment booking rules",
+          "description": "Service-layer validation for clinic hours, booking windows, overlaps, and role-scoped querysets for patients and specialists.",
+          "icon": "calendar-check",
+          "category": "api",
+          "status": "stable",
+          "highlights": [
+            "Clinic hours 09:00–19:00",
+            "Cancel, reschedule, today, and stats actions",
+            "Virtual session and room fields on Appointment model"
+          ],
+          "techStack": [
+            "apps/appointments/services.py"
+          ],
+          "metrics": [
+            {
+              "label": "Max advance booking",
+              "value": "90 days",
+              "trend": "stable",
+              "icon": "calendar"
+            }
+          ],
+          "codeSnippet": {
+            "language": "python",
+            "filename": "apps/appointments/services.py",
+            "code": "CLINIC_OPEN_HOUR = 9\nCLINIC_CLOSE_HOUR = 19\nMIN_ADVANCE_BOOKING_HOURS = 1\nMAX_ADVANCE_BOOKING_DAYS = 90\n"
+          }
+        },
+        {
+          "id": "medical-records-privacy",
+          "title": "Confidential medical records",
+          "description": "Clinical notes tied to appointments with standard, sensitive, and highly_sensitive levels; patients blocked from highly_sensitive; 24h specialist edit window.",
+          "icon": "file-medical",
+          "category": "security",
+          "status": "stable",
+          "highlights": [
+            "MedicalRecordService access matrix by role",
+            "Export and audit-log endpoints for compliance workflows",
+            "Change-confidentiality action for admin/staff"
+          ],
+          "techStack": [
+            "apps/medical",
+            "django-encrypted-model-fields (dependency)"
+          ],
+          "metrics": [
+            {
+              "label": "Edit window",
+              "value": "24 hours",
+              "trend": "stable",
+              "icon": "edit"
+            }
+          ]
+        },
+        {
+          "id": "billing-stripe",
+          "title": "Billing, invoices & Stripe",
+          "description": "Bills from appointments, cash and bank-transfer payments, Stripe PaymentIntents, refunds, insurance claims, and PDF invoices.",
+          "icon": "credit-card",
+          "category": "integration",
+          "status": "stable",
+          "highlights": [
+            "my-bills and overdue listings for patients",
+            "Invoice PDF and email reminders",
+            "Stripe webhook handler implemented (route pending)"
+          ],
+          "techStack": [
+            "stripe",
+            "reportlab",
+            "apps/billing"
+          ],
+          "metrics": [
+            {
+              "label": "Payment channels",
+              "value": "3+",
+              "trend": "up",
+              "icon": "wallet"
+            }
+          ]
+        },
+        {
+          "id": "rate-limiting",
+          "title": "Redis-backed rate limiting",
+          "description": "Profile-based sliding window limits (SENSITIVE, PUBLIC, WRITE_OPERATION, etc.) using Django cache / Redis.",
+          "icon": "speedometer",
+          "category": "performance",
+          "status": "stable",
+          "highlights": [
+            "Per-email login throttling",
+            "Per-IP public endpoint protection",
+            "Configurable profiles in apps/core/decorators/profiles.py"
+          ],
+          "techStack": [
+            "django-redis",
+            "apps/core/decorators/rate_limit.py"
+          ],
+          "codeSnippet": {
+            "language": "python",
+            "filename": "apps/core/decorators/profiles.py",
+            "code": "SENSITIVE = {\"key_type\": \"email\", \"rate\": \"5/1min\", ...}\nPUBLIC = {\"key_type\": \"ip\", \"rate\": \"30/1min\", ...}\n"
+          }
+        },
+        {
+          "id": "notifications-async",
+          "title": "Multi-channel notifications",
+          "description": "Email and SMS templates with Celery tasks for appointment reminders, activation, and billing—notification app present; HTTP admin API not mounted in urls.",
+          "icon": "bell",
+          "category": "messaging",
+          "status": "beta",
+          "highlights": [
+            "NotificationTemplate and user preferences models",
+            "Celery beat: process-pending-notifications",
+            "Twilio and SMTP configuration via environment"
+          ],
+          "techStack": [
+            "Celery",
+            "Twilio",
+            "apps/notification"
+          ]
+        },
+        {
+          "id": "openapi-docs",
+          "title": "OpenAPI & standardized responses",
+          "description": "drf-spectacular schema, Swagger UI, ReDoc, and uniform APIResponse envelope for success and errors.",
+          "icon": "book",
+          "category": "api",
+          "status": "stable",
+          "highlights": [
+            "/api/v2/schema/swagger-ui/",
+            "MindCareBaseException global handling",
+            "AuditLoggingMiddleware for sensitive actions"
+          ],
+          "techStack": [
+            "drf-spectacular",
+            "apps/core/responses/api_response.py"
+          ],
+          "metrics": [
+            {
+              "label": "Documented version",
+              "value": "2.0.0",
+              "trend": "stable",
+              "icon": "tag"
+            }
+          ]
+        },
+        {
+          "id": "docker-production",
+          "title": "Docker production image",
+          "description": "Multi-stage Python 3.11 image, non-root django user, entrypoint migrations, and Gunicorn WSGI server for EC2 or ECS deploy.",
+          "icon": "docker",
+          "category": "integration",
+          "status": "stable",
+          "highlights": [
+            "Waits for cloud PostgreSQL and Redis",
+            "Optional POPULATE_DUMMY_DATA and CREATE_SUPERUSER",
+            "Host port 8001 → container 8000"
+          ],
+          "techStack": [
+            "Docker",
+            "Gunicorn",
+            "docker/docker-compose.yml"
+          ]
+        }
+      ]
+    },
+    "infrastructure": {
+      "metrics": [
+        {
+          "label": "Container port",
+          "value": "8000",
+          "icon": "server",
+          "description": "Gunicorn binds 0.0.0.0:8000 inside the web container"
+        },
+        {
+          "label": "Host mapping",
+          "value": "8001:8000",
+          "icon": "network",
+          "description": "docker-compose publishes API on host port 8001 for EC2 security groups"
+        },
+        {
+          "label": "Gunicorn workers",
+          "value": "3 × 2 threads",
+          "icon": "cpu",
+          "description": "scripts/entrypoint.sh — tune per EC2 instance size"
+        },
+        {
+          "label": "DB connection pool",
+          "value": "600s",
+          "icon": "database",
+          "description": "CONN_MAX_AGE in production PostgreSQL settings"
+        }
+      ],
+      "cloudServices": [
+        {
+          "name": "Amazon EC2",
+          "purpose": "Runs Docker Compose web service (mindcare_api) for the Django API behind security group allowing 8001/443",
+          "icon": "aws-ec2",
+          "cost": "~$15–40/mo (t3.small placeholder)"
+        },
+        {
+          "name": "Amazon RDS (PostgreSQL)",
+          "purpose": "Managed primary database for users, appointments, medical records, and billing (DB_HOST in .env)",
+          "icon": "aws-rds",
+          "cost": "~$25–80/mo (db.t4g.micro placeholder)"
+        },
+        {
+          "name": "Upstash Redis",
+          "purpose": "Cache (DB 1), rate limiting, activation tokens, and Celery broker URL (REDIS_HOST / REDIS_URL)",
+          "icon": "redis",
+          "cost": "Free tier or ~$10/mo"
+        },
+        {
+          "name": "Stripe",
+          "purpose": "Online card payments, PaymentIntents, and webhooks for billing reconciliation",
+          "icon": "stripe",
+          "cost": "2.9% + per transaction"
+        },
+        {
+          "name": "SMTP (e.g. Gmail / SES)",
+          "purpose": "Account activation, password reset, invoice and reminder emails",
+          "icon": "mail",
+          "cost": "Variable / SES low volume"
+        },
+        {
+          "name": "Twilio",
+          "purpose": "SMS notifications for appointments and system alerts",
+          "icon": "twilio",
+          "cost": "Per SMS"
+        },
+        {
+          "name": "Sentry (optional)",
+          "purpose": "Error tracking when SENTRY_DSN is set in production",
+          "icon": "sentry",
+          "cost": "Free tier available"
+        }
+      ],
+      "deploymentLayers": [
+        {
+          "name": "Clients",
+          "color": "#4F46E5",
+          "components": [
+            {
+              "name": "Clinic admin web app",
+              "icon": "layout",
+              "description": "Staff dashboard (future or separate frontend) calling REST API"
+            },
+            {
+              "name": "Patient portal / mobile",
+              "icon": "smartphone",
+              "description": "Books appointments and pays bills via JWT-authenticated API"
+            },
+            {
+              "name": "Therapist tools",
+              "icon": "user-md",
+              "description": "Specialists manage schedule, notes, and services"
+            }
+          ]
+        },
+        {
+          "name": "Edge & compute (EC2)",
+          "color": "#059669",
+          "components": [
+            {
+              "name": "Nginx / ALB (recommended)",
+              "icon": "globe",
+              "description": "TLS termination, reverse proxy to Gunicorn on port 8001"
+            },
+            {
+              "name": "Docker — mindcare_api",
+              "icon": "docker",
+              "description": "Built from docker/dockerfile; ENVIRONMENT=production"
+            },
+            {
+              "name": "Celery worker (optional same host)",
+              "icon": "worker",
+              "description": "Processes notification and async billing tasks"
+            }
+          ]
+        },
+        {
+          "name": "Data & messaging",
+          "color": "#DC2626",
+          "components": [
+            {
+              "name": "RDS PostgreSQL",
+              "icon": "database",
+              "description": "at_mind_care_hub_db — all Django models"
+            },
+            {
+              "name": "Upstash Redis",
+              "icon": "redis",
+              "description": "Cache prefix mind_care_hub, 900s default timeout"
+            },
+            {
+              "name": "Local volume logs",
+              "icon": "folder",
+              "description": "logs_volume mounted at /app/logs in container"
+            }
+          ]
+        },
+        {
+          "name": "External integrations",
+          "color": "#D97706",
+          "components": [
+            {
+              "name": "Stripe API",
+              "icon": "credit-card",
+              "description": "PaymentIntents and webhook signatures"
+            },
+            {
+              "name": "Email SMTP",
+              "icon": "mail",
+              "description": "Transactional email from DEFAULT_FROM_EMAIL"
+            },
+            {
+              "name": "Twilio SMS",
+              "icon": "message",
+              "description": "TWILIO_* env vars for SMS delivery"
+            }
+          ]
+        }
+      ],
+      "dockerFiles": [
+        {
+          "service": "web (docker-compose)",
+          "description": "Single-service compose file; PostgreSQL and Redis are external cloud instances, not containerized.",
+          "content": "services:\n  web:\n    build:\n      context: ..\n      dockerfile: docker/dockerfile\n    container_name: mindcare_api\n    env_file: ../.env\n    environment:\n      DJANGO_SETTINGS_MODULE: config.settings.production\n      ENVIRONMENT: production\n    ports:\n      - \"8001:8000\"\n    volumes:\n      - logs_volume:/app/logs\n    restart: unless-stopped\n# Cloud: RDS PostgreSQL + Upstash Redis\n"
+        },
+        {
+          "service": "dockerfile (multi-stage)",
+          "description": "Python 3.11 slim bookworm; builder installs requirements; runtime runs as non-root django user.",
+          "content": "FROM python:3.11-slim-bookworm AS builder\n# gcc, libpq-dev, pip install -r requirements.txt\nFROM python:3.11-slim-bookworm AS runtime\nUSER django\nEXPOSE 8000\nENTRYPOINT [\"/bin/sh\", \"/app/scripts/entrypoint.sh\"]\n# Gunicorn: 3 workers, 2 threads, migrate on start\n"
+        },
+        {
+          "service": "entrypoint.sh",
+          "description": "Waits for DB_HOST/REDIS_HOST, runs migrate, optional superuser/dummy data, starts Gunicorn.",
+          "content": "# nc -z DB_HOST DB_PORT  (PostgreSQL ready)\n# nc -z REDIS_HOST REDIS_PORT  (Redis ready)\npython manage.py migrate --noinput\ngunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 3 --threads 2\n"
+        }
+      ]
+    },
+    "apiSchema": {
+      "type": "REST",
+      "httpEndpoints": [
+        {
+          "id": "health-check",
+          "method": "GET",
+          "urlPath": "/api/v2/health/",
+          "summary": "Service health check",
+          "description": "Public liveness probe for load balancers and Docker orchestration on EC2.",
+          "tags": [
+            "service"
+          ],
+          "authenticated": false,
+          "rateLimit": "PUBLIC — 30/1min per IP",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Service is up",
+              "example": {
+                "status": "ok"
+              }
+            }
+          ]
+        },
+        {
+          "id": "app-documentation",
+          "method": "GET",
+          "urlPath": "/api/v2/app-documentation/",
+          "summary": "Application metadata",
+          "description": "Returns API name, version, and short description for clients and portfolio tools.",
+          "tags": [
+            "service"
+          ],
+          "authenticated": false,
+          "rateLimit": "PUBLIC — 30/1min per IP",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Application info",
+              "example": {
+                "name": "Mind Care Hub API",
+                "version": "2.0.0",
+                "description": "Mental health support platform for practices and patients"
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-login",
+          "method": "POST",
+          "urlPath": "/api/v2/auth/login/",
+          "summary": "Authenticate and obtain JWT",
+          "description": "Email/password login for patients, specialists, staff, and admins. Returns user profile and access/refresh tokens.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": false,
+          "rateLimit": "SENSITIVE — 5/1min per email",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "email": "string (required)",
+              "password": "string (required)"
+            },
+            "example": {
+              "email": "therapist@clinic.example.com",
+              "password": "SecurePass123!"
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Login successful",
+              "example": {
+                "status": "success",
+                "message": "Login successful",
+                "data": {
+                  "user": {
+                    "id": 1,
+                    "email": "therapist@clinic.example.com",
+                    "user_type": "specialist",
+                    "full_name": "Dr. Ana Rivera"
+                  },
+                  "tokens": {
+                    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-register",
+          "method": "POST",
+          "urlPath": "/api/v2/auth/register/",
+          "summary": "Register a new patient account",
+          "description": "Creates a patient user; email activation flow uses cache-backed tokens.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": false,
+          "rateLimit": "RESTRICTED — 3/1min per IP",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "email": "string (required)",
+              "password": "string (required)",
+              "full_name": "string (required)"
+            },
+            "example": {
+              "email": "patient@example.com",
+              "password": "SecurePass123!",
+              "full_name": "Jordan Lee"
+            }
+          },
+          "responses": [
+            {
+              "status": 201,
+              "description": "Registration accepted",
+              "example": {
+                "status": "success",
+                "message": "User registered successfully",
+                "data": {
+                  "email": "patient@example.com",
+                  "activation_required": true
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-logout",
+          "method": "POST",
+          "urlPath": "/api/v2/auth/logout/",
+          "summary": "Logout and blacklist refresh token",
+          "description": "Requires Bearer access token and refresh_token in body. Ensure token_blacklist app is installed for production.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": true,
+          "rateLimit": "STANDARD — 60/1min per user",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "refresh_token": "string (required)"
+            },
+            "example": {
+              "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Logout successful",
+              "example": {
+                "status": "success",
+                "message": "Logout successful"
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-profile",
+          "method": "GET",
+          "urlPath": "/api/v2/auth/profile/",
+          "summary": "Get current user profile",
+          "description": "Returns profile for the authenticated user (any role).",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": true,
+          "rateLimit": "STANDARD — 60/1min per user",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Profile retrieved",
+              "example": {
+                "status": "success",
+                "data": {
+                  "id": 2,
+                  "email": "patient@example.com",
+                  "user_type": "patient",
+                  "full_name": "Jordan Lee",
+                  "phone": "+15551234567"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "specialists-list-public",
+          "method": "GET",
+          "urlPath": "/api/v2/specialists/",
+          "summary": "List specialists (public)",
+          "description": "Browse active mental-health professionals (psychologists, psychiatrists, therapists) for booking.",
+          "tags": [
+            "specialists"
+          ],
+          "authenticated": false,
+          "rateLimit": "PUBLIC — 30/1min per IP",
+          "parameters": [
+            {
+              "name": "specialization",
+              "in": "query",
+              "type": "string",
+              "required": false,
+              "description": "Filter by specialization category",
+              "example": "psychologist"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Paginated specialist list",
+              "example": {
+                "count": 1,
+                "results": [
+                  {
+                    "id": 1,
+                    "full_name": "Dr. Ana Rivera",
+                    "specialization": "psychologist",
+                    "is_active": true
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "specialists-available-slots",
+          "method": "GET",
+          "urlPath": "/api/v2/specialists/{id}/available-slots/{date}/",
+          "summary": "Available appointment slots",
+          "description": "Returns bookable time slots for a specialist on a given date (YYYY-MM-DD).",
+          "tags": [
+            "specialists"
+          ],
+          "authenticated": false,
+          "rateLimit": "PUBLIC — 30/1min per IP",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "integer",
+              "required": true,
+              "description": "Specialist ID",
+              "example": 1
+            },
+            {
+              "name": "date",
+              "in": "path",
+              "type": "string",
+              "required": true,
+              "description": "Date in ISO format",
+              "example": "2026-06-15"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Available slots",
+              "example": {
+                "specialist_id": 1,
+                "date": "2026-06-15",
+                "slots": [
+                  {
+                    "start": "2026-06-15T10:00:00Z",
+                    "end": "2026-06-15T11:00:00Z",
+                    "available": true
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "appointments-list-create",
+          "method": "GET",
+          "urlPath": "/appointments/",
+          "summary": "List appointments",
+          "description": "Authenticated list scoped by role: patients see own bookings, specialists see their schedule, staff/admin see broader sets. Note: mounted without /api/v2/ prefix.",
+          "tags": [
+            "appointments"
+          ],
+          "authenticated": true,
+          "rateLimit": "STANDARD — 60/1min per user",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Appointment list",
+              "example": {
+                "count": 1,
+                "results": [
+                  {
+                    "id": 10,
+                    "patient_id": 2,
+                    "specialist_id": 1,
+                    "start_time": "2026-06-15T10:00:00Z",
+                    "status": "confirmed",
+                    "is_virtual": false
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "appointments-create",
+          "method": "POST",
+          "urlPath": "/appointments/",
+          "summary": "Book an appointment",
+          "description": "Creates appointment after clinic hours, overlap, and advance-booking validation in AppointmentService.",
+          "tags": [
+            "appointments"
+          ],
+          "authenticated": true,
+          "rateLimit": "WRITE_OPERATION — 20/1min per user",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "specialist_id": "integer (required)",
+              "start_time": "datetime (required)",
+              "end_time": "datetime (required)",
+              "notes": "string (optional)",
+              "is_virtual": "boolean (optional)"
+            },
+            "example": {
+              "specialist_id": 1,
+              "start_time": "2026-06-15T10:00:00Z",
+              "end_time": "2026-06-15T11:00:00Z",
+              "notes": "First session — anxiety management",
+              "is_virtual": true
+            }
+          },
+          "responses": [
+            {
+              "status": 201,
+              "description": "Appointment created",
+              "example": {
+                "id": 10,
+                "status": "pending",
+                "start_time": "2026-06-15T10:00:00Z"
+              }
+            }
+          ]
+        },
+        {
+          "id": "appointments-cancel",
+          "method": "POST",
+          "urlPath": "/appointments/{id}/cancel/",
+          "summary": "Cancel appointment",
+          "description": "Specialist or staff cancels a booking; enforces business rules on status transitions.",
+          "tags": [
+            "appointments"
+          ],
+          "authenticated": true,
+          "rateLimit": "WRITE_OPERATION — 20/1min per user",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "integer",
+              "required": true,
+              "description": "Appointment ID",
+              "example": 10
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Appointment cancelled",
+              "example": {
+                "id": 10,
+                "status": "cancelled"
+              }
+            }
+          ]
+        },
+        {
+          "id": "medical-records-list",
+          "method": "GET",
+          "urlPath": "/api/v2/medical-records/",
+          "summary": "List medical records",
+          "description": "Returns records the caller may access per confidentiality and role (MedicalRecordService).",
+          "tags": [
+            "medical"
+          ],
+          "authenticated": true,
+          "rateLimit": "STANDARD — 60/1min per user",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Filtered medical records",
+              "example": {
+                "count": 1,
+                "results": [
+                  {
+                    "id": 5,
+                    "appointment_id": 10,
+                    "diagnosis": "Generalized anxiety disorder — initial assessment",
+                    "confidentiality_level": "sensitive",
+                    "created_at": "2026-06-15T11:30:00Z"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "medical-records-create",
+          "method": "POST",
+          "urlPath": "/api/v2/medical-records/",
+          "summary": "Create medical record",
+          "description": "Specialist documents session notes linked to an appointment; validates diagnosis length and confidentiality.",
+          "tags": [
+            "medical"
+          ],
+          "authenticated": true,
+          "rateLimit": "WRITE_OPERATION — 20/1min per user",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "appointment_id": "integer (required)",
+              "diagnosis": "string (required, min 10 chars)",
+              "prescription": "string (optional)",
+              "confidentiality_level": "standard | sensitive | highly_sensitive"
+            },
+            "example": {
+              "appointment_id": 10,
+              "diagnosis": "Patient reports improved sleep; continue CBT exercises.",
+              "prescription": "N/A",
+              "confidentiality_level": "sensitive"
+            }
+          },
+          "responses": [
+            {
+              "status": 201,
+              "description": "Record created",
+              "example": {
+                "id": 5,
+                "confidentiality_level": "sensitive"
+              }
+            }
+          ]
+        },
+        {
+          "id": "billing-bills-my",
+          "method": "GET",
+          "urlPath": "/api/v2/billing/bills/my-bills/",
+          "summary": "List current user's bills",
+          "description": "Patients and authorized roles view invoices tied to completed appointments.",
+          "tags": [
+            "billing"
+          ],
+          "authenticated": true,
+          "rateLimit": "STANDARD — 60/1min per user",
+          "responses": [
+            {
+              "status": 200,
+              "description": "User bills",
+              "example": {
+                "results": [
+                  {
+                    "id": 3,
+                    "bill_number": "INV-2026-0003",
+                    "total_amount": "120.00",
+                    "status": "pending",
+                    "due_date": "2026-06-30"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "billing-payment-intent",
+          "method": "POST",
+          "urlPath": "/api/v2/billing/payments/online/intent/",
+          "summary": "Create Stripe PaymentIntent",
+          "description": "Starts online card payment for a bill; integrates with StripeService.",
+          "tags": [
+            "billing"
+          ],
+          "authenticated": true,
+          "rateLimit": "WRITE_OPERATION — 20/1min per user",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "bill_id": "integer (required)"
+            },
+            "example": {
+              "bill_id": 3
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "PaymentIntent created",
+              "example": {
+                "client_secret": "pi_3xxx_secret_xxx",
+                "amount": 12000,
+                "currency": "usd"
+              }
+            }
+          ]
+        },
+        {
+          "id": "openapi-schema",
+          "method": "GET",
+          "urlPath": "/api/v2/schema/swagger-ui/",
+          "summary": "Swagger UI",
+          "description": "Interactive OpenAPI documentation for all registered endpoints.",
+          "tags": [
+            "service"
+          ],
+          "authenticated": false,
+          "rateLimit": "PUBLIC — 30/1min per IP",
+          "responses": [
+            {
+              "status": 200,
+              "description": "HTML Swagger UI",
+              "example": {
+                "note": "Open browser to view interactive docs"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,2092 @@
+{
+  "projectId": "company-expenses-api",
+  "featured": true,
+  "name": "Company Expenses API",
+  "language": "Java",
+  "category": "backend",
+  "framework": "Spring Boot",
+  "version": "1.0.0",
+  "repositoryUrl": "https://github.com/alexisTrejo11/company-expenses-api",
+  "liveDemoUrl": "http://localhost:8080/swagger-ui.html",
+  "description": "REST API for corporate expense reporting: employees submit claims with receipts, managers approve or reject, finance processes reimbursements, and admins configure company settings—with JWT security, Flyway migrations, and Docker deploy.",
+  "techStack": [
+    "Java 17",
+    "Spring Boot 3.4.1",
+    "Spring Security (OAuth2 Resource Server + JWT)",
+    "Spring Data JPA",
+    "PostgreSQL 15",
+    "Flyway",
+    "MapStruct",
+    "Bucket4j (rate limiting)",
+    "Caffeine (Spring Cache)",
+    "Spring Mail + Thymeleaf",
+    "springdoc-openapi 2.8.3",
+    "Docker (Gradle multi-stage + Temurin 17 JRE)"
+  ],
+  "status": "stable",
+  "createdAt": "2024-05-25T00:00:00.000Z",
+  "updatedAt": "2026-06-03T00:00:00.000Z",
+  "docs": {
+    "overview": {
+      "problemStatement": {
+        "problemTitle": "Manual, opaque expense reimbursement workflows",
+        "problemDescription": "Companies often track employee expenses in spreadsheets or email threads. Managers lack a single queue for pending approvals, finance cannot tie reimbursements to approved claims, and employees have no audit trail for receipts or rejection reasons.",
+        "problemList": [
+          "Expense status scattered across email and spreadsheets",
+          "No role-separated API for employees vs managers vs finance vs admins",
+          "Receipt attachments stored ad hoc without linkage to expense records",
+          "Managers need paginated filters by status and monthly summaries",
+          "No standardized JSON envelope for frontend clients"
+        ]
+      },
+      "solution": {
+        "solutionTitle": "A Spring Boot API for the full expense lifecycle",
+        "solutionList": [
+          {
+            "title": "JWT auth with role-based routes",
+            "description": "Register employees and managers publicly; admins register other admins. OAuth2 resource server validates Bearer tokens with roles claim mapped to Spring authorities."
+          },
+          {
+            "title": "Employee expense submission",
+            "description": "Authenticated employees create PENDING expenses, upload multipart attachments, and list their own claims via JWT subject email."
+          },
+          {
+            "title": "Manager approval workflow",
+            "description": "Managers and admins approve or reject expenses, soft-delete records, filter by status with sorting, and fetch date-range summaries."
+          },
+          {
+            "title": "Finance reimbursements",
+            "description": "MANAGER or FINANCE roles create reimbursements linked to expenses; notifications fire on state changes."
+          },
+          {
+            "title": "Admin settings & dashboard",
+            "description": "Admin-only dashboard stats and mutable company settings stored in the database."
+          },
+          {
+            "title": "Containerized local and cloud deploy",
+            "description": "Multi-stage Docker image, local compose with PostgreSQL 15, production compose with external DB host from `.env`."
+          }
+        ]
+      },
+      "keyMetrics": {
+        "metricsTitle": "Codebase snapshot",
+        "metricsList": [
+          "8 REST controllers under `/v1/api/*`",
+          "~75 main Java source files + 11 test classes",
+          "2 Flyway SQL migrations (schema + demo seed data)",
+          "API served on port 8080; Swagger UI at `/swagger-ui.html`",
+          "Global Bucket4j interceptor on `/**` (20 token bucket, 10 refill/min)"
+        ]
+      },
+      "links": {
+        "github": "https://github.com/alexisTrejo11/company-expenses-api",
+        "demo": "http://localhost:8080/swagger-ui.html",
+        "documentation": "http://localhost:8080/api-docs",
+        "dockerHub": null
+      },
+      "mediaGallery": {
+        "title": "Company Expenses API — product views",
+        "description": "Placeholder assets for portfolio UI. Replace with Swagger screenshots, admin dashboard mockups, or sequence diagrams from your frontend.",
+        "items": [
+          {
+            "type": "image",
+            "url": "https://placehold.co/1200x630/1e3a5f/ffffff?text=Company+Expenses+API",
+            "thumbnail": "https://placehold.co/400x210/1e3a5f/ffffff?text=Expenses+API",
+            "title": "API cover",
+            "description": "Spring Boot expense tracking backend",
+            "alt": "Company Expenses API branding placeholder",
+            "category": "screenshot"
+          },
+          {
+            "type": "image",
+            "url": "https://placehold.co/1200x800/2563eb/ffffff?text=Swagger+UI",
+            "thumbnail": "https://placehold.co/400x267/2563eb/ffffff?text=OpenAPI",
+            "title": "OpenAPI documentation",
+            "description": "springdoc Swagger UI for interactive endpoint exploration",
+            "alt": "Swagger UI placeholder",
+            "category": "demo"
+          }
+        ]
+      },
+      "mediaItems": [
+        {
+          "type": "image",
+          "url": "https://placehold.co/800x500/059669/ffffff?text=Docker+Local",
+          "thumbnail": "https://placehold.co/320x200/059669/ffffff?text=Docker",
+          "title": "Docker local stack",
+          "description": "App + PostgreSQL via docker/docker-compose.local.yml",
+          "alt": "Docker compose placeholder",
+          "category": "architecture"
+        },
+        {
+          "type": "image",
+          "url": "https://placehold.co/800x500/7c3aed/ffffff?text=Expense+Flow",
+          "thumbnail": "https://placehold.co/320x200/7c3aed/ffffff?text=Flow",
+          "title": "Expense approval flow",
+          "description": "PENDING → APPROVED/REJECTED → REIMBURSED lifecycle",
+          "alt": "Workflow diagram placeholder",
+          "category": "diagram"
+        }
+      ],
+      "metrics": [
+        {
+          "label": "Spring Boot",
+          "value": "3.4.1",
+          "description": "Parent BOM in build.gradle"
+        },
+        {
+          "label": "Java toolchain",
+          "value": "17",
+          "description": "Gradle java.toolchain"
+        },
+        {
+          "label": "API prefix",
+          "value": "/v1/api",
+          "description": "All business controllers"
+        },
+        {
+          "label": "JWT TTL default",
+          "value": "24h",
+          "description": "jwt.expiration.ms default 86400000 in application.properties"
+        }
+      ]
+    },
+    "architecture": {
+      "layers": [
+        {
+          "name": "Presentation (clients)",
+          "description": "Web or mobile clients for employees, managers, finance, and admins.",
+          "color": "#6366F1",
+          "expanded": true,
+          "components": [
+            "Employee expense submission UI",
+            "Manager approval queue",
+            "Admin settings / dashboard"
+          ],
+          "responsibilities": [
+            "Store JWT after login",
+            "Render ResponseWrapper success and error states"
+          ],
+          "technologies": [
+            "HTTPS",
+            "REST JSON",
+            "OpenAPI-generated client (optional)"
+          ]
+        },
+        {
+          "name": "API & security",
+          "description": "Spring MVC controllers, validation, JWT resource server, and global rate limiting.",
+          "color": "#10B981",
+          "expanded": true,
+          "components": [
+            "AuthController — registration & login",
+            "EmployeeExpenseController / ExpenseAttachmentController",
+            "ExpenseController — manager workflow",
+            "ReimbursementController",
+            "NotificationController",
+            "AdminController",
+            "UserController",
+            "SecurityConfig + JWTService",
+            "RateLimitInterceptor"
+          ],
+          "responsibilities": [
+            "HTTP mapping and DTO validation",
+            "Role-based authorization per path prefix",
+            "Consistent ResponseWrapper envelopes"
+          ],
+          "technologies": [
+            "Spring Web MVC",
+            "Spring Security OAuth2 Resource Server",
+            "Bucket4j",
+            "springdoc OpenAPI"
+          ]
+        },
+        {
+          "name": "Application services",
+          "description": "Business logic, notifications, email, and file uploads.",
+          "color": "#F59E0B",
+          "expanded": true,
+          "components": [
+            "ExpenseService",
+            "AuthService / UserService",
+            "ReimbursementService",
+            "NotificationService",
+            "AdminService",
+            "AttachmentService",
+            "EmailService",
+            "FileHandler"
+          ],
+          "responsibilities": [
+            "Expense lifecycle and validation",
+            "Trigger notifications on state changes",
+            "Map entities to DTOs (MapStruct)"
+          ],
+          "technologies": [
+            "Spring @Service",
+            "MapStruct",
+            "Thymeleaf (email templates)"
+          ]
+        },
+        {
+          "name": "Persistence",
+          "description": "JPA entities, repositories, and Flyway-managed PostgreSQL schema.",
+          "color": "#EF4444",
+          "expanded": true,
+          "components": [
+            "User, Expense, ExpenseAttachment",
+            "Reimbursement, Notification",
+            "AdminSettings",
+            "ExpenseRepository and related repos"
+          ],
+          "responsibilities": [
+            "ACID transactions for financial data",
+            "Soft delete on expenses",
+            "Schema migrations at startup"
+          ],
+          "technologies": [
+            "Spring Data JPA",
+            "Hibernate",
+            "Flyway",
+            "PostgreSQL"
+          ]
+        }
+      ],
+      "designPatterns": [
+        {
+          "title": "Layered architecture",
+          "emoji": "🏗️",
+          "description": "Controllers delegate to services; services use repositories and mappers—classic Spring layering.",
+          "category": "Structural",
+          "badge": "Core"
+        },
+        {
+          "title": "DTO + Mapper",
+          "emoji": "🔄",
+          "description": "MapStruct mappers translate entities to API DTOs, keeping persistence models out of HTTP contracts.",
+          "category": "Structural",
+          "badge": "MapStruct"
+        },
+        {
+          "title": "Result object",
+          "emoji": "✅",
+          "description": "Result<T> wraps success/failure for auth validation without exceptions for expected failures.",
+          "category": "Behavioral",
+          "badge": "shared/Result"
+        },
+        {
+          "title": "Response wrapper",
+          "emoji": "📦",
+          "description": "ResponseWrapper factory methods standardize success, created, notFound, and badRequest payloads.",
+          "category": "Structural",
+          "badge": "API"
+        },
+        {
+          "title": "Repository",
+          "emoji": "🗄️",
+          "description": "Spring Data JPA repositories encapsulate queries and pagination.",
+          "category": "Data",
+          "badge": "JPA"
+        },
+        {
+          "title": "Interceptor — rate limit",
+          "emoji": "🚦",
+          "description": "HandlerInterceptor consumes Bucket4j tokens before controller execution.",
+          "category": "Behavioral",
+          "badge": "Bucket4j"
+        }
+      ],
+      "scalabilityStrategies": [
+        {
+          "title": "Stateless API instances",
+          "description": "JWT-backed auth allows horizontal scaling of Spring Boot containers behind a load balancer."
+        },
+        {
+          "title": "External PostgreSQL",
+          "description": "Database lives outside the app container in production compose—scale app tier independently."
+        },
+        {
+          "title": "Paginated list endpoints",
+          "description": "Manager and employee list endpoints use Spring Data Pageable to limit payload size."
+        },
+        {
+          "title": "File storage externalization (future)",
+          "description": "Move FILE_UPLOAD_DIR to S3-compatible object storage for multi-instance deploys."
+        }
+      ],
+      "securityStrategies": [
+        {
+          "title": "JWT resource server",
+          "description": "Bearer tokens validated per request; roles claim drives hasRole checks."
+        },
+        {
+          "title": "Path-based authorization",
+          "description": "Separate prefixes for admin, manager, employee, and reimbursement routes."
+        },
+        {
+          "title": "Password hashing",
+          "description": "PasswordHandler for credential storage (see UserService / auth flow)."
+        },
+        {
+          "title": "Global rate limiting",
+          "description": "Mitigates brute-force and abuse via Bucket4j 429 responses."
+        },
+        {
+          "title": "CSRF disabled",
+          "description": "Appropriate for pure JSON API clients; ensure HTTPS-only in production."
+        }
+      ],
+      "cacheStrategies": [
+        {
+          "name": "Caffeine (Spring Cache)",
+          "description": "spring-boot-starter-cache with Caffeine on classpath—ready for @Cacheable on hot reads.",
+          "ttl": "Per-cache config (placeholder)",
+          "coverage": "Not widely applied in controllers yet"
+        },
+        {
+          "name": "No Redis in current deploy",
+          "description": "Unlike Django template docs, this project does not bundle Redis; rate limits are in-process Bucket4j.",
+          "ttl": "N/A",
+          "coverage": "Single-instance effective only"
+        }
+      ],
+      "architectureFeatures": [
+        {
+          "title": "Unified API envelope",
+          "emoji": "📦",
+          "description": "ResponseWrapper provides consistent JSON for clients and tests."
+        },
+        {
+          "title": "OpenAPI-first exploration",
+          "emoji": "📖",
+          "description": "springdoc + @Operation document endpoints at /swagger-ui.html."
+        },
+        {
+          "title": "Flyway versioned schema",
+          "emoji": "🗃️",
+          "description": "SQL migrations in src/main/resources/db/migration."
+        },
+        {
+          "title": "Role-separated API surface",
+          "emoji": "🧩",
+          "description": "Distinct controller packages/paths per actor: employee, manager, admin, finance."
+        }
+      ],
+      "architectureDiagram": {
+        "legendItems": [
+          {
+            "type": "client",
+            "label": "Client",
+            "color": "#6366F1",
+            "icon": "monitor"
+          },
+          {
+            "type": "gateway",
+            "label": "Edge (optional)",
+            "color": "#10B981",
+            "icon": "shield"
+          },
+          {
+            "type": "service",
+            "label": "API service",
+            "color": "#F59E0B",
+            "icon": "server"
+          },
+          {
+            "type": "database",
+            "label": "Database",
+            "color": "#EF4444",
+            "icon": "database"
+          },
+          {
+            "type": "queue",
+            "label": "Files / mail",
+            "color": "#8B5CF6",
+            "icon": "layers"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "clients",
+            "label": "Web / mobile clients",
+            "type": "client",
+            "x": 80,
+            "y": 120,
+            "connections": [
+              "api"
+            ],
+            "status": "healthy",
+            "traffic": 100
+          },
+          {
+            "id": "api",
+            "label": "Spring Boot API :8080",
+            "type": "service",
+            "x": 320,
+            "y": 120,
+            "connections": [
+              "postgres",
+              "files",
+              "smtp"
+            ],
+            "status": "healthy",
+            "traffic": 90
+          },
+          {
+            "id": "postgres",
+            "label": "PostgreSQL",
+            "type": "database",
+            "x": 560,
+            "y": 80,
+            "connections": [],
+            "status": "healthy",
+            "traffic": 70
+          },
+          {
+            "id": "files",
+            "label": "FILE_UPLOAD_DIR",
+            "type": "queue",
+            "x": 560,
+            "y": 180,
+            "connections": [],
+            "status": "healthy",
+            "traffic": 25
+          },
+          {
+            "id": "smtp",
+            "label": "SMTP server",
+            "type": "monitoring",
+            "x": 320,
+            "y": 240,
+            "connections": [],
+            "status": "healthy",
+            "traffic": 15
+          },
+          {
+            "id": "swagger",
+            "label": "Swagger UI",
+            "type": "client",
+            "x": 80,
+            "y": 240,
+            "connections": [
+              "api"
+            ],
+            "status": "healthy",
+            "traffic": 10
+          }
+        ],
+        "connections": [
+          {
+            "id": "c1",
+            "from": "clients",
+            "to": "api",
+            "label": "HTTPS + JWT",
+            "protocol": "REST",
+            "isActive": true
+          },
+          {
+            "id": "c2",
+            "from": "api",
+            "to": "postgres",
+            "label": "JDBC",
+            "protocol": "PostgreSQL",
+            "isActive": true
+          },
+          {
+            "id": "c3",
+            "from": "api",
+            "to": "files",
+            "label": "Upload receipts",
+            "protocol": "Local FS",
+            "isActive": true
+          },
+          {
+            "id": "c4",
+            "from": "api",
+            "to": "smtp",
+            "label": "Email",
+            "protocol": "SMTP",
+            "isActive": true
+          },
+          {
+            "id": "c5",
+            "from": "swagger",
+            "to": "api",
+            "label": "Docs",
+            "protocol": "HTTP",
+            "isActive": true
+          }
+        ]
+      },
+      "dataFlow": {
+        "requestFlow": [
+          {
+            "number": 1,
+            "title": "Client request",
+            "description": "Client calls REST endpoint with JSON body and optional Bearer JWT.",
+            "icon": "send"
+          },
+          {
+            "number": 2,
+            "title": "Rate limit & security",
+            "description": "RateLimitInterceptor consumes token; SecurityFilterChain validates JWT and roles.",
+            "icon": "shield"
+          },
+          {
+            "number": 3,
+            "title": "Controller → service",
+            "description": "Controller validates DTOs, delegates to @Service (e.g. ExpenseService.createExpense).",
+            "icon": "cog"
+          },
+          {
+            "number": 4,
+            "title": "Persistence",
+            "description": "JPA repositories write/read PostgreSQL; Flyway ensures schema version.",
+            "icon": "database"
+          },
+          {
+            "number": 5,
+            "title": "Response",
+            "description": "ResponseWrapper JSON returned; notifications/email may fire asynchronously in-thread.",
+            "icon": "reply"
+          }
+        ],
+        "eventFlow": [
+          {
+            "number": 1,
+            "title": "Expense state change",
+            "description": "Submit, approve, or reject updates expense row and may create notification row.",
+            "icon": "zap"
+          },
+          {
+            "number": 2,
+            "title": "NotificationService",
+            "description": "builds in-app notification for affected user.",
+            "icon": "bell"
+          },
+          {
+            "number": 3,
+            "title": "Email (optional)",
+            "description": "EmailService can send templated mail when SMTP configured.",
+            "icon": "mail"
+          },
+          {
+            "number": 4,
+            "title": "Reimbursement",
+            "description": "Finance creates reimbursement record linked to expense.",
+            "icon": "wallet"
+          }
+        ]
+      },
+      "techDecisions": [
+        {
+          "title": "Spring Boot monolith",
+          "problem": "Small team needs one deployable unit with clear modules, not microservice overhead.",
+          "solution": "Single Gradle project with controller/service/repository packages.",
+          "alternatives": [
+            "Microservices per domain",
+            "Serverless functions"
+          ],
+          "outcome": "Faster iteration; Docker one-jar deploy.",
+          "icon": "layers"
+        },
+        {
+          "title": "PostgreSQL + Flyway",
+          "problem": "Relational expense data with FK integrity and audit fields.",
+          "solution": "PostgreSQL with versioned SQL migrations instead of ddl-auto in prod.",
+          "alternatives": [
+            "H2 only (tests)",
+            "MongoDB documents"
+          ],
+          "outcome": "Predictable schema; demo seed in V2 migration.",
+          "icon": "database"
+        },
+        {
+          "title": "JWT (OAuth2 resource server)",
+          "problem": "SPA/mobile clients need stateless auth across instances.",
+          "solution": "Encode roles in JWT; validate with JwtDecoder per request.",
+          "alternatives": [
+            "Session cookies",
+            "API keys only"
+          ],
+          "outcome": "Works with horizontal scaling; no refresh token flow yet.",
+          "icon": "key"
+        },
+        {
+          "title": "In-process rate limiting",
+          "problem": "Basic abuse protection without Redis infrastructure.",
+          "solution": "Bucket4j bucket in RateLimitInterceptor for all paths.",
+          "alternatives": [
+            "Redis-backed limits",
+            "API gateway throttling"
+          ],
+          "outcome": "Simple for single instance; per-instance counters when scaled out.",
+          "icon": "gauge"
+        }
+      ]
+    },
+    "codeShowcase": {
+      "codeExamples": [
+        {
+          "id": "jwt-generation",
+          "title": "JWT issuance with role claims",
+          "description": "JWTService encodes subject (email) and roles list for Spring Security resource server consumption.",
+          "category": "security",
+          "duration": "3 min read",
+          "views": 0,
+          "tags": [
+            "jwt",
+            "security",
+            "auth"
+          ],
+          "files": [
+            {
+              "name": "JWTService.java",
+              "path": "src/main/java/.../service/JWTService.java",
+              "language": "java",
+              "highlighted": true,
+              "explanation": "Tokens include issuer, expiry, subject, and roles claim stripped of ROLE_ prefix in authorities mapping.",
+              "content": "public String generateToken(UserDetails userDetails) {\n    Instant now = Instant.now();\n    JwtClaimsSet claims = JwtClaimsSet.builder()\n            .issuer(\"alexisTrejo.expenses.tracking\")\n            .issuedAt(now)\n            .expiresAt(now.plusMillis(jwtExpirationMs))\n            .subject(userDetails.getUsername())\n            .claim(\"roles\", userDetails.getAuthorities().stream()\n                    .map(auth -> auth.getAuthority().replace(\"ROLE_\", \"\"))\n                    .toList())\n            .build();\n    return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();\n}\n"
+            }
+          ]
+        },
+        {
+          "id": "security-filter-chain",
+          "title": "Path-based security rules",
+          "description": "SecurityConfig declares public auth/swagger routes and role requirements per API prefix.",
+          "category": "security",
+          "duration": "4 min read",
+          "views": 0,
+          "tags": [
+            "spring-security",
+            "rbac"
+          ],
+          "files": [
+            {
+              "name": "SecurityConfig.java",
+              "path": "src/main/java/.../config/security/SecurityConfig.java",
+              "language": "java",
+              "highlighted": true,
+              "explanation": "Note FINANCIAL vs Role.FINANCE mismatch for reimbursement routes.",
+              "content": ".authorizeHttpRequests(auth -> auth\n    .requestMatchers(\"/v1/api/auth/**\", \"/swagger-ui/**\", \"/api-docs/**\").permitAll()\n    .requestMatchers(\"/v1/api/admin/**\").hasRole(\"ADMIN\")\n    .requestMatchers(\"/v1/api/employees/**\").authenticated()\n    .requestMatchers(\"/v1/api/manager/**\").hasAnyRole(\"MANAGER\", \"ADMIN\")\n    .requestMatchers(\"/v1/api/reimbursements/**\").hasAnyRole(\"MANAGER\", \"FINANCIAL\")\n    .anyRequest().authenticated())\n.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt\n    .decoder(jwtDecoder)\n    .jwtAuthenticationConverter(jwtAuthenticationConverter())));\n"
+            }
+          ]
+        },
+        {
+          "id": "response-wrapper",
+          "title": "Standard API response envelope",
+          "description": "ResponseWrapper factory methods keep HTTP payloads consistent for clients.",
+          "category": "api",
+          "duration": "2 min read",
+          "views": 0,
+          "tags": [
+            "api-design",
+            "json"
+          ],
+          "files": [
+            {
+              "name": "ResponseWrapper.java",
+              "path": "src/main/java/.../shared/ResponseWrapper.java",
+              "language": "java",
+              "highlighted": true,
+              "explanation": "Fields: success, data, message, code, time_stamp.",
+              "content": "public static <T> ResponseWrapper<T> success(T data, String message) {\n    return new ResponseWrapper<>(\n            true,\n            data,\n            message,\n            HttpStatus.OK.value(),\n            LocalDateTime.now()\n    );\n}\n"
+            }
+          ]
+        },
+        {
+          "id": "rate-limit-interceptor",
+          "title": "Global Bucket4j rate limiting",
+          "description": "Every request consumes one token; exhaustion returns 429 JSON.",
+          "category": "performance",
+          "duration": "3 min read",
+          "views": 0,
+          "tags": [
+            "bucket4j",
+            "interceptor"
+          ],
+          "files": [
+            {
+              "name": "RateLimitInterceptor.java",
+              "path": "src/main/java/.../config/rateLimiter/RateLimitInterceptor.java",
+              "language": "java",
+              "highlighted": true,
+              "explanation": "Adds X-Rate-Limit-Remaining or X-Rate-Limit-Retry-After-Seconds headers.",
+              "content": "ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);\nif (!probe.isConsumed()) {\n    response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());\n    response.getWriter().write(\n        \"{ \\\"error\\\": \\\"You have exhausted your API Request Quota\\\", ... }\");\n    return false;\n}\n"
+            }
+          ]
+        },
+        {
+          "id": "employee-expense-create",
+          "title": "Submit expense with validation",
+          "description": "EmployeeExpenseController validates DTO, creates PENDING expense, notifies stakeholders.",
+          "category": "api",
+          "duration": "4 min read",
+          "views": 0,
+          "tags": [
+            "expenses",
+            "workflow"
+          ],
+          "files": [
+            {
+              "name": "EmployeeExpenseController.java",
+              "path": "src/main/java/.../controller/EmployeeExpenseController.java",
+              "language": "java",
+              "highlighted": true,
+              "explanation": "Email taken from JWT via JWTService.getEmailFromRequest.",
+              "content": "@PostMapping\npublic ResponseEntity<ResponseWrapper<ExpenseDTO>> requestExpense(\n        @Valid @RequestBody ExpenseInsertDTO insertDTO,\n        HttpServletRequest request) {\n    String email = jwtService.getEmailFromRequest(request);\n    Result<Void> validationResult = expenseService.validate(insertDTO);\n    if (!validationResult.isSuccess()) {\n        return ResponseEntity.status(HttpStatus.BAD_REQUEST)\n                .body(ResponseWrapper.badRequest(validationResult.getErrorMessage()));\n    }\n    ExpenseDTO expenseDTO = expenseService.createExpense(insertDTO, email, ExpenseStatus.PENDING);\n    notificationService.sendNotificationFromExpense(expenseDTO);\n    return ResponseEntity.status(HttpStatus.CREATED)\n            .body(ResponseWrapper.created(expenseDTO, \"Expense\"));\n}\n"
+            }
+          ]
+        }
+      ]
+    },
+    "features": {
+      "features": [
+        {
+          "id": "jwt-auth-rbac",
+          "title": "JWT authentication & role-based access",
+          "description": "OAuth2 resource server with JWT decoder; roles claim mapped to Spring authorities (ROLE_EMPLOYEE, ROLE_MANAGER, ROLE_ADMIN, ROLE_FINANCE). Auth endpoints issue tokens on register/login.",
+          "icon": "shield-lock",
+          "category": "authentication",
+          "status": "stable",
+          "highlights": [
+            "Public /v1/api/auth/login and register-employee/manager",
+            "Admin-only register-admin with @PreAuthorize",
+            "Stateless session; CSRF disabled for API usage"
+          ],
+          "techStack": [
+            "Spring Security 6",
+            "nimbus-jose-jwt",
+            "JWTService"
+          ],
+          "metrics": [
+            {
+              "label": "Token TTL default",
+              "value": "24h",
+              "trend": "stable",
+              "icon": "clock"
+            }
+          ],
+          "codeSnippet": {
+            "language": "java",
+            "filename": "config/security/SecurityConfig.java",
+            "code": ".requestMatchers(\"/v1/api/auth/**\", \"/swagger-ui/**\", \"/api-docs/**\").permitAll()\n.requestMatchers(\"/v1/api/admin/**\").hasRole(\"ADMIN\")\n.requestMatchers(\"/v1/api/manager/**\").hasAnyRole(\"MANAGER\", \"ADMIN\")\n.requestMatchers(\"/v1/api/reimbursements/**\").hasAnyRole(\"MANAGER\", \"FINANCIAL\")\n"
+          }
+        },
+        {
+          "id": "expense-workflow",
+          "title": "Expense submission & approval",
+          "description": "Employees create PENDING expenses; managers approve, reject with reason, or soft-delete; status transitions trigger notifications.",
+          "icon": "receipt",
+          "category": "api",
+          "status": "stable",
+          "highlights": [
+            "Categories: TRAVEL, FOOD, OFFICE_SUPPLIES, SOFTWARE_LICENSES, ENTERTAINMENT",
+            "Statuses: PENDING, APPROVED, REJECTED, REIMBURSED, MISCELLANEOUS",
+            "Paginated manager views by status and user"
+          ],
+          "techStack": [
+            "ExpenseService",
+            "ExpenseController / EmployeeExpenseController",
+            "Flyway schema"
+          ],
+          "metrics": [
+            {
+              "label": "Default page size",
+              "value": "10",
+              "trend": "stable",
+              "icon": "list"
+            }
+          ]
+        },
+        {
+          "id": "attachments",
+          "title": "Receipt attachments",
+          "description": "Multipart uploads stored via FileHandler to configurable FILE_UPLOAD_DIR; metadata in expense_attachments table.",
+          "icon": "paperclip",
+          "category": "integration",
+          "status": "stable",
+          "highlights": [
+            "POST /v1/api/employees/expenses/{id}/attachments",
+            "commons-io for file handling",
+            "Cascade delete on expense_attachments FK"
+          ],
+          "techStack": [
+            "FileHandler",
+            "AttachmentService",
+            "commons-io"
+          ]
+        },
+        {
+          "id": "reimbursements",
+          "title": "Reimbursement processing",
+          "description": "Finance/manager roles record reimbursements against approved expenses with processed_by audit.",
+          "icon": "wallet",
+          "category": "api",
+          "status": "beta",
+          "highlights": [
+            "POST /v1/api/reimbursements",
+            "Links expense_id and processed_by user",
+            "Notification on create"
+          ],
+          "techStack": [
+            "ReimbursementService",
+            "ReimbursementRepository"
+          ],
+          "metrics": [
+            {
+              "label": "Authorized roles",
+              "value": "MANAGER + FINANCIAL*",
+              "trend": "stable",
+              "icon": "users"
+            }
+          ]
+        },
+        {
+          "id": "notifications-email",
+          "title": "In-app notifications & email",
+          "description": "Notification entities for user events; EmailService + Thymeleaf templates for outbound mail when configured.",
+          "icon": "bell",
+          "category": "messaging",
+          "status": "beta",
+          "highlights": [
+            "CRUD-style notification HTTP API",
+            "sendNotificationFromExpense on approve/reject/submit",
+            "SMTP settings from .env"
+          ],
+          "techStack": [
+            "NotificationService",
+            "spring-boot-starter-mail",
+            "Thymeleaf"
+          ]
+        },
+        {
+          "id": "rate-limiting",
+          "title": "Global API rate limiting",
+          "description": "Bucket4j classic bucket applied to all routes through WebMvc interceptor; returns 429 with Retry-After style header.",
+          "icon": "speedometer",
+          "category": "performance",
+          "status": "stable",
+          "highlights": [
+            "20 token capacity, 10 refill per minute",
+            "X-Rate-Limit-Remaining response header",
+            "JSON error body on quota exhaustion"
+          ],
+          "techStack": [
+            "bucket4j-core",
+            "RateLimitInterceptor"
+          ],
+          "codeSnippet": {
+            "language": "java",
+            "filename": "config/rateLimiter/RateLimiterConfig.java",
+            "code": "Refill refill = Refill.intervally(10, Duration.ofMinutes(1));\nBandwidth limit = Bandwidth.classic(20, refill);\nreturn Bucket.builder().addLimit(limit).build();\n"
+          }
+        },
+        {
+          "id": "flyway-migrations",
+          "title": "Database migrations",
+          "description": "Flyway manages PostgreSQL schema; V1 creates users, expenses, attachments, reimbursements, notifications; V2 seeds demo data.",
+          "icon": "database",
+          "category": "database",
+          "status": "stable",
+          "highlights": [
+            "spring.flyway.enabled=true",
+            "CHECK constraints on category and status",
+            "Soft delete via expenses.deleted_at"
+          ],
+          "techStack": [
+            "Flyway",
+            "PostgreSQL 15"
+          ]
+        },
+        {
+          "id": "openapi-docs",
+          "title": "OpenAPI & Swagger UI",
+          "description": "springdoc-openapi exposes /api-docs and /swagger-ui.html for interactive testing.",
+          "icon": "book",
+          "category": "api",
+          "status": "stable",
+          "highlights": [
+            "@Operation annotations on controllers",
+            "OpenApiConfig metadata (title Expense Tracking API v1.0)",
+            "Public access in SecurityConfig"
+          ],
+          "techStack": [
+            "springdoc-openapi-starter-webmvc-ui"
+          ],
+          "metrics": [
+            {
+              "label": "Documented version",
+              "value": "1.0",
+              "trend": "stable",
+              "icon": "tag"
+            }
+          ]
+        },
+        {
+          "id": "docker-deploy",
+          "title": "Docker & Compose profiles",
+          "description": "Gradle multi-stage build producing boot JAR; local compose runs app + Postgres; prod compose runs app only against external DB.",
+          "icon": "docker",
+          "category": "integration",
+          "status": "stable",
+          "highlights": [
+            "docker/Dockerfile — JDK 17 build, Temurin 17 JRE runtime",
+            "docker-compose.local.yml — Postgres healthcheck on 5431",
+            "docker-compose.prod.yml — external DB_HOST"
+          ],
+          "techStack": [
+            "Docker",
+            "docker/README.md"
+          ]
+        }
+      ]
+    },
+    "infrastructure": {
+      "metrics": [
+        {
+          "label": "API port",
+          "value": "8080",
+          "icon": "server",
+          "description": "server.port in application.properties; exposed in Docker compose"
+        },
+        {
+          "label": "Local Postgres host port",
+          "value": "5431",
+          "icon": "database",
+          "description": "Maps container 5432 for host access during Gradle bootRun"
+        },
+        {
+          "label": "Java runtime",
+          "value": "17",
+          "icon": "cpu",
+          "description": "Eclipse Temurin JRE in production image"
+        },
+        {
+          "label": "Flyway migrations",
+          "value": "2",
+          "icon": "migrate",
+          "description": "V1 schema + V2 demo seed"
+        }
+      ],
+      "cloudServices": [
+        {
+          "name": "PostgreSQL (managed or self-hosted)",
+          "purpose": "Primary datastore for users, expenses, reimbursements, notifications, admin settings",
+          "icon": "database",
+          "cost": "~$0 local Docker — ~$15–50/mo managed (placeholder)"
+        },
+        {
+          "name": "SMTP provider",
+          "purpose": "Transactional email for notifications (MAIL_* in .env)",
+          "icon": "mail",
+          "cost": "Variable / free tier on many providers"
+        },
+        {
+          "name": "Railway / Render / Fly.io (optional)",
+          "purpose": "PaaS deploy using docker/Dockerfile and injected env vars per docker/README.md",
+          "icon": "cloud",
+          "cost": "Platform-dependent (placeholder)"
+        },
+        {
+          "name": "Local filesystem",
+          "purpose": "FILE_UPLOAD_DIR for receipt attachments (not S3 yet)",
+          "icon": "folder",
+          "cost": "$0"
+        },
+        {
+          "name": "GitHub Actions (placeholder)",
+          "purpose": "CI build and test — not configured in repo yet",
+          "icon": "ci",
+          "cost": "Free for public repos"
+        }
+      ],
+      "deploymentLayers": [
+        {
+          "name": "Clients",
+          "color": "#4F46E5",
+          "components": [
+            {
+              "name": "Employee web / mobile app",
+              "icon": "smartphone",
+              "description": "Submits expenses and uploads receipts (future or separate frontend)"
+            },
+            {
+              "name": "Manager dashboard",
+              "icon": "layout",
+              "description": "Approves/rejects queue, views summaries"
+            },
+            {
+              "name": "Admin console",
+              "icon": "settings",
+              "description": "Settings and dashboard stats"
+            }
+          ]
+        },
+        {
+          "name": "Application runtime",
+          "color": "#059669",
+          "components": [
+            {
+              "name": "Spring Boot JAR",
+              "icon": "coffee",
+              "description": "company-expenses-api boot jar on port 8080"
+            },
+            {
+              "name": "Docker container (app)",
+              "icon": "docker",
+              "description": "Built from docker/Dockerfile via compose"
+            },
+            {
+              "name": "Bucket4j interceptor",
+              "icon": "gauge",
+              "description": "Global rate limit on incoming HTTP"
+            }
+          ]
+        },
+        {
+          "name": "Data layer",
+          "color": "#DC2626",
+          "components": [
+            {
+              "name": "PostgreSQL 15",
+              "icon": "database",
+              "description": "Local container in compose.local; external host in prod"
+            },
+            {
+              "name": "Flyway",
+              "icon": "migrate",
+              "description": "Schema versioning at startup"
+            },
+            {
+              "name": "Upload volume",
+              "icon": "folder",
+              "description": "Host path FILE_UPLOAD_DIR for attachments"
+            }
+          ]
+        },
+        {
+          "name": "Integrations",
+          "color": "#D97706",
+          "components": [
+            {
+              "name": "SMTP",
+              "icon": "mail",
+              "description": "spring.mail.* from environment"
+            },
+            {
+              "name": "OpenAPI / Swagger",
+              "icon": "book",
+              "description": "Public documentation endpoints"
+            }
+          ]
+        }
+      ],
+      "dockerFiles": [
+        {
+          "service": "docker-compose.local.yml",
+          "description": "Local development: Spring Boot app + PostgreSQL 15 with healthcheck and named volume.",
+          "content": "services:\n  app:\n    build:\n      context: ..\n      dockerfile: docker/Dockerfile\n    ports:\n      - \"8080:8080\"\n    depends_on:\n      db:\n        condition: service_healthy\n    env_file:\n      - ../.env\n    environment:\n      DB_HOST: db\n      DB_PORT: \"5432\"\n  db:\n    image: postgres:15\n    ports:\n      - \"5431:5432\"\nvolumes:\n  postgres_data:\n"
+        },
+        {
+          "service": "docker-compose.prod.yml",
+          "description": "Production profile: app container only; DB_HOST points to external Postgres.",
+          "content": "services:\n  app:\n    build:\n      context: ..\n      dockerfile: docker/Dockerfile\n    ports:\n      - \"8080:8080\"\n    env_file:\n      - ../.env\n    restart: unless-stopped\n"
+        },
+        {
+          "service": "Dockerfile",
+          "description": "Multi-stage: Gradle 8.5 JDK 17 build (skip tests), Temurin 17 JRE runs app.jar.",
+          "content": "FROM gradle:8.5-jdk17 AS build\nWORKDIR /app\nCOPY . .\nRUN gradle build -x test\nFROM eclipse-temurin:17-jre-jammy\nCOPY --from=build /app/build/libs/*.jar app.jar\nEXPOSE 8080\nENTRYPOINT [\"java\", \"-jar\", \"app.jar\"]\n"
+        }
+      ]
+    },
+    "apiSchema": {
+      "type": "REST",
+      "httpEndpoints": [
+        {
+          "id": "openapi-docs",
+          "method": "GET",
+          "urlPath": "/swagger-ui.html",
+          "summary": "Swagger UI",
+          "description": "Interactive OpenAPI documentation (springdoc). Also available under /swagger-ui/** and /v3/api-docs/**.",
+          "tags": [
+            "service"
+          ],
+          "authenticated": false,
+          "rateLimit": "Global — 20 capacity, 10 tokens/min refill (Bucket4j on /**)",
+          "responses": [
+            {
+              "status": 200,
+              "description": "HTML Swagger UI",
+              "example": null
+            }
+          ]
+        },
+        {
+          "id": "openapi-json",
+          "method": "GET",
+          "urlPath": "/api-docs",
+          "summary": "OpenAPI JSON",
+          "description": "Machine-readable API description (springdoc.api-docs.path).",
+          "tags": [
+            "service"
+          ],
+          "authenticated": false,
+          "rateLimit": "Global — 20 capacity, 10 tokens/min refill",
+          "responses": [
+            {
+              "status": 200,
+              "description": "OpenAPI 3 document",
+              "example": {
+                "openapi": "3.0.1",
+                "info": {
+                  "title": "Expense Tracking API",
+                  "version": "1.0"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-login",
+          "method": "POST",
+          "urlPath": "/v1/api/auth/login",
+          "summary": "Login and obtain JWT",
+          "description": "Validates email/password and returns a JWT string in ResponseWrapper.data.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": false,
+          "rateLimit": "Global Bucket4j (per-request token)",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "email": "string (required)",
+              "password": "string (required)"
+            },
+            "example": {
+              "email": "employee@company.example.com",
+              "password": "SecurePass123!"
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Login successful",
+              "example": {
+                "success": true,
+                "data": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
+                "message": "Login Successfully Completed",
+                "code": 200,
+                "time_stamp": "2026-06-03T10:00:00"
+              }
+            },
+            {
+              "status": 400,
+              "description": "Invalid credentials",
+              "example": {
+                "success": false,
+                "message": "Invalid credentials",
+                "code": 400
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-register-employee",
+          "method": "POST",
+          "urlPath": "/v1/api/auth/register-employee",
+          "summary": "Register employee",
+          "description": "Creates a user with role EMPLOYEE and returns JWT on success.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": false,
+          "rateLimit": "Global Bucket4j",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "email": "string",
+              "password": "string",
+              "firstName": "string",
+              "lastName": "string",
+              "department": "string"
+            },
+            "example": {
+              "email": "new.employee@company.example.com",
+              "password": "SecurePass123!",
+              "firstName": "Alex",
+              "lastName": "Trejo",
+              "department": "Engineering"
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Registered",
+              "example": {
+                "success": true,
+                "message": "user With Role [EMPLOYEE] Successfully Registered"
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-register-manager",
+          "method": "POST",
+          "urlPath": "/v1/api/auth/register-manager",
+          "summary": "Register manager",
+          "description": "Creates a user with role MANAGER and returns JWT.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": false,
+          "rateLimit": "Global Bucket4j",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "email": "string",
+              "password": "string"
+            },
+            "example": {
+              "email": "manager@company.example.com",
+              "password": "SecurePass123!"
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Registered",
+              "example": {
+                "success": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-register-admin",
+          "method": "POST",
+          "urlPath": "/v1/api/auth/register-admin",
+          "summary": "Register admin (admin only)",
+          "description": "Requires authenticated ADMIN (`@PreAuthorize`). Creates another ADMIN user.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "email": "string",
+              "password": "string"
+            },
+            "example": {
+              "email": "admin2@company.example.com",
+              "password": "SecurePass123!"
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Admin created",
+              "example": {
+                "success": true
+              }
+            },
+            {
+              "status": 403,
+              "description": "Forbidden for non-admin callers",
+              "example": {
+                "success": false,
+                "code": 403
+              }
+            }
+          ]
+        },
+        {
+          "id": "users-my-profile",
+          "method": "GET",
+          "urlPath": "/v1/api/users/my-profile",
+          "summary": "Get authenticated user profile",
+          "description": "Resolves user from JWT subject (email) via JWTService.",
+          "tags": [
+            "users"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Profile returned",
+              "example": {
+                "success": true,
+                "data": {
+                  "email": "employee@company.example.com",
+                  "firstName": "Alex",
+                  "lastName": "Trejo",
+                  "role": "EMPLOYEE",
+                  "department": "Engineering"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "employee-expenses-list",
+          "method": "GET",
+          "urlPath": "/v1/api/employees/expenses/by-user/{userId}",
+          "summary": "List my expenses (paginated)",
+          "description": "Uses JWT email from request; path userId is present in mapping but listing is scoped by token subject.",
+          "tags": [
+            "expenses"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "type": "long",
+              "required": true,
+              "description": "Path segment (implementation uses JWT email)",
+              "example": 1
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer",
+              "required": false,
+              "description": "Page index (default 0)",
+              "example": 0
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "type": "integer",
+              "required": false,
+              "description": "Page size (default 10)",
+              "example": 10
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Page of ExpenseDTO",
+              "example": {
+                "success": true,
+                "data": {
+                  "content": [],
+                  "totalElements": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "employee-expenses-create",
+          "method": "POST",
+          "urlPath": "/v1/api/employees/expenses",
+          "summary": "Submit new expense",
+          "description": "Creates expense in PENDING status for authenticated employee; triggers notification.",
+          "tags": [
+            "expenses"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "amount": "number",
+              "category": "TRAVEL | FOOD | OFFICE_SUPPLIES | SOFTWARE_LICENSES | ENTERTAINMENT",
+              "description": "string",
+              "date": "date",
+              "receiptUrl": "string"
+            },
+            "example": {
+              "amount": 42.5,
+              "category": "TRAVEL",
+              "description": "Client visit taxi",
+              "date": "2026-06-01",
+              "receiptUrl": "https://example.com/receipt.pdf"
+            }
+          },
+          "responses": [
+            {
+              "status": 201,
+              "description": "Expense created",
+              "example": {
+                "success": true,
+                "data": {
+                  "id": 10,
+                  "status": "PENDING"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "employee-expense-attachment-upload",
+          "method": "POST",
+          "urlPath": "/v1/api/employees/expenses/{expenseId}/attachments",
+          "summary": "Upload expense attachment",
+          "description": "Multipart file upload; stores file via FileHandler and links Attachment entity.",
+          "tags": [
+            "expenses"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "expenseId",
+              "in": "path",
+              "type": "long",
+              "required": true,
+              "description": "Expense ID",
+              "example": 10
+            }
+          ],
+          "requestBody": {
+            "contentType": "multipart/form-data",
+            "schema": {
+              "file": "binary (required)"
+            },
+            "example": {
+              "file": "(binary)"
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Attachment added",
+              "example": {
+                "success": true,
+                "message": "Attachment Successfully Added to Expense With Id [10]"
+              }
+            }
+          ]
+        },
+        {
+          "id": "employee-expense-attachments-list",
+          "method": "GET",
+          "urlPath": "/v1/api/employees/expenses/{expenseId}/attachments",
+          "summary": "List attachments for expense",
+          "description": "Returns list of AttachmentDTO for the expense.",
+          "tags": [
+            "expenses"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "expenseId",
+              "in": "path",
+              "type": "long",
+              "required": true,
+              "description": "Expense ID",
+              "example": 10
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Attachments list",
+              "example": {
+                "success": true,
+                "data": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "manager-expense-by-id",
+          "method": "GET",
+          "urlPath": "/v1/api/manager/expenses/{expenseId}",
+          "summary": "Get expense by ID",
+          "description": "Requires MANAGER or ADMIN role.",
+          "tags": [
+            "manager"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "expenseId",
+              "in": "path",
+              "type": "long",
+              "required": true,
+              "description": "Expense ID",
+              "example": 10
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "ExpenseDTO",
+              "example": {
+                "success": true,
+                "data": {
+                  "id": 10,
+                  "status": "PENDING"
+                }
+              }
+            },
+            {
+              "status": 404,
+              "description": "Not found",
+              "example": {
+                "success": false,
+                "code": 404
+              }
+            }
+          ]
+        },
+        {
+          "id": "manager-expenses-by-user",
+          "method": "GET",
+          "urlPath": "/v1/api/manager/expenses/by-user/{userId}",
+          "summary": "List expenses by user email",
+          "description": "Paginated expenses for a user. Note: path variable is userId but handler binds email — verify client usage.",
+          "tags": [
+            "manager"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer",
+              "required": false,
+              "description": "Page index",
+              "example": 0
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "type": "integer",
+              "required": false,
+              "description": "Page size",
+              "example": 10
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Page of expenses",
+              "example": {
+                "success": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "manager-expenses-by-status",
+          "method": "GET",
+          "urlPath": "/v1/api/manager/expenses/by-status",
+          "summary": "List expenses by status",
+          "description": "Filters by ExpenseStatus; defaults to PENDING if status unknown. Sorts by createdAt ASC/DESC.",
+          "tags": [
+            "manager"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "status",
+              "in": "query",
+              "type": "string",
+              "required": false,
+              "description": "PENDING | APPROVED | REJECTED | REIMBURSED | MISCELLANEOUS",
+              "example": "PENDING"
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer",
+              "required": false,
+              "description": "Page index",
+              "example": 0
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "type": "integer",
+              "required": false,
+              "description": "Page size",
+              "example": 10
+            },
+            {
+              "name": "isSortedASC",
+              "in": "query",
+              "type": "boolean",
+              "required": false,
+              "description": "Sort direction on createdAt",
+              "example": true
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Filtered page",
+              "example": {
+                "success": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "manager-expense-summary",
+          "method": "GET",
+          "urlPath": "/v1/api/manager/expenses/s",
+          "summary": "Expense summary by date range",
+          "description": "Returns ExpenseSummary for optional startDate/endDate; defaults to current calendar month.",
+          "tags": [
+            "manager"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "startDate",
+              "in": "query",
+              "type": "date-time",
+              "required": false,
+              "description": "Range start",
+              "example": "2026-06-01T00:00:00"
+            },
+            {
+              "name": "endDate",
+              "in": "query",
+              "type": "date-time",
+              "required": false,
+              "description": "Range end",
+              "example": "2026-06-30T23:59:59"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Summary aggregates",
+              "example": {
+                "success": true,
+                "data": {
+                  "totalAmount": 1250,
+                  "summaryDateRange": "2026-06-01 to 2026-06-30"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "manager-expense-approve",
+          "method": "PUT",
+          "urlPath": "/v1/api/manager/expenses/{expenseId}/approve",
+          "summary": "Approve expense",
+          "description": "Sets approved status; records approver email from JWT. Mapping in code may be missing slash before {expenseId} — clients should test actual path.",
+          "tags": [
+            "manager"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "expenseId",
+              "in": "path",
+              "type": "long",
+              "required": true,
+              "description": "Expense ID",
+              "example": 10
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Approved",
+              "example": {
+                "success": true,
+                "message": "Expense With Id 10 Successfully Approved"
+              }
+            }
+          ]
+        },
+        {
+          "id": "manager-expense-reject",
+          "method": "PUT",
+          "urlPath": "/v1/api/manager/expenses/{expenseId}/reject",
+          "summary": "Reject expense",
+          "description": "Requires ExpenseRejectDTO body with expenseId and rejection reason.",
+          "tags": [
+            "manager"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "expenseId": "long",
+              "rejectionReason": "string"
+            },
+            "example": {
+              "expenseId": 10,
+              "rejectionReason": "Missing itemized receipt"
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Rejected",
+              "example": {
+                "success": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "manager-expense-delete",
+          "method": "DELETE",
+          "urlPath": "/v1/api/manager/expenses/{expenseId}",
+          "summary": "Soft delete expense",
+          "description": "Sets deleted_at on expense record.",
+          "tags": [
+            "manager"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "expenseId",
+              "in": "path",
+              "type": "long",
+              "required": true,
+              "description": "Expense ID",
+              "example": 10
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Deleted",
+              "example": {
+                "success": true,
+                "message": "Expense deleted successfully"
+              }
+            }
+          ]
+        },
+        {
+          "id": "reimbursements-by-user",
+          "method": "GET",
+          "urlPath": "/v1/api/reimbursements/user/{userId}",
+          "summary": "List reimbursements for user",
+          "description": "Requires MANAGER or FINANCE role (see SecurityConfig vs Role enum alignment).",
+          "tags": [
+            "reimbursements"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "type": "long",
+              "required": true,
+              "description": "User ID",
+              "example": 1
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer",
+              "required": false,
+              "description": "Page index",
+              "example": 0
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "type": "integer",
+              "required": false,
+              "description": "Page size",
+              "example": 10
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Page of ReimbursementDTO",
+              "example": {
+                "success": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "reimbursements-by-id",
+          "method": "GET",
+          "urlPath": "/v1/api/reimbursements/{reimbursementId}",
+          "summary": "Get reimbursement by ID",
+          "description": "Single reimbursement lookup.",
+          "tags": [
+            "reimbursements"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "reimbursementId",
+              "in": "path",
+              "type": "long",
+              "required": true,
+              "description": "Reimbursement ID",
+              "example": 5
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "ReimbursementDTO",
+              "example": {
+                "success": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "reimbursements-create",
+          "method": "POST",
+          "urlPath": "/v1/api/reimbursements",
+          "summary": "Create reimbursement",
+          "description": "Links reimbursement to expense; processed_by from JWT email.",
+          "tags": [
+            "reimbursements"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "expenseId": "long",
+              "reimbursementDate": "date"
+            },
+            "example": {
+              "expenseId": 10,
+              "reimbursementDate": "2026-06-15"
+            }
+          },
+          "responses": [
+            {
+              "status": 201,
+              "description": "Created",
+              "example": {
+                "success": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "notifications-by-id",
+          "method": "GET",
+          "urlPath": "/v1/api/notifications/{notificationId}",
+          "summary": "Get notification",
+          "description": "Authenticated users (any role with valid JWT).",
+          "tags": [
+            "notifications"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "notificationId",
+              "in": "path",
+              "type": "long",
+              "required": true,
+              "description": "Notification ID",
+              "example": 1
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "NotificationDTO",
+              "example": {
+                "success": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "notifications-by-user",
+          "method": "GET",
+          "urlPath": "/v1/api/notifications/by-user/{userId}",
+          "summary": "List notifications for user",
+          "description": "Paginated notifications.",
+          "tags": [
+            "notifications"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "type": "long",
+              "required": true,
+              "description": "User ID",
+              "example": 1
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Page of notifications",
+              "example": {
+                "success": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "notifications-create",
+          "method": "POST",
+          "urlPath": "/v1/api/notifications",
+          "summary": "Create notification",
+          "description": "Manual notification insert (also used internally from expense events).",
+          "tags": [
+            "notifications"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "userId": "long",
+              "type": "string",
+              "message": "string"
+            },
+            "example": {
+              "userId": 1,
+              "type": "EXPENSE_APPROVED",
+              "message": "Your expense was approved"
+            }
+          },
+          "responses": [
+            {
+              "status": 201,
+              "description": "Created",
+              "example": {
+                "success": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "notifications-mark-read",
+          "method": "PUT",
+          "urlPath": "/v1/api/notifications/set-as-read/{notificationId}",
+          "summary": "Mark notification as read",
+          "description": "Updates read flag on notification.",
+          "tags": [
+            "notifications"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "parameters": [
+            {
+              "name": "notificationId",
+              "in": "path",
+              "type": "long",
+              "required": true,
+              "description": "Notification ID",
+              "example": 1
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Marked read",
+              "example": {
+                "success": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "admin-dashboard",
+          "method": "GET",
+          "urlPath": "/v1/api/admin/dashboard",
+          "summary": "Admin dashboard",
+          "description": "Returns AdminDashboardDTO (stats). ADMIN role only.",
+          "tags": [
+            "admin"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Dashboard payload",
+              "example": {
+                "totalUsers": 12,
+                "pendingExpenses": 4
+              }
+            }
+          ]
+        },
+        {
+          "id": "admin-settings-get",
+          "method": "GET",
+          "urlPath": "/v1/api/admin/settings",
+          "summary": "Get company settings",
+          "description": "Current SettingsDTO from AdminService.",
+          "tags": [
+            "admin"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Settings",
+              "example": {
+                "success": true,
+                "data": {
+                  "companyName": "Acme Corp"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "admin-settings-update",
+          "method": "PUT",
+          "urlPath": "/v1/api/admin/settings",
+          "summary": "Update company settings",
+          "description": "Persists SettingsDTO.",
+          "tags": [
+            "admin"
+          ],
+          "authenticated": true,
+          "rateLimit": "Global Bucket4j",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "companyName": "string"
+            },
+            "example": {
+              "companyName": "Acme Corp"
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Updated",
+              "example": {
+                "success": true,
+                "message": "settings updated successfully"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

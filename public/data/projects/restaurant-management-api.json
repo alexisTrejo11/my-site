@@ -1,0 +1,1660 @@
+{
+  "projectId": "restaurant-management-api",
+  "featured": true,
+  "name": "Restaurant Management API",
+  "language": "Python",
+  "category": "backend",
+  "framework": "Django REST Framework",
+  "version": "1.0.0",
+  "repositoryUrl": "https://github.com/alexisTrejo11/restaurant-managemenet-api",
+  "liveDemoUrl": "https://{{YOUR_DEPLOYED_HOST}}/api/docs/",
+  "description": "Production REST API for restaurant operations — JWT auth, menu and stock, table seating, orders, payments with 16% VAT, and reservations. Deployed with AWS RDS PostgreSQL and Upstash Redis (via REDIS_URL).",
+  "techStack": [
+    "Django 5.1.2",
+    "Django REST Framework",
+    "PostgreSQL (AWS RDS)",
+    "Upstash Redis (django-redis)",
+    "SimpleJWT",
+    "drf-spectacular",
+    "django-filter",
+    "django-ratelimit",
+    "Docker",
+    "python-dotenv"
+  ],
+  "status": "deployed",
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2026-06-05T00:00:00.000Z",
+  "docs": {
+    "overview": {
+      "problemStatement": {
+        "problemTitle": "Disconnected restaurant operations",
+        "problemDescription": "Small and mid-size restaurants often track menus, table availability, orders, inventory, and payments in separate tools or spreadsheets. That leads to double-booked tables, stock overselling, inconsistent billing, and no single API for a POS or admin dashboard.",
+        "problemList": [
+          "Tables marked free while an active order is in progress",
+          "Menu changes not reflected consistently across ordering channels",
+          "Manual VAT and payment totals prone to error",
+          "Stock depletion discovered only after orders are placed",
+          "Reservation requests handled outside the order/table system"
+        ]
+      },
+      "solution": {
+        "solutionTitle": "One API for front-of-house and back-of-house",
+        "solutionList": [
+          {
+            "title": "JWT-authenticated staff workflows",
+            "description": "Signup, login, logout, and logout-all via SimpleJWT with standardized JSON responses and 8-hour access tokens."
+          },
+          {
+            "title": "Table-aware ordering",
+            "description": "Starting an order atomically marks the table unavailable; completing or cancelling releases it."
+          },
+          {
+            "title": "Menu with cache-backed categories",
+            "description": "Public dish browsing with Upstash Redis-cached category lists and 15-minute HTTP cache on dish detail."
+          },
+          {
+            "title": "Payments aligned to orders",
+            "description": "Payment records auto-created on order completion with 16% VAT via PaymentCalculatorService."
+          },
+          {
+            "title": "Reservations with auto table assignment",
+            "description": "Customer reservation requests validate date, party size (max 8), and assign a suitable table when possible."
+          },
+          {
+            "title": "Deployed cloud stack",
+            "description": "Dockerized Django API connected to AWS RDS PostgreSQL and Upstash Redis for production cache."
+          }
+        ]
+      },
+      "keyMetrics": {
+        "metricsTitle": "Platform snapshot",
+        "metricsList": [
+          "9 Django domain apps (tables, users, menu, orders, payments, stock, reservations, authorization, shared)",
+          "REST API v1 under /api/v1/",
+          "OpenAPI at /api/docs/, /api/schema/, /api/redoc/",
+          "Docker image Python 3.12 slim; docker-compose for local dev",
+          "DRF throttling 40/minute for anon and authenticated users",
+          "Redis cache timeout 600s default; menu categories cached 24h"
+        ]
+      },
+      "links": {
+        "github": "https://github.com/alexisTrejo11/restaurant-managemenet-api",
+        "demo": "https://{{YOUR_DEPLOYED_HOST}}/api/docs/",
+        "documentation": "https://{{YOUR_DEPLOYED_HOST}}/api/docs/",
+        "dockerHub": null
+      },
+      "mediaGallery": {
+        "title": "Restaurant Management API — product views",
+        "description": "Replace placeholder image URLs with Swagger UI screenshots or admin dashboard captures from your deployed instance.",
+        "items": [
+          {
+            "type": "image",
+            "url": "https://placehold.co/1200x630/1a1a2e/f5f5f5?text=Restaurant+Management+API",
+            "thumbnail": "https://placehold.co/400x210/1a1a2e/f5f5f5?text=Restaurant+API",
+            "title": "API cover",
+            "description": "Restaurant Management REST API for menus, orders, tables, and payments",
+            "alt": "Restaurant Management API branding placeholder",
+            "category": "screenshot"
+          },
+          {
+            "type": "image",
+            "url": "https://placehold.co/1200x800/316192/ffffff?text=Swagger+OpenAPI",
+            "thumbnail": "https://placehold.co/400x267/316192/ffffff?text=OpenAPI",
+            "title": "OpenAPI documentation",
+            "description": "Interactive API schema at /api/docs/ (drf-spectacular)",
+            "alt": "OpenAPI Swagger UI placeholder",
+            "category": "demo"
+          }
+        ]
+      },
+      "mediaItems": [
+        {
+          "type": "image",
+          "url": "https://placehold.co/800x500/37814A/ffffff?text=Architecture",
+          "thumbnail": "https://placehold.co/320x200/37814A/ffffff?text=Arch",
+          "title": "Service architecture",
+          "description": "Django API in Docker with AWS RDS PostgreSQL and Upstash Redis",
+          "alt": "Architecture diagram placeholder",
+          "category": "architecture"
+        },
+        {
+          "type": "image",
+          "url": "https://placehold.co/800x500/DC382D/ffffff?text=Docker+Deploy",
+          "thumbnail": "https://placehold.co/320x200/DC382D/ffffff?text=Docker",
+          "title": "Docker deployment",
+          "description": "docker-compose for local dev; production uses external RDS + Upstash",
+          "alt": "Docker deployment placeholder",
+          "category": "diagram"
+        }
+      ],
+      "metrics": [
+        {
+          "label": "Django apps",
+          "value": "9",
+          "description": "Domain apps plus shared cross-cutting utilities"
+        },
+        {
+          "label": "API version prefix",
+          "value": "/api/v1/",
+          "description": "All business endpoints under v1"
+        },
+        {
+          "label": "Access token TTL",
+          "value": "8 hours",
+          "description": "SimpleJWT HS256 signing with JWT_SECRET_KEY"
+        },
+        {
+          "label": "Default VAT rate",
+          "value": "16%",
+          "description": "PaymentCalculatorService.DEFAULT_VAT_RATE"
+        },
+        {
+          "label": "Max reservation party",
+          "value": "8",
+          "description": "MAX_CUSTOMERS_PER_RESERVATION constant"
+        }
+      ]
+    },
+    "architecture": {
+      "layers": [
+        {
+          "name": "Presentation (clients)",
+          "description": "POS terminals, admin dashboards, and mobile clients consuming the REST API.",
+          "color": "#6366F1",
+          "expanded": true,
+          "components": [
+            "Staff order management UI",
+            "Public menu browsing",
+            "Reservation booking form"
+          ],
+          "responsibilities": [
+            "Send JWT Bearer token on protected routes",
+            "Handle standardized ApiResponse JSON envelope"
+          ],
+          "technologies": [
+            "HTTPS",
+            "REST JSON",
+            "OpenAPI client (optional)"
+          ]
+        },
+        {
+          "name": "API layer",
+          "description": "Django 5.1 + DRF monolith exposing /api/v1/ with ViewSets, custom actions, and function-based views.",
+          "color": "#F59E0B",
+          "expanded": true,
+          "components": [
+            "config.urls — routing",
+            "apps/authorization — auth",
+            "apps/users — user admin",
+            "apps/menu — dishes",
+            "apps/tables — seating",
+            "apps/orders — order lifecycle",
+            "apps/payments — billing",
+            "apps/reservations — bookings",
+            "apps/stock — inventory",
+            "apps/shared — cross-cutting utilities"
+          ],
+          "responsibilities": [
+            "Business rules in service classes, not views",
+            "Unified exception handling and JSON responses",
+            "OpenAPI schema generation"
+          ],
+          "technologies": [
+            "Django REST Framework",
+            "drf-spectacular",
+            "django-filter"
+          ]
+        },
+        {
+          "name": "Data & cache",
+          "description": "Persistent storage on AWS RDS PostgreSQL and hot-path cache on Upstash Redis.",
+          "color": "#10B981",
+          "expanded": true,
+          "components": [
+            "PostgreSQL — AWS RDS (DJANGO_DB_* env vars)",
+            "Upstash Redis — django-redis via REDIS_URL (DB index 1)"
+          ],
+          "responsibilities": [
+            "Transactional order/table state in PostgreSQL",
+            "Menu category cache and rate-limit counters in Redis"
+          ],
+          "technologies": [
+            "psycopg2-binary",
+            "django-redis"
+          ]
+        },
+        {
+          "name": "Deployment",
+          "description": "Docker container running Django runserver (dev) or Gunicorn (production placeholder).",
+          "color": "#EF4444",
+          "expanded": false,
+          "components": [
+            "dockerfile — Python 3.12-slim",
+            "docker-compose.yml — local stack"
+          ],
+          "responsibilities": [
+            "Env-injected secrets (SECRET_KEY, JWT_SECRET_KEY, DB, REDIS)",
+            "Volume mount for live code reload in dev"
+          ],
+          "technologies": [
+            "Docker",
+            "Docker Compose"
+          ]
+        }
+      ],
+      "designPatterns": [
+        {
+          "title": "Service layer",
+          "emoji": "⚙️",
+          "description": "Domain logic encapsulated in *Service classes (OrderService, PaymentService, DishService, etc.) called from views.",
+          "category": "Structural",
+          "badge": "Core"
+        },
+        {
+          "title": "Result type",
+          "emoji": "✅",
+          "description": "Auth flows use Result success/failure objects instead of raising exceptions for expected failures.",
+          "category": "Behavioral",
+          "badge": "Auth"
+        },
+        {
+          "title": "Repository via ORM",
+          "emoji": "🗄️",
+          "description": "Django ORM models with ViewSets for CRUD; custom @action methods for domain transitions (complete, cancel).",
+          "category": "Data access",
+          "badge": "DRF"
+        },
+        {
+          "title": "Unified API response",
+          "emoji": "📦",
+          "description": "All responses wrapped in success/message/data/timestamp envelope via shared serializers.",
+          "category": "API design",
+          "badge": "Shared"
+        }
+      ],
+      "scalabilityStrategies": [
+        {
+          "title": "Redis for hot paths",
+          "description": "Offload menu category cache to Upstash Redis to reduce DB reads on public menu endpoints."
+        },
+        {
+          "title": "Stateless JWT auth",
+          "description": "Horizontal scaling of API containers without server-side session storage."
+        },
+        {
+          "title": "External managed DB",
+          "description": "AWS RDS handles connection pooling and backups independently of the API container."
+        }
+      ],
+      "securityStrategies": [
+        {
+          "title": "JWT Bearer authentication",
+          "description": "HS256-signed tokens with 8-hour access lifetime; refresh token blacklist on logout."
+        },
+        {
+          "title": "DRF throttling",
+          "description": "Global AnonRateThrottle and UserRateThrottle at 40 requests/minute."
+        },
+        {
+          "title": "Admin isolation",
+          "description": "User and table mutations require Django IsAdminUser (is_staff flag)."
+        },
+        {
+          "title": "Custom JSON exception middleware",
+          "description": "JSONExceptionMiddleware ensures unhandled errors return JSON, not HTML stack traces."
+        }
+      ],
+      "cacheStrategies": [
+        {
+          "name": "Default Django cache",
+          "description": "django-redis backend pointing to Upstash Redis DB 1 via REDIS_URL",
+          "ttl": "600s default (CACHES TIMEOUT)",
+          "coverage": "Global cache backend"
+        },
+        {
+          "name": "Menu categories",
+          "description": "Key menu_categories set by DishService.list_all_categories()",
+          "ttl": "86400s (24 hours)",
+          "coverage": "GET /api/v1/menu/dish/categories/"
+        },
+        {
+          "name": "Dish detail HTTP cache",
+          "description": "cache_page(60*15) on DishViewSet.retrieve",
+          "ttl": "900s (15 minutes)",
+          "coverage": "GET /api/v1/menu/{id}/"
+        },
+        {
+          "name": "Test fallback",
+          "description": "LocMemCache when TESTING=True or running manage.py test",
+          "ttl": "N/A",
+          "coverage": "CI and unit test runs"
+        }
+      ],
+      "architectureFeatures": [
+        {
+          "title": "Atomic table locking",
+          "emoji": "🔒",
+          "description": "Order creation and completion use database transactions to keep table availability consistent."
+        },
+        {
+          "title": "Order-to-payment pipeline",
+          "emoji": "💳",
+          "description": "Completing an order automatically creates a pending payment with calculated VAT."
+        },
+        {
+          "title": "OpenAPI-first docs",
+          "emoji": "📖",
+          "description": "drf-spectacular generates live schema consumed by Swagger UI and ReDoc."
+        }
+      ],
+      "architectureDiagram": {
+        "legendItems": [
+          {
+            "type": "client",
+            "label": "Client apps",
+            "color": "#6366F1",
+            "icon": "monitor"
+          },
+          {
+            "type": "service",
+            "label": "Django API",
+            "color": "#F59E0B",
+            "icon": "server"
+          },
+          {
+            "type": "database",
+            "label": "AWS RDS PostgreSQL",
+            "color": "#10B981",
+            "icon": "database"
+          },
+          {
+            "type": "queue",
+            "label": "Upstash Redis",
+            "color": "#DC382D",
+            "icon": "redis"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "client",
+            "label": "POS / Admin / Mobile",
+            "type": "client",
+            "x": 0,
+            "y": 0,
+            "status": "healthy"
+          },
+          {
+            "id": "api",
+            "label": "Restaurant API (Docker)",
+            "type": "service",
+            "x": 200,
+            "y": 0,
+            "status": "healthy"
+          },
+          {
+            "id": "rds",
+            "label": "AWS RDS PostgreSQL",
+            "type": "database",
+            "x": 400,
+            "y": -50,
+            "status": "healthy"
+          },
+          {
+            "id": "redis",
+            "label": "Upstash Redis",
+            "type": "queue",
+            "x": 400,
+            "y": 50,
+            "status": "healthy"
+          }
+        ],
+        "connections": [
+          {
+            "id": "c1",
+            "from": "client",
+            "to": "api",
+            "label": "REST /api/v1/",
+            "protocol": "HTTPS JSON",
+            "isActive": true
+          },
+          {
+            "id": "c2",
+            "from": "api",
+            "to": "rds",
+            "label": "ORM queries",
+            "protocol": "PostgreSQL",
+            "isActive": true
+          },
+          {
+            "id": "c3",
+            "from": "api",
+            "to": "redis",
+            "label": "Cache / limits",
+            "protocol": "Redis",
+            "isActive": true
+          }
+        ]
+      },
+      "dataFlow": {
+        "requestFlow": [
+          {
+            "number": 1,
+            "title": "Client sends request",
+            "description": "HTTP request to /api/v1/ with optional Authorization Bearer JWT header.",
+            "icon": "send"
+          },
+          {
+            "number": 2,
+            "title": "Middleware pipeline",
+            "description": "JSONExceptionMiddleware, RatelimitMiddleware, auth, and DRF throttling process the request.",
+            "icon": "filter"
+          },
+          {
+            "number": 3,
+            "title": "View or ViewSet",
+            "description": "Permission check, serializer validation, then service layer execution.",
+            "icon": "code"
+          },
+          {
+            "number": 4,
+            "title": "Data layer",
+            "description": "PostgreSQL writes for domain state; Redis reads/writes for cache keys.",
+            "icon": "database"
+          },
+          {
+            "number": 5,
+            "title": "Standardized response",
+            "description": "ApiResponse JSON envelope returned with success, message, data, and timestamp.",
+            "icon": "reply"
+          }
+        ],
+        "eventFlow": [
+          {
+            "number": 1,
+            "title": "Order completed",
+            "description": "OrderService.complete_order frees table inside atomic transaction.",
+            "icon": "check"
+          },
+          {
+            "number": 2,
+            "title": "Payment auto-created",
+            "description": "PaymentService.create_payment_from_order generates line items and 16% VAT totals.",
+            "icon": "credit-card"
+          },
+          {
+            "number": 3,
+            "title": "Reservation status change",
+            "description": "Staff PATCH updates reservation status; table assignment validated by ReservationService.",
+            "icon": "calendar"
+          }
+        ]
+      },
+      "techDecisions": [
+        {
+          "title": "AWS RDS + Upstash Redis (external managed services)",
+          "problem": "Database and cache must survive API container restarts and scale independently.",
+          "solution": "PostgreSQL via DJANGO_DB_* pointing to AWS RDS; cache via REDIS_URL to Upstash Redis DB 1.",
+          "alternatives": [
+            "In-container PostgreSQL and Redis (docker-compose local only)",
+            "SQLite for production (rejected — no concurrency)"
+          ],
+          "outcome": "Production deploy uses managed RDS and Upstash; local dev uses docker-compose services.",
+          "icon": "cloud"
+        },
+        {
+          "title": "Service layer over fat views",
+          "problem": "Order/table/payment rules span multiple models and need transactional integrity.",
+          "solution": "Dedicated *Service classes with atomic blocks called from thin views.",
+          "alternatives": [
+            "Fat ViewSets with inline logic",
+            "Django signals for side effects"
+          ],
+          "outcome": "Testable business logic; clear separation between HTTP and domain rules.",
+          "icon": "layers"
+        },
+        {
+          "title": "django-redis over Memcached",
+          "problem": "Need a shared cache compatible with cloud Redis and local docker-compose.",
+          "solution": "Migrated to django-redis with REDIS_URL env var (Upstash in production).",
+          "alternatives": [
+            "Memcached (removed)",
+            "Database cache backend"
+          ],
+          "outcome": "Single REDIS_URL config works for Upstash, local Redis, and docker-compose.",
+          "icon": "redis"
+        }
+      ]
+    },
+    "codeShowcase": {
+      "codeExamples": [
+        {
+          "id": "order-table-lock",
+          "title": "Atomic table reservation on order start",
+          "description": "OrderService.start_order validates table availability and marks the table taken inside a database transaction — preventing double seating.",
+          "category": "Orders",
+          "tags": [
+            "transactions",
+            "tables",
+            "orders"
+          ],
+          "files": [
+            {
+              "name": "order_service.py",
+              "path": "apps/orders/services/order_service.py",
+              "language": "python",
+              "highlighted": true,
+              "explanation": "Table availability check and atomic order creation with _take_table.",
+              "content": "if not table.is_available:\n    raise TableNotAvailableForOrder(\n        f\"Table {table.number} is currently not available.\"\n    )\n\nwith transaction.atomic():\n    order = Order.objects.create(**validated_data)\n    cls._take_table(order)\n"
+            }
+          ]
+        },
+        {
+          "id": "payment-from-order",
+          "title": "Auto payment creation on order completion",
+          "description": "When staff completes an order, PaymentService generates line items from order items and calculates 16% VAT totals.",
+          "category": "Payments",
+          "tags": [
+            "payments",
+            "vat",
+            "orders"
+          ],
+          "files": [
+            {
+              "name": "payment_service.py",
+              "path": "apps/payments/services/payment_service.py",
+              "language": "python",
+              "highlighted": true,
+              "explanation": "Payment.from_order persists the record; ItemService and CalculatorService handle line items and VAT.",
+              "content": "payment = Payment.from_order(order)\npayment.save()\npayment_items = ItemService.generate_items_from_order(\n    order.order_items.all(), payment\n)\nItemService.save_items(payment_items)\nCalculatorService.calculate_payment_totals(payment, payment_items)\n"
+            }
+          ]
+        },
+        {
+          "id": "redis-menu-cache",
+          "title": "Redis-cached menu categories",
+          "description": "DishService caches category list in Upstash Redis for 24 hours, reducing DB load on the public categories endpoint.",
+          "category": "Caching",
+          "tags": [
+            "redis",
+            "menu",
+            "upstash"
+          ],
+          "files": [
+            {
+              "name": "services.py",
+              "path": "apps/menu/services.py",
+              "language": "python",
+              "highlighted": true,
+              "explanation": "Cache-aside pattern with menu_categories key and 86400s TTL.",
+              "content": "cached = cache.get(\"menu_categories\")\nif not cached:\n    cached = [\n        {\"id\": idx + 1, \"category\": v}\n        for idx, (v, l) in enumerate(Dish.CATEGORY_CHOICES)\n    ]\n    cache.set(\"menu_categories\", cached, timeout=86400)\n"
+            }
+          ]
+        },
+        {
+          "id": "redis-settings",
+          "title": "Redis cache configuration via REDIS_URL",
+          "description": "settings.py connects django-redis to Upstash (production) or local Redis (dev) through a single REDIS_URL environment variable.",
+          "category": "Infrastructure",
+          "tags": [
+            "redis",
+            "settings",
+            "upstash"
+          ],
+          "files": [
+            {
+              "name": "settings.py",
+              "path": "config/settings.py",
+              "language": "python",
+              "highlighted": true,
+              "explanation": "Production uses RedisCache; tests fall back to LocMemCache.",
+              "content": "REDIS_URL = os.getenv(\"REDIS_URL\", \"redis://127.0.0.1:6379/1\")\n\nCACHES = {\n    \"default\": {\n        \"BACKEND\": \"django_redis.cache.RedisCache\",\n        \"LOCATION\": REDIS_URL,\n        \"OPTIONS\": {\n            \"CLIENT_CLASS\": \"django_redis.client.DefaultClient\",\n        },\n        \"TIMEOUT\": 600,\n    }\n}\n"
+            }
+          ]
+        }
+      ]
+    },
+    "features": {
+      "features": [
+        {
+          "id": "jwt-auth",
+          "title": "JWT authentication & session management",
+          "description": "Email-based signup and login with SimpleJWT access/refresh tokens, logout, and logout-all session invalidation.",
+          "icon": "shield-lock",
+          "category": "authentication",
+          "status": "stable",
+          "highlights": [
+            "8-hour access token lifetime (HS256, JWT_SECRET_KEY)",
+            "Custom JWT claims: user_id, email, role",
+            "Standardized ApiResponse wrapper on all auth endpoints"
+          ],
+          "techStack": [
+            "djangorestframework-simplejwt",
+            "apps/authorization"
+          ],
+          "metrics": [
+            {
+              "label": "Access token TTL",
+              "value": "8 hours",
+              "trend": "stable",
+              "icon": "clock"
+            },
+            {
+              "label": "Auth endpoints",
+              "value": "4",
+              "trend": "stable",
+              "icon": "key"
+            }
+          ],
+          "codeSnippet": {
+            "language": "python",
+            "filename": "config/settings.py",
+            "code": "SIMPLE_JWT = {\n    \"SIGNING_KEY\": os.getenv(\"JWT_SECRET_KEY\"),\n    \"ALGORITHM\": \"HS256\",\n    \"ACCESS_TOKEN_LIFETIME\": datetime.timedelta(hours=8),\n    \"AUTH_HEADER_TYPES\": (\"Bearer\",),\n}\n"
+          }
+        },
+        {
+          "id": "table-aware-orders",
+          "title": "Table-aware order lifecycle",
+          "description": "Orders atomically reserve tables on start and release them on complete or cancel. Order completion auto-triggers payment creation.",
+          "icon": "receipt",
+          "category": "api",
+          "status": "stable",
+          "highlights": [
+            "start_order marks table unavailable inside transaction.atomic()",
+            "complete_order validates non-empty order before closing",
+            "PATCH /orders/{id}/complete/ creates pending payment"
+          ],
+          "techStack": [
+            "apps/orders/services/order_service.py",
+            "apps/payments/services/payment_service.py"
+          ],
+          "metrics": [
+            {
+              "label": "Order statuses",
+              "value": "3",
+              "trend": "stable",
+              "icon": "list"
+            }
+          ],
+          "codeSnippet": {
+            "language": "python",
+            "filename": "apps/orders/services/order_service.py",
+            "code": "with transaction.atomic():\n    order = Order.objects.create(**validated_data)\n    cls._take_table(order)\n"
+          }
+        },
+        {
+          "id": "menu-caching",
+          "title": "Redis-backed menu caching",
+          "description": "Dish categories cached in Upstash Redis for 24 hours. Dish detail responses use 15-minute HTTP cache_page.",
+          "icon": "lightning",
+          "category": "caching",
+          "status": "stable",
+          "highlights": [
+            "Redis key menu_categories — 86400s TTL",
+            "django-redis via REDIS_URL (Upstash in production)",
+            "LocMemCache fallback during tests"
+          ],
+          "techStack": [
+            "django-redis",
+            "apps/menu/services.py"
+          ],
+          "metrics": [
+            {
+              "label": "Category cache TTL",
+              "value": "24 hours",
+              "trend": "stable",
+              "icon": "clock"
+            },
+            {
+              "label": "Default Redis timeout",
+              "value": "600s",
+              "trend": "stable",
+              "icon": "database"
+            }
+          ],
+          "codeSnippet": {
+            "language": "python",
+            "filename": "apps/menu/services.py",
+            "code": "cached = cache.get(\"menu_categories\")\nif not cached:\n    cached = [...]\n    cache.set(\"menu_categories\", cached, timeout=86400)\n"
+          }
+        },
+        {
+          "id": "payments-vat",
+          "title": "Payments with VAT calculation",
+          "description": "Payment records with line items, discounts, and automatic 16% VAT via PaymentCalculatorService. Soft-delete support.",
+          "icon": "credit-card",
+          "category": "api",
+          "status": "stable",
+          "highlights": [
+            "Auto-created from completed orders",
+            "Methods: CASH, CARD, TRANSACTION, ONLINE",
+            "Currencies: MXN, USD, EUR"
+          ],
+          "techStack": [
+            "apps/payments/services/payment_calculator_service.py",
+            "apps/payments/services/payment_service.py"
+          ],
+          "metrics": [
+            {
+              "label": "Default VAT",
+              "value": "16%",
+              "trend": "stable",
+              "icon": "percent"
+            }
+          ]
+        },
+        {
+          "id": "reservations",
+          "title": "Reservation workflow",
+          "description": "Public booking requests with validation, staff status updates, and admin CRUD. Max 8 customers per reservation.",
+          "icon": "calendar",
+          "category": "api",
+          "status": "stable",
+          "highlights": [
+            "Status flow: PENDING → BOOKED → ATTENDED / NOT_ATTENDED / CANCELLED",
+            "Auto table assignment when suitable table available",
+            "Staff view for today and tomorrow reservations"
+          ],
+          "techStack": [
+            "apps/reservations/services/reservation_service.py"
+          ],
+          "metrics": [
+            {
+              "label": "Max party size",
+              "value": "8",
+              "trend": "stable",
+              "icon": "users"
+            }
+          ]
+        },
+        {
+          "id": "stock-inventory",
+          "title": "Stock & inventory tracking",
+          "description": "Nested stock items under stock records with IN/OUT transactions that update quantities in real time.",
+          "icon": "box",
+          "category": "database",
+          "status": "stable",
+          "highlights": [
+            "Categories: INGREDIENT, UTENSIL, CONTAINER, OTHER",
+            "Nested router: /stock/{stock_pk}/items/",
+            "Transaction endpoints for IN/OUT movements"
+          ],
+          "techStack": [
+            "apps/stock"
+          ],
+          "metrics": [
+            {
+              "label": "Transaction types",
+              "value": "IN / OUT",
+              "trend": "stable",
+              "icon": "arrow"
+            }
+          ]
+        },
+        {
+          "id": "openapi-docs",
+          "title": "OpenAPI documentation",
+          "description": "Auto-generated schema via drf-spectacular with Swagger UI and ReDoc. All major endpoints annotated with @extend_schema.",
+          "icon": "book",
+          "category": "api",
+          "status": "stable",
+          "highlights": [
+            "/api/schema/ — raw OpenAPI JSON",
+            "/api/docs/ — Swagger UI",
+            "/api/redoc/ — ReDoc UI"
+          ],
+          "techStack": [
+            "drf-spectacular"
+          ],
+          "metrics": [
+            {
+              "label": "Documented endpoints",
+              "value": "50+",
+              "trend": "stable",
+              "icon": "route"
+            }
+          ]
+        },
+        {
+          "id": "docker-deploy",
+          "title": "Docker deployment",
+          "description": "Python 3.12 slim image with docker-compose for local dev (Postgres + Redis). Production connects to AWS RDS and Upstash Redis.",
+          "icon": "docker",
+          "category": "integration",
+          "status": "stable",
+          "highlights": [
+            "3-service compose: db, redis, restaurant_app",
+            "Env-driven config via .env / docker-compose environment",
+            "Deployed state — external RDS + Upstash, not in-container DB"
+          ],
+          "techStack": [
+            "Docker",
+            "docker-compose.yml",
+            "dockerfile"
+          ],
+          "metrics": [
+            {
+              "label": "Container port",
+              "value": "8000",
+              "trend": "stable",
+              "icon": "server"
+            }
+          ]
+        }
+      ]
+    },
+    "infrastructure": {
+      "metrics": [
+        {
+          "label": "Container port",
+          "value": "8000",
+          "icon": "server",
+          "description": "Django runserver binds 0.0.0.0:8000 inside restaurant_app container"
+        },
+        {
+          "label": "Local Postgres port",
+          "value": "5431:5432",
+          "icon": "database",
+          "description": "docker-compose maps host 5431 to container 5432 for local dev"
+        },
+        {
+          "label": "Local Redis port",
+          "value": "6379:6379",
+          "icon": "redis",
+          "description": "docker-compose Redis service; production uses Upstash URL instead"
+        },
+        {
+          "label": "Python version",
+          "value": "3.12",
+          "icon": "code",
+          "description": "python:3.12-slim base image in dockerfile"
+        },
+        {
+          "label": "DRF throttle rate",
+          "value": "40/min",
+          "icon": "shield",
+          "description": "AnonRateThrottle and UserRateThrottle global defaults"
+        }
+      ],
+      "cloudServices": [
+        {
+          "name": "Amazon RDS (PostgreSQL)",
+          "purpose": "Production primary database — users, orders, payments, reservations, stock, menu. Connected via DJANGO_DB_NAME, DJANGO_DB_USER, DJANGO_DB_PASSWORD, DJANGO_DB_HOST, DJANGO_DB_PORT.",
+          "icon": "aws-rds",
+          "cost": "Varies by instance (db.t4g.micro ~$15–25/mo placeholder)"
+        },
+        {
+          "name": "Upstash Redis",
+          "purpose": "Production cache backend via REDIS_URL (django-redis, DB index 1). Menu categories, rate-limit counters, and general Django cache.",
+          "icon": "redis",
+          "cost": "Free tier / pay-as-you-go (~$0–10/mo placeholder)"
+        },
+        {
+          "name": "Docker host",
+          "purpose": "Runs restaurant_app container with env-injected secrets. Local dev via docker-compose; production host {{YOUR_DEPLOY_HOST}}.",
+          "icon": "docker",
+          "cost": "~$5–40/mo depending on provider"
+        }
+      ],
+      "deploymentLayers": [
+        {
+          "name": "Local development (docker-compose)",
+          "color": "#3B82F6",
+          "components": [
+            {
+              "name": "db",
+              "icon": "postgres",
+              "description": "postgres:latest — POSTGRES_USER/PASSWORD/DB=mydb, volume postgres_data"
+            },
+            {
+              "name": "redis",
+              "icon": "redis",
+              "description": "redis:alpine — local cache at redis://redis:6379/1"
+            },
+            {
+              "name": "restaurant_app",
+              "icon": "python",
+              "description": "Built from dockerfile — mounts source, runs runserver on port 8000"
+            }
+          ]
+        },
+        {
+          "name": "Production (deployed)",
+          "color": "#10B981",
+          "components": [
+            {
+              "name": "API container",
+              "icon": "docker",
+              "description": "Django API image with SECRET_KEY, JWT_SECRET_KEY, DJANGO_DB_*, REDIS_URL from environment"
+            },
+            {
+              "name": "AWS RDS",
+              "icon": "aws-rds",
+              "description": "External PostgreSQL — not containerized in production"
+            },
+            {
+              "name": "Upstash Redis",
+              "icon": "redis",
+              "description": "External Redis URL — not containerized in production"
+            }
+          ]
+        }
+      ],
+      "dockerFiles": [
+        {
+          "service": "dockerfile",
+          "description": "Production-ready API image — Python 3.12-slim, libpq-dev, installs requirements.txt, exposes 8000.",
+          "content": "FROM python:3.12-slim\nWORKDIR /restaurant_management_backend\nRUN apt-get update && apt-get install -y libpq-dev gcc\nCOPY requirements.txt /restaurant_management_backend/\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY . /restaurant_management_backend/\nEXPOSE 8000\nCMD [\"python3\", \"manage.py\", \"runserver\", \"0.0.0.0:8000\"]\n"
+        },
+        {
+          "service": "docker-compose.yml",
+          "description": "Three-service local stack — db, redis, restaurant_app on app_network.",
+          "content": "services:\n  db:\n    image: postgres:latest\n    ports: [\"5431:5432\"]\n  redis:\n    image: redis:alpine\n    ports: [\"6379:6379\"]\n  restaurant_app:\n    build: .\n    ports: [\"8000:8000\"]\n    depends_on: [db, redis]\n    environment:\n      - REDIS_URL=redis://redis:6379/1\n      - DJANGO_DB_HOST=db\n      - DJANGO_DB_NAME=mydb\n      - DJANGO_DB_USER=postgres\n      - DJANGO_DB_PASSWORD=postgres\n"
+        }
+      ]
+    },
+    "apiSchema": {
+      "type": "REST",
+      "httpEndpoints": [
+        {
+          "id": "openapi-schema",
+          "method": "GET",
+          "urlPath": "/api/schema/",
+          "summary": "OpenAPI schema",
+          "description": "Raw OpenAPI 3 schema generated by drf-spectacular.",
+          "tags": [
+            "service"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "responses": [
+            {
+              "status": 200,
+              "description": "OpenAPI JSON document",
+              "example": {
+                "openapi": "3.0.3",
+                "info": {
+                  "title": "Restaurant Management API",
+                  "version": "1.0.0"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "swagger-ui",
+          "method": "GET",
+          "urlPath": "/api/docs/",
+          "summary": "Swagger UI",
+          "description": "Interactive API documentation browser.",
+          "tags": [
+            "service"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Swagger HTML UI"
+            }
+          ]
+        },
+        {
+          "id": "redoc",
+          "method": "GET",
+          "urlPath": "/api/redoc/",
+          "summary": "ReDoc UI",
+          "description": "Alternative OpenAPI documentation UI.",
+          "tags": [
+            "service"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "responses": [
+            {
+              "status": 200,
+              "description": "ReDoc HTML UI"
+            }
+          ]
+        },
+        {
+          "id": "auth-signup",
+          "method": "POST",
+          "urlPath": "/api/v1/auth/signup/",
+          "summary": "Register a new user",
+          "description": "Creates a user account and returns JWT access and refresh tokens.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "email": "string (required)",
+              "password": "string (required)",
+              "first_name": "string",
+              "last_name": "string"
+            },
+            "example": {
+              "email": "staff@restaurant.example.com",
+              "password": "SecurePass123!",
+              "first_name": "Maria",
+              "last_name": "Lopez"
+            }
+          },
+          "responses": [
+            {
+              "status": 201,
+              "description": "User created with tokens",
+              "example": {
+                "success": true,
+                "message": "User registered successfully",
+                "data": {
+                  "access": "<jwt-access-token>",
+                  "refresh": "<jwt-refresh-token>"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-login",
+          "method": "POST",
+          "urlPath": "/api/v1/auth/login/",
+          "summary": "Authenticate and obtain JWT",
+          "description": "Email/password login. Returns access and refresh tokens with user profile.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "email": "string (required)",
+              "password": "string (required)"
+            },
+            "example": {
+              "email": "staff@restaurant.example.com",
+              "password": "SecurePass123!"
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Login successful",
+              "example": {
+                "success": true,
+                "data": {
+                  "access": "<jwt-access-token>",
+                  "refresh": "<jwt-refresh-token>"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "auth-logout",
+          "method": "POST",
+          "urlPath": "/api/v1/auth/logout/",
+          "summary": "Logout (blacklist refresh token)",
+          "description": "Invalidates the provided refresh token. Requires JWT authentication.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": true,
+          "rateLimit": "DRF user throttle — 40/minute",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "refresh_token": "string (required)"
+            },
+            "example": {
+              "refresh_token": "<jwt-refresh-token>"
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Session invalidated"
+            }
+          ]
+        },
+        {
+          "id": "auth-logout-all",
+          "method": "POST",
+          "urlPath": "/api/v1/auth/logout-all/",
+          "summary": "Logout all sessions",
+          "description": "Blacklists all outstanding refresh tokens for the authenticated user.",
+          "tags": [
+            "auth"
+          ],
+          "authenticated": true,
+          "rateLimit": "DRF user throttle — 40/minute",
+          "responses": [
+            {
+              "status": 200,
+              "description": "All sessions invalidated"
+            }
+          ]
+        },
+        {
+          "id": "users-list",
+          "method": "GET",
+          "urlPath": "/api/v1/users/",
+          "summary": "List users (admin)",
+          "description": "Paginated user list. Requires Django IsAdminUser (is_staff).",
+          "tags": [
+            "users"
+          ],
+          "authenticated": true,
+          "rateLimit": "DRF user throttle — 40/minute",
+          "parameters": [
+            {
+              "name": "role",
+              "in": "query",
+              "type": "string",
+              "required": false,
+              "description": "Filter by role (admin, staff, user)"
+            },
+            {
+              "name": "is_active",
+              "in": "query",
+              "type": "boolean",
+              "required": false,
+              "description": "Filter by active status"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Paginated user list"
+            }
+          ]
+        },
+        {
+          "id": "menu-list",
+          "method": "GET",
+          "urlPath": "/api/v1/menu/",
+          "summary": "List dishes",
+          "description": "Public dish listing with category, price range, status, search, and ordering filters.",
+          "tags": [
+            "menu"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "parameters": [
+            {
+              "name": "category",
+              "in": "query",
+              "type": "string",
+              "required": false,
+              "description": "Filter by dish category (DRINKS, MEALS, DESSERTS, etc.)"
+            },
+            {
+              "name": "status",
+              "in": "query",
+              "type": "string",
+              "required": false,
+              "description": "ACTIVE, INACTIVE, or DRAFT"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Dish list"
+            }
+          ]
+        },
+        {
+          "id": "menu-retrieve",
+          "method": "GET",
+          "urlPath": "/api/v1/menu/{id}/",
+          "summary": "Retrieve dish",
+          "description": "Public dish detail. Response cached for 15 minutes via cache_page.",
+          "tags": [
+            "menu"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "integer",
+              "required": true,
+              "description": "Dish primary key"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Dish detail"
+            }
+          ]
+        },
+        {
+          "id": "menu-categories",
+          "method": "GET",
+          "urlPath": "/api/v1/menu/dish/categories/",
+          "summary": "List dish categories",
+          "description": "Returns all dish categories. Backed by Upstash Redis cache (24h TTL).",
+          "tags": [
+            "menu"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Category list",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "category": "DRINKS"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "menu-active",
+          "method": "GET",
+          "urlPath": "/api/v1/menu/dish/active/",
+          "summary": "List active dishes by category",
+          "description": "Returns active dishes filtered by category query param.",
+          "tags": [
+            "menu"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Active dishes"
+            }
+          ]
+        },
+        {
+          "id": "tables-list",
+          "method": "GET",
+          "urlPath": "/api/v1/tables/",
+          "summary": "List tables",
+          "description": "List restaurant tables with optional availability and capacity filters. Lookup field is table number.",
+          "tags": [
+            "tables"
+          ],
+          "authenticated": true,
+          "rateLimit": "DRF user throttle — 40/minute",
+          "parameters": [
+            {
+              "name": "is_available",
+              "in": "query",
+              "type": "boolean",
+              "required": false,
+              "description": "Filter by availability"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Table list"
+            }
+          ]
+        },
+        {
+          "id": "tables-create",
+          "method": "POST",
+          "urlPath": "/api/v1/tables/",
+          "summary": "Create table (admin)",
+          "description": "Create a new table. Requires IsAdminUser.",
+          "tags": [
+            "tables"
+          ],
+          "authenticated": true,
+          "rateLimit": "DRF user throttle — 40/minute",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "number": "integer (required)",
+              "capacity": "integer (required)",
+              "is_available": "boolean"
+            },
+            "example": {
+              "number": 12,
+              "capacity": 4,
+              "is_available": true
+            }
+          },
+          "responses": [
+            {
+              "status": 201,
+              "description": "Table created"
+            }
+          ]
+        },
+        {
+          "id": "orders-create",
+          "method": "POST",
+          "urlPath": "/api/v1/orders/",
+          "summary": "Start a new order",
+          "description": "Creates an order with IN_PROGRESS status and marks the table unavailable atomically.",
+          "tags": [
+            "orders"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "table": "integer (required, table PK)",
+              "status": "string (must be IN_PROGRESS)"
+            },
+            "example": {
+              "table": 1,
+              "status": "IN_PROGRESS"
+            }
+          },
+          "responses": [
+            {
+              "status": 201,
+              "description": "Order started"
+            },
+            {
+              "status": 400,
+              "description": "Table not available or invalid status"
+            }
+          ]
+        },
+        {
+          "id": "orders-complete",
+          "method": "PATCH",
+          "urlPath": "/api/v1/orders/{id}/complete/",
+          "summary": "Complete order and create payment",
+          "description": "Marks order COMPLETED, frees the table, and auto-creates a pending payment via PaymentService.",
+          "tags": [
+            "orders"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "integer",
+              "required": true,
+              "description": "Order ID"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Order completed with payment initiated",
+              "example": {
+                "message": "Order 1 successfully completed. Payment 1 initiated pending payment"
+              }
+            }
+          ]
+        },
+        {
+          "id": "orders-cancel",
+          "method": "PATCH",
+          "urlPath": "/api/v1/orders/{id}/cancel/",
+          "summary": "Cancel order",
+          "description": "Marks order CANCELLED and releases the table.",
+          "tags": [
+            "orders"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "integer",
+              "required": true,
+              "description": "Order ID"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Order cancelled"
+            }
+          ]
+        },
+        {
+          "id": "order-items-add",
+          "method": "POST",
+          "urlPath": "/api/v1/orders/{order_id}/items/add/",
+          "summary": "Add items to order",
+          "description": "Add one or more menu items to an in-progress order. Requires JWT.",
+          "tags": [
+            "orders"
+          ],
+          "authenticated": true,
+          "rateLimit": "DRF user throttle — 40/minute",
+          "parameters": [
+            {
+              "name": "order_id",
+              "in": "path",
+              "type": "integer",
+              "required": true,
+              "description": "Order ID"
+            }
+          ],
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "items": "array of { dish_id, quantity, notes? }"
+            },
+            "example": {
+              "items": [
+                {
+                  "dish_id": 5,
+                  "quantity": 2
+                }
+              ]
+            }
+          },
+          "responses": [
+            {
+              "status": 200,
+              "description": "Items added"
+            }
+          ]
+        },
+        {
+          "id": "payments-list",
+          "method": "GET",
+          "urlPath": "/api/v1/payments/",
+          "summary": "List payments",
+          "description": "Searchable payment list with status, method, date range, and amount filters.",
+          "tags": [
+            "payments"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "parameters": [
+            {
+              "name": "status",
+              "in": "query",
+              "type": "string",
+              "required": false,
+              "description": "PENDING, COMPLETED, REFUNDED, CANCELLED"
+            },
+            {
+              "name": "payment_method",
+              "in": "query",
+              "type": "string",
+              "required": false,
+              "description": "CASH, CARD, TRANSACTION, ONLINE"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Paginated payment list"
+            }
+          ]
+        },
+        {
+          "id": "payments-create",
+          "method": "POST",
+          "urlPath": "/api/v1/payments/",
+          "summary": "Create payment",
+          "description": "Create a payment record manually. Totals include 16% VAT via PaymentCalculatorService.",
+          "tags": [
+            "payments"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "responses": [
+            {
+              "status": 201,
+              "description": "Payment created"
+            }
+          ]
+        },
+        {
+          "id": "reservations-create",
+          "method": "POST",
+          "urlPath": "/api/v1/reservations/",
+          "summary": "Request a reservation",
+          "description": "Public customer reservation request with date/time validation and optional auto table assignment.",
+          "tags": [
+            "reservations"
+          ],
+          "authenticated": false,
+          "rateLimit": "DRF anon throttle — 40/minute",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "customer_name": "string (required)",
+              "customer_email": "string (required)",
+              "date": "date (required)",
+              "hour": "time (required)",
+              "number_of_customers": "integer (max 8)"
+            },
+            "example": {
+              "customer_name": "John Doe",
+              "customer_email": "john@example.com",
+              "date": "2026-06-10",
+              "hour": "19:00",
+              "number_of_customers": 4
+            }
+          },
+          "responses": [
+            {
+              "status": 201,
+              "description": "Reservation request created"
+            }
+          ]
+        },
+        {
+          "id": "reservations-today",
+          "method": "GET",
+          "urlPath": "/api/v1/reservations/today/",
+          "summary": "Today's reservations",
+          "description": "Returns today and tomorrow reservations for staff. Requires JWT.",
+          "tags": [
+            "reservations"
+          ],
+          "authenticated": true,
+          "rateLimit": "DRF user throttle — 40/minute",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Reservation list"
+            }
+          ]
+        },
+        {
+          "id": "reservations-status",
+          "method": "PATCH",
+          "urlPath": "/api/v1/reservations/{reservation_id}/status/{new_status}/",
+          "summary": "Update reservation status",
+          "description": "Transition reservation status (PENDING, BOOKED, ATTENDED, NOT_ATTENDED, CANCELLED).",
+          "tags": [
+            "reservations"
+          ],
+          "authenticated": true,
+          "rateLimit": "DRF user throttle — 40/minute",
+          "parameters": [
+            {
+              "name": "reservation_id",
+              "in": "path",
+              "type": "integer",
+              "required": true,
+              "description": "Reservation ID"
+            },
+            {
+              "name": "new_status",
+              "in": "path",
+              "type": "string",
+              "required": true,
+              "description": "Target status"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Status updated"
+            }
+          ]
+        },
+        {
+          "id": "stock-list",
+          "method": "GET",
+          "urlPath": "/api/v1/stock/",
+          "summary": "List stock records",
+          "description": "Inventory stock records with optional transaction history. Requires JWT.",
+          "tags": [
+            "stock"
+          ],
+          "authenticated": true,
+          "rateLimit": "DRF user throttle — 40/minute",
+          "responses": [
+            {
+              "status": 200,
+              "description": "Stock list"
+            }
+          ]
+        },
+        {
+          "id": "stock-transactions",
+          "method": "POST",
+          "urlPath": "/api/v1/stock/transactions/",
+          "summary": "Register stock transaction",
+          "description": "Record IN or OUT stock movement and update inventory quantities.",
+          "tags": [
+            "stock"
+          ],
+          "authenticated": true,
+          "rateLimit": "DRF user throttle — 40/minute",
+          "requestBody": {
+            "contentType": "application/json",
+            "schema": {
+              "stock_item": "integer (required)",
+              "transaction_type": "IN | OUT",
+              "quantity": "number (required)"
+            },
+            "example": {
+              "stock_item": 3,
+              "transaction_type": "IN",
+              "quantity": 10
+            }
+          },
+          "responses": [
+            {
+              "status": 201,
+              "description": "Transaction recorded"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

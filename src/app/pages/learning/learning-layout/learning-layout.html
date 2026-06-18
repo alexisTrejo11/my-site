@@ -3,7 +3,7 @@
   <!-- ─── Sidebar ─────────────────────────────────────────────────────────── -->
   <aside
     class="flex-shrink-0 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col transition-all duration-300 ease-in-out overflow-hidden z-20"
-    [style.width]="isSidebarOpen() ? '256px' : '60px'"
+    [style.width]="isSidebarOpen() ? '280px' : '60px'"
   >
     <!-- Brand -->
     <div class="flex items-center gap-3 px-3 py-4 border-b border-gray-200 dark:border-gray-800 min-h-[64px]">
@@ -13,9 +13,11 @@
         K
       </div>
       @if (isSidebarOpen()) {
-        <div class="overflow-hidden">
+        <div class="overflow-hidden min-w-0">
           <p class="text-gray-900 dark:text-white font-semibold text-sm leading-tight whitespace-nowrap">Knowledge Hub</p>
-          <p class="text-gray-400 dark:text-gray-500 text-xs whitespace-nowrap mt-0.5">Engineering Mastery</p>
+          <p class="text-gray-400 dark:text-gray-500 text-xs whitespace-nowrap mt-0.5">
+            {{ isCatalogLoading() ? 'Syncing vault…' : catalogCount() + ' notes' }}
+          </p>
         </div>
       }
     </div>
@@ -50,47 +52,86 @@
         }
       </a>
 
-      <!-- Section divider -->
+      <!-- Vault categories -->
       @if (isSidebarOpen()) {
         <p class="text-xs font-semibold text-gray-400 dark:text-gray-600 uppercase tracking-widest px-2.5 pt-5 pb-2">
-          Pillars
+          Vault
         </p>
       } @else {
         <div class="my-3 border-t border-gray-200 dark:border-gray-800"></div>
       }
 
-      <!-- Accordion sections -->
-      @for (section of sidebarSections; track section.id) {
-        <div>
-          <button
-            (click)="toggleSection(section.id)"
-            class="w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            [title]="isSidebarOpen() ? '' : section.label"
-          >
-            <span class="text-base flex-shrink-0 leading-none">{{ section.icon }}</span>
-            @if (isSidebarOpen()) {
-              <span class="text-sm font-medium flex-1 text-left whitespace-nowrap">{{ section.label }}</span>
-              <span
-                class="text-gray-400 dark:text-gray-600 text-xs transition-transform duration-200 leading-none"
-                [class.rotate-90]="isSectionOpen(section.id)"
-              >›</span>
+      @if (isCatalogLoading()) {
+        @if (isSidebarOpen()) {
+          <div class="px-2.5 py-4 space-y-2 animate-pulse">
+            @for (s of [1, 2, 3, 4]; track s) {
+              <div class="h-8 bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
             }
-          </button>
-
-          @if (isSidebarOpen() && isSectionOpen(section.id)) {
-            <div class="ml-3 pl-3 border-l border-gray-200 dark:border-gray-800 mt-1 mb-1 space-y-0.5">
-              @for (topic of section.topics; track topic.slug) {
-                <a
-                  [routerLink]="['/learning', topic.slug]"
-                  routerLinkActive="!text-primary-600 dark:!text-primary-400 !bg-gray-100/80 dark:!bg-gray-800/50"
-                  class="block text-xs text-gray-500 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 py-1.5 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800/60 transition-colors truncate"
-                >
-                  {{ topic.label }}
-                </a>
+          </div>
+        }
+      } @else if (filteredTree().length === 0) {
+        @if (isSidebarOpen()) {
+          <p class="px-2.5 py-3 text-xs text-gray-400 dark:text-gray-500 italic">
+            No topics match your search.
+          </p>
+        }
+      } @else {
+        @for (category of filteredTree(); track category.id) {
+          <div>
+            <!-- Category -->
+            <button
+              (click)="toggleCategory(category.id)"
+              class="w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              [title]="isSidebarOpen() ? '' : category.title"
+            >
+              <span class="text-base flex-shrink-0 leading-none">{{ category.icon }}</span>
+              @if (isSidebarOpen()) {
+                <span class="text-sm font-medium flex-1 text-left truncate">{{ category.title }}</span>
+                <span class="text-[10px] text-gray-400 dark:text-gray-600 tabular-nums">{{ category.noteCount }}</span>
+                <span
+                  class="text-gray-400 dark:text-gray-600 text-xs transition-transform duration-200 leading-none flex-shrink-0"
+                  [class.rotate-90]="isCategoryOpen(category.id)"
+                >›</span>
               }
-            </div>
-          }
-        </div>
+            </button>
+
+            @if (isSidebarOpen() && isCategoryOpen(category.id)) {
+              <div class="ml-2 pl-2 border-l border-gray-200 dark:border-gray-800 mt-0.5 mb-1 space-y-0.5">
+                @for (sub of category.subcategories; track sub.id) {
+                  <div>
+                    <!-- Subcategory -->
+                    <button
+                      (click)="toggleSubcategory(category.id, sub.id)"
+                      class="w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-left text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition-colors"
+                    >
+                      <span
+                        class="text-gray-400 dark:text-gray-600 text-[10px] transition-transform duration-200 leading-none flex-shrink-0"
+                        [class.rotate-90]="isSubcategoryOpen(category.id, sub.id)"
+                      >›</span>
+                      <span class="text-xs font-medium flex-1 truncate">{{ sub.title }}</span>
+                      <span class="text-[10px] text-gray-400 dark:text-gray-600 tabular-nums flex-shrink-0">{{ sub.notes.length }}</span>
+                    </button>
+
+                    @if (isSubcategoryOpen(category.id, sub.id)) {
+                      <div class="ml-3 pl-2 border-l border-gray-100 dark:border-gray-800 space-y-0.5 mb-1">
+                        @for (note of sub.notes; track note.slug) {
+                          <a
+                            [routerLink]="['/learning', note.slug]"
+                            routerLinkActive="!text-primary-600 dark:!text-primary-400 !bg-primary-50 dark:!bg-primary-900/20"
+                            class="block text-[11px] text-gray-500 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800/60 transition-colors truncate leading-snug"
+                            [title]="note.title"
+                          >
+                            {{ note.title }}
+                          </a>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
       }
     </nav>
 
@@ -122,10 +163,10 @@
         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">🔍</span>
         <input
           type="text"
-          placeholder="Search topics, concepts, terms…"
+          placeholder="Filter sidebar topics…"
           class="w-full pl-9 pr-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg text-sm border border-transparent focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 focus:bg-white dark:focus:bg-gray-700 transition-all placeholder-gray-400 dark:placeholder-gray-500"
           [value]="searchQuery()"
-          (input)="searchQuery.set($any($event.target).value)"
+          (input)="onSearchInput($event)"
         />
       </div>
 
@@ -140,7 +181,7 @@
       <!-- Status pill -->
       <div class="hidden sm:flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-full">
         <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse flex-shrink-0"></span>
-        <span class="whitespace-nowrap">Wiki Active</span>
+        <span class="whitespace-nowrap">{{ catalogCount() }} notes synced</span>
       </div>
     </header>
 

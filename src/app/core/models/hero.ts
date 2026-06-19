@@ -32,8 +32,9 @@ export interface TechCategoryInfo {
 export interface Expertise {
   title: string;
   description: string;
-  iconName: string;
+  iconPath: string;
   skills: string[];
+  featured?: boolean;
 }
 
 export interface Stat {

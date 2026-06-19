@@ -5,6 +5,15 @@ import { Technology, TechCategoryInfo, TechCategory } from '../core/models/hero'
   providedIn: 'root',
 })
 export class TechStackService {
+  /** Core stack shown by default on the home page. */
+  readonly highlightedTechIds = [
+    'spring-boot',
+    'angular',
+    'postgresql',
+    'docker',
+    'aws',
+  ] as const;
+
   private technologies: Technology[] = [
     {
       id: 'python',
@@ -54,7 +63,7 @@ export class TechStackService {
       id: 'spring-boot',
       name: 'Spring Boot',
       category: 'backend-framework',
-      iconPath: 'icons/tech/spring boot.svg',
+      iconPath: 'icons/tech/spring.svg',
       color: 'from-green-500 to-green-700',
       level: 'expert',
       description: 'Java framework for building microservices',
@@ -245,6 +254,16 @@ export class TechStackService {
 
   getAllTechnologies(): Technology[] {
     return this.technologies;
+  }
+
+  getHighlightedTechnologies(): Technology[] {
+    return this.highlightedTechIds
+      .map((id) => this.technologies.find((tech) => tech.id === id))
+      .filter((tech): tech is Technology => tech !== undefined);
+  }
+
+  isHighlighted(id: string): boolean {
+    return (this.highlightedTechIds as readonly string[]).includes(id);
   }
 
   getTechnologiesByCategory(category: TechCategory): Technology[] {

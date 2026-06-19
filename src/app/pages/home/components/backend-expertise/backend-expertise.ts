@@ -9,46 +9,42 @@ import { Expertise } from '../../../../core/models/hero';
 export class BackendExpertise {
   expertiseAreas: Expertise[] = [
     {
-      title: 'API Development',
+      title: 'Backend Engineering',
       description:
-        'RESTful and GraphQL APIs with comprehensive documentation, versioning, and rate limiting.',
-      iconName: 'backend/api',
-      skills: ['REST', 'GraphQL', 'OpenAPI', 'Rate Limiting'],
+        'End-to-end server-side development — REST and GraphQL APIs, microservices and event-driven systems, authentication and security hardening, and performance tuning with caching, load balancing, and database optimization.',
+      iconPath: 'icons/general/server.svg',
+      skills: [
+        'REST & GraphQL',
+        'Microservices',
+        'OAuth2 & JWT',
+        'PostgreSQL & Redis',
+        'Caching & Performance',
+      ],
+      featured: true,
     },
     {
-      title: 'Database Design',
+      title: 'DevOps & Infrastructure',
       description:
-        'Optimized schemas, indexing strategies, and query performance for both SQL and NoSQL databases.',
-      iconName: 'backend/database',
-      skills: ['PostgreSQL', 'MongoDB', 'Redis', 'Optimization'],
+        'Server management, Linux administration, and networking — plus containerized deployments, cloud infrastructure, and CI/CD pipelines for reliable production systems.',
+      iconPath: 'icons/general/infrastructure.svg',
+      skills: ['Linux', 'Networking', 'Docker', 'AWS', 'CI/CD'],
     },
     {
-      title: 'Microservices',
+      title: 'AI Integration',
       description:
-        'Distributed systems with service mesh, event-driven architecture, and inter-service communication.',
-      iconName: 'backend/microservices',
-      skills: ['Docker', 'Message Queues', 'Service Mesh'],
+        'Building with modern AI tooling — MCP servers, coding agents, reusable agent skills, and spec-driven development workflows.',
+      iconPath: 'icons/general/brain.svg',
+      skills: ['MCP', 'Coding Agents', 'Agent Skills', 'Spec-Driven Dev'],
     },
     {
-      title: 'Cloud Infrastructure',
+      title: 'Design & UI',
       description:
-        'Scalable deployments on AWS/Azure with CI/CD pipelines, monitoring, and auto-scaling.',
-      iconName: 'backend/cloud',
-      skills: ['AWS', 'Azure', 'Terraform', 'CI/CD'],
-    },
-    {
-      title: 'Security',
-      description:
-        'Authentication, authorization, encryption, and security best practices for backend systems.',
-      iconName: 'backend/security',
-      skills: ['OAuth2', 'JWT', 'Encryption', 'OWASP'],
-    },
-    {
-      title: 'Performance',
-      description:
-        'Optimization techniques including caching strategies, load balancing, and database tuning.',
-      iconName: 'backend/performance',
-      skills: ['Caching', 'Load Balancing', 'CDN', 'Monitoring'],
+        'Crafting clean, responsive interfaces with solid HTML and CSS foundations and an eye for graphical and visual design.',
+      iconPath: 'icons/general/screen.svg',
+      skills: ['HTML', 'CSS', 'UI Design', 'Visual Design'],
     },
   ];
+
+  readonly featuredArea = this.expertiseAreas.find((area) => area.featured)!;
+  readonly supportingAreas = this.expertiseAreas.filter((area) => !area.featured);
 }

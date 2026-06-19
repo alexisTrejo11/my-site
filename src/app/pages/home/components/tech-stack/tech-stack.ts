@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TechStackService } from '../../../../services/tech-stack.service';
 
 type TechStatistics = ReturnType<TechStackService['getStatistics']>;
+type TechFilter = 'highlight' | 'all' | TechCategoryInfo['id'];
 
 @Component({
   selector: 'app-tech-stack',
@@ -14,8 +15,9 @@ export class TechStack implements OnInit {
   private techStackService = inject(TechStackService);
 
   technologies: Technology[] = [];
+  highlightedTechnologies: Technology[] = [];
   categories: TechCategoryInfo[] = [];
-  selectedCategory = 'all';
+  selectedFilter: TechFilter = 'highlight';
   isLoading = true;
   statistics: TechStatistics | null = null;
 
@@ -26,9 +28,9 @@ export class TechStack implements OnInit {
   private loadData(): void {
     this.isLoading = true;
 
-    // Simular carga
     setTimeout(() => {
       this.technologies = this.techStackService.getAllTechnologies();
+      this.highlightedTechnologies = this.techStackService.getHighlightedTechnologies();
       this.categories = this.techStackService.getCategories();
       this.statistics = this.techStackService.getStatistics();
       this.isLoading = false;
@@ -36,14 +38,25 @@ export class TechStack implements OnInit {
   }
 
   get filteredTechnologies(): Technology[] {
-    if (this.selectedCategory === 'all') {
+    if (this.selectedFilter === 'highlight') {
+      return this.highlightedTechnologies;
+    }
+    if (this.selectedFilter === 'all') {
       return this.technologies;
     }
-    return this.technologies.filter((tech) => tech.category === this.selectedCategory);
+    return this.technologies.filter((tech) => tech.category === this.selectedFilter);
   }
 
-  selectCategory(categoryId: string): void {
-    this.selectedCategory = categoryId;
+  get isDefaultFilter(): boolean {
+    return this.selectedFilter === 'highlight';
+  }
+
+  selectFilter(filter: TechFilter): void {
+    this.selectedFilter = filter;
+  }
+
+  resetFilter(): void {
+    this.selectedFilter = 'highlight';
   }
 
   getLevelColor(level: string): string {
@@ -74,9 +87,5 @@ export class TechStack implements OnInit {
       default:
         return level;
     }
-  }
-
-  clearFilter(): void {
-    this.selectedCategory = 'all';
   }
 }

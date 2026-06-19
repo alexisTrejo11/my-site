@@ -15,7 +15,8 @@ export class QuickStats implements OnInit, OnDestroy {
     { label: 'System Uptime', value: 0, suffix: '%', duration: 2000 },
   ];
 
-  private targetValues = [5, 50, 500, 99.9];
+  // MAYBE LATER: Get these values from the data
+  private targetValues = [3, 15, 500, 99.9];
   private intervals: ReturnType<typeof setInterval>[] = [];
 
   ngOnInit() {

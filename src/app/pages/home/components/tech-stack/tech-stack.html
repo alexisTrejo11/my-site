@@ -6,25 +6,29 @@
         Technologies & Tools
       </h2>
       <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">
-        A comprehensive collection of technologies I use to design, build, and scale applications.
+        @if (isDefaultFilter) {
+          The core stack I use most often to design, build, and ship production systems.
+        } @else {
+          Browse the full toolkit — {{ statistics?.total || 0 }} technologies across {{ categories.length }} areas.
+        }
       </p>
 
       <!-- Statistics -->
       <div class="flex flex-wrap justify-center gap-6 mb-8">
         <div class="text-center">
           <div class="text-3xl font-bold text-gray-900 dark:text-white">
-            {{ statistics?.total || 0 }}
+            {{ highlightedTechnologies.length }}
           </div>
-          <div class="text-sm text-gray-600 dark:text-gray-400">Total Technologies</div>
-        </div>
-        <div class="text-center">
-          <div class="text-3xl font-bold text-green-600 dark:text-green-400">
-            {{ statistics?.byLevel?.expert || 0 }}+{{ statistics?.byLevel?.advanced || 0 }}
-          </div>
-          <div class="text-sm text-gray-600 dark:text-gray-400">Expert/Advanced</div>
+          <div class="text-sm text-gray-600 dark:text-gray-400">Core Stack</div>
         </div>
         <div class="text-center">
           <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">
+            {{ statistics?.total || 0 }}
+          </div>
+          <div class="text-sm text-gray-600 dark:text-gray-400">Total in Toolkit</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-green-600 dark:text-green-400">
             {{ categories.length }}
           </div>
           <div class="text-sm text-gray-600 dark:text-gray-400">Categories</div>
@@ -35,11 +39,11 @@
     <!-- Category Filters -->
     <div class="mb-12">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Browse by Category</h3>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Browse Stack</h3>
 
-        @if (selectedCategory !== 'all') {
+        @if (!isDefaultFilter) {
         <button
-          (click)="clearFilter()"
+          (click)="resetFilter()"
           class="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -50,17 +54,31 @@
               d="M6 18L18 6M6 6l12 12"
             />
           </svg>
-          Clear filter
+          Back to highlights
         </button>
         }
       </div>
 
       <div class="flex flex-wrap justify-center gap-3">
+        <!-- Highlights (default) -->
+        <button
+          (click)="selectFilter('highlight')"
+          [class]="
+            selectedFilter === 'highlight'
+              ? 'bg-blue-600 text-white shadow-lg scale-105'
+              : 'bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-blue-600 dark:hover:border-blue-400'
+          "
+          class="px-5 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium flex items-center gap-2"
+        >
+          <span>Highlights</span>
+          <span class="text-xs opacity-75">({{ highlightedTechnologies.length }})</span>
+        </button>
+
         <!-- All Button -->
         <button
-          (click)="selectCategory('all')"
+          (click)="selectFilter('all')"
           [class]="
-            selectedCategory === 'all'
+            selectedFilter === 'all'
               ? 'bg-blue-600 text-white shadow-lg scale-105'
               : 'bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-blue-600 dark:hover:border-blue-400'
           "
@@ -73,13 +91,13 @@
         <!-- Category Buttons -->
         @for (category of categories; track category.id) {
         <button
-          (click)="selectCategory(category.id)"
+          (click)="selectFilter(category.id)"
           [class]="
-            selectedCategory === category.id
+            selectedFilter === category.id
               ? 'bg-blue-600 text-white shadow-lg scale-105'
               : 'bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 hover:border-opacity-50'
           "
-          [style.border-color]="selectedCategory === category.id ? 'transparent' : ''"
+          [style.border-color]="selectedFilter === category.id ? 'transparent' : ''"
           class="px-5 py-3 rounded-xl transition-all duration-300 hover:scale-105 font-medium flex items-center gap-2 group"
         >
           <!-- Color Indicator -->
@@ -103,8 +121,8 @@
 
     <!-- Loading State -->
     @if (isLoading) {
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      @for (i of [1,2,3,4,5,6,7,8]; track i) {
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-5xl mx-auto">
+      @for (i of [1,2,3,4,5]; track i) {
       <div class="animate-pulse">
         <div class="h-48 bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
       </div>
@@ -114,7 +132,13 @@
 
     <!-- Tech Grid -->
     @if (!isLoading) {
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div
+      class="grid grid-cols-2 md:grid-cols-3 gap-6"
+      [class.lg:grid-cols-5]="isDefaultFilter"
+      [class.lg:grid-cols-4]="!isDefaultFilter"
+      [class.max-w-5xl]="isDefaultFilter"
+      [class.mx-auto]="isDefaultFilter"
+    >
       @for (tech of filteredTechnologies; track tech.id) {
       <div
         class="group relative p-6 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-blue-600/30 dark:hover:border-blue-400/30 transition-all duration-500 hover:scale-105 hover:shadow-2xl overflow-hidden"
@@ -223,7 +247,7 @@
         <p class="text-gray-600 dark:text-gray-400 mb-6">
           Try selecting a different category or check back later.
         </p>
-        <button (click)="clearFilter()" class="btn-primary">View all technologies</button>
+        <button (click)="resetFilter()" class="btn-primary">View highlights</button>
       </div>
     </div>
     }

@@ -105,4 +105,17 @@ export class Hero implements OnDestroy, OnInit {
     // TODO: Replace with actual resume link
     window.open('/assets/resume.pdf', '_blank');
   }
+
+
+  getYearsOfExperience(): number {
+    const startDate = new Date('2024-01-01');
+    const currentDate = new Date();
+    const years = currentDate.getFullYear() - startDate.getFullYear();
+    return years;
+  }
+
+  getProjectsCount(): number {
+    // MAYBE LATER: Get projects count from the data
+    return 15;
+  }
 }

@@ -48,9 +48,9 @@ USER app
 
 EXPOSE 4000
 
-# Healthcheck optional but useful with Compose/K8s
+# Uses Node (always present) instead of wget (not guaranteed on alpine).
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD wget -qO- http://127.0.0.1:4000/ > /dev/null || exit 1
+  CMD node -e "fetch('http://127.0.0.1:4000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 
-  # Same entry as package.json "serve:ssr:alexis-trejo-portfolio"
+# Same entry as package.json "serve:ssr:alexis-trejo-portfolio"
 CMD ["node", "dist/alexis-trejo-portfolio/server/server.mjs"]

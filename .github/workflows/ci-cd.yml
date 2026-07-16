@@ -1,0 +1,202 @@
+# CI/CD for the Angular SSR portfolio
+#
+# Flow:
+#   1) ci      — install + production build (PRs and main). Catches broken builds early.
+#   2) publish — build & push image to GHCR (main only, after ci passes).
+#   3) deploy  — SSH through Cloudflare Access (cloudflared) → pull THIS image,
+#                recreate the container, remove ONLY unused images for this project.
+#
+# Why cloudflared?
+#   The VPS is not open on the public internet. SSH goes through Cloudflare Zero Trust
+#   (e.g. ssh.alexis-trejo.com). GitHub runners must install cloudflared and present a
+#   Cloudflare Access Service Token, same idea as your local ProxyCommand.
+#
+# Required GitHub secrets (you create the Cloudflare token in Zero Trust yourself):
+#   SSH_HOST           — Access hostname, e.g. ssh.alexis-trejo.com
+#   SSH_USER           — Linux user on the VPS, e.g. alexistrejo
+#   SSH_PRIVATE_KEY    — Full private key (same key you use locally for fedora-host)
+#   CF_CLIENT_ID       — Cloudflare Access Service Token Client ID
+#   CF_CLIENT_SECRET   — Cloudflare Access Service Token Client Secret
+#   GHCR_TOKEN         — GitHub PAT with read:packages (server pull from ghcr.io)
+#
+# Cloudflare Zero Trust (your side, not in this repo):
+#   Access → Service Tokens → create one → attach an Allow policy on the SSH Access app
+#   that accepts that Service Token.
+#
+# Server layout expected:
+#   ~/apps/my-site/docker-compose.yml  (copy from this repo; service name: web)
+
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Least privilege by default; publish job elevates packages: write.
+permissions:
+  contents: read
+
+concurrency:
+  # Cancel outdated runs on the same ref (faster feedback on PRs).
+  group: ci-cd-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # GHCR requires lowercase image names.
+  IMAGE_NAME: ghcr.io/${{ github.repository }}
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # CI — verify the app builds (Node, not Docker). Fast signal for PRs.
+  # ---------------------------------------------------------------------------
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          # Match Dockerfile / Angular 20 (not Node 18).
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        # npm ci = clean, lockfile-exact install (better for CI than npm install).
+        run: npm ci
+
+      - name: Production build
+        # Use the npm script so the local @angular/cli from node_modules is used.
+        # Plain `ng build` fails in CI because `ng` is not on PATH.
+        run: npm run build
+
+  # ---------------------------------------------------------------------------
+  # Publish — build the production Docker image and push to GHCR (main only).
+  # ---------------------------------------------------------------------------
+  publish:
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.meta.outputs.tags }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          # metadata-action lowercases the image name automatically.
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=sha,prefix=sha-,format=short
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Cache layers in GHA for faster rebuilds.
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ---------------------------------------------------------------------------
+  # Deploy — SSH via Cloudflare Access, then pull/restart this project's service.
+  # ---------------------------------------------------------------------------
+  deploy:
+    needs: publish
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install cloudflared
+        run: |
+          curl -fsSL --output cloudflared.deb \
+            https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+          sudo dpkg -i cloudflared.deb
+          cloudflared --version
+
+      - name: Configure SSH over Cloudflare Access
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          CF_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
+          CF_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          # Same private key you use locally (e.g. fedora-host).
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          # Alias "deploy-host" = your Cloudflare Access SSH hostname + Service Token.
+          # Locally you use: ProxyCommand cloudflared access ssh --hostname %h
+          # In CI we also pass --id / --secret so Access allows the runner non-interactively.
+          {
+            echo "Host deploy-host"
+            echo "  HostName ${SSH_HOST}"
+            echo "  User ${SSH_USER}"
+            echo "  IdentityFile ~/.ssh/id_ed25519"
+            echo "  IdentitiesOnly yes"
+            echo "  ProxyCommand cloudflared access ssh --hostname %h --id ${CF_CLIENT_ID} --secret ${CF_CLIENT_SECRET}"
+            echo "  StrictHostKeyChecking accept-new"
+          } > ~/.ssh/config
+          chmod 600 ~/.ssh/config
+
+      - name: Deploy via SSH (GHCR pull + restart)
+        env:
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+          GHCR_USER: ${{ github.actor }}
+          IMAGE: ghcr.io/${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          IMAGE="$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')"
+
+          # printf %q keeps tokens with special chars safe inside the remote shell.
+          ssh deploy-host \
+            "export GHCR_TOKEN=$(printf '%q' "$GHCR_TOKEN") GHCR_USER=$(printf '%q' "$GHCR_USER") IMAGE=$(printf '%q' "$IMAGE"); bash -s" <<'REMOTE'
+          set -euo pipefail
+
+          cd ~/apps/my-site
+
+          echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+
+          docker compose pull web
+          docker compose up -d --remove-orphans web
+
+          # Safe cleanup: only unused images for THIS project (not host-wide prune).
+          echo "Cleaning unused images for $IMAGE only..."
+          docker images "$IMAGE" --format '{{.ID}}' | sort -u | while read -r id; do
+            if [ -z "$(docker ps -aq --filter "ancestor=${id}")" ]; then
+              docker rmi "$id" 2>/dev/null || true
+            fi
+          done
+
+          docker logout ghcr.io || true
+          echo "Deploy finished."
+          REMOTE

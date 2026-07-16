@@ -1,0 +1,28 @@
+# Production Compose for the portfolio (SSR Node server).
+#
+# Place this file on the server at: ~/apps/my-site/docker-compose.yml
+# (or clone/pull this repo there). The CD job runs:
+#   docker compose pull web && docker compose up -d web
+#
+# Image is published by GitHub Actions to GHCR on every push to main.
+
+services:
+  web:
+    # Must match the image pushed by .github/workflows/ci-cd.yml (lowercase).
+    image: ghcr.io/alexistrejo11/my-site:latest
+    container_name: my-site-web
+    ports:
+      # host:container — change host port if 4000 is already taken on the VPS
+      - "4001:4000"
+    environment:
+      NODE_ENV: production
+      PORT: "4000"
+      ALLOWED_HOSTS: "localhost,127.0.0.1,alexis-trejo.com"
+    restart: unless-stopped
+    # Optional: only publish on a reverse-proxy network
+    # networks:
+    #   - proxy
+
+# networks:
+#   proxy:
+#     external: true

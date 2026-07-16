@@ -15,8 +15,11 @@ import engineManifest from './angular-app-engine-manifest.mjs';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
-/** Hostnames permitted for SSR requests (dev + production). Add your deploy domain here. */
-const ALLOWED_HOSTS = ['localhost', '127.0.0.1'];
+/** Hostnames permitted for SSR requests. Set via ALLOWED_HOSTS (comma-separated). */
+const ALLOWED_HOSTS = (process.env['ALLOWED_HOSTS'] ?? 'localhost,127.0.0.1')
+  .split(',')
+  .map((host) => host.trim())
+  .filter(Boolean);
 
 ɵsetAngularAppEngineManifest({
   ...engineManifest,

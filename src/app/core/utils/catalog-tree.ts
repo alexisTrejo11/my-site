@@ -1,4 +1,4 @@
-import { NoteMetadata } from '../models/note-metadata';
+import { NoteMetadata } from '../../features/knowledge-base/learning.model';
 import { CATEGORY_CONFIG, categoryLabel, subcategoryLabel } from '../constants/learning-catalog';
 
 export interface CatalogNoteLink {

@@ -1,0 +1,19 @@
+# Keep build context small and avoid leaking local junk into the image
+node_modules
+dist
+.angular
+.git
+.gitignore
+.vscode
+.idea
+coverage
+tmp
+out-tsc
+__screenshots__
+*.md
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+npm-debug.log
+yarn-error.log
+.DS_Store

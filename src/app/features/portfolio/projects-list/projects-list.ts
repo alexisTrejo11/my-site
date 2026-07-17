@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Project } from '../../../core/models/project';
 import { ProjectsGrid } from '../../../shared/components/projects-grid/projects-grid';
-import { ProjectsService } from '../../../core/services/projects.service';
+import { ProjectsService } from '../projects.service';
 
 @Component({
   selector: 'app-projects-list',

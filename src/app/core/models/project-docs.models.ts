@@ -22,6 +22,10 @@ export interface ProjectMetric {
   label: string;
   value: string;
   description?: string;
+  icon?: string;
+  unit?: string;
+  trend?: string;
+  threshold?: number | null;
 }
 
 export interface ProjectSection {
@@ -79,7 +83,7 @@ export interface ProjectMediaItem {
   title: string;
   description: string;
   alt?: string;
-  category?: 'screenshot' | 'diagram' | 'demo' | 'architecture';
+  category?: 'screenshot' | 'diagram' | 'demo' | 'architecture' | 'code';
 }
 
 export interface MediaGallerySection {
@@ -174,6 +178,7 @@ export interface DeploymentLayer {
   name: string;
   components: DeploymentComponent[];
   color: string;
+  expanded?: boolean;
 }
 
 export interface DeploymentComponent {
@@ -217,6 +222,7 @@ export interface ProjectFeature {
   techStack?: string[];
   metrics?: FeatureMetric[];
   codeSnippet?: CodeSnippet;
+  githubExampleUrl?: string;
 }
 
 export interface FeatureMetric {
@@ -242,7 +248,8 @@ export type FeatureCategory =
   | 'messaging'
   | 'caching'
   | 'monitoring'
-  | 'testing';
+  | 'testing'
+  | 'architecture';
 
 export type FeatureStatus = 'stable' | 'beta' | 'experimental' | 'deprecated';
 
@@ -265,7 +272,7 @@ export interface ArchitectureLayer {
   name: string;
   description: string;
   components: string[];
-  color: string;
+  color?: string;
   expanded?: boolean;
   responsibilities?: string[];
   technologies?: string[];
@@ -277,6 +284,7 @@ export interface DesignPattern {
   description: string;
   category: string;
   badge: string;
+  githubExampleUrl?: string;
 }
 
 export interface StrategyItem {
@@ -306,16 +314,16 @@ export interface ArchitectureDiagramModel {
 export interface DiagramNode {
   id: string;
   label: string;
-  type: 'client' | 'gateway' | 'service' | 'database' | 'queue' | 'monitoring';
-  x: number;
-  y: number;
+  type: 'client' | 'gateway' | 'service' | 'database' | 'queue' | 'monitoring' | 'cache';
+  x?: number;
+  y?: number;
   connections?: string[];
   status?: 'healthy' | 'warning' | 'error';
   traffic?: number; // simulated traffic
 }
 
 export interface DiagramConnection {
-  id: string;
+  id?: string;
   from: string;
   to: string;
   label?: string;
@@ -326,8 +334,8 @@ export interface DiagramConnection {
 export interface LegendItem {
   type: string;
   label: string;
-  color: string;
-  icon: string;
+  color?: string;
+  icon?: string;
 }
 
 export interface DataFlowModel {
@@ -388,19 +396,19 @@ export interface ApiParameter {
   in: 'path' | 'query' | 'header';
   type: string;
   required: boolean;
-  description: string;
+  description?: string;
   example?: JsonValue;
 }
 
 export interface ApiRequestBody {
   contentType: string;
-  schema: JsonValue;
-  example: JsonValue;
+  schema?: JsonValue;
+  example?: JsonValue;
 }
 
 export interface ApiResponse {
   status: number;
-  description: string;
+  description?: string;
   schema?: JsonValue;
-  example: JsonValue;
+  example?: JsonValue;
 }

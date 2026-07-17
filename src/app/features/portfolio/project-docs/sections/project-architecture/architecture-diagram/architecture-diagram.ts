@@ -160,16 +160,18 @@ export class ArchitectureDiagram implements OnInit {
     const toNode = this.nodes().find((n) => n.id === conn.to);
     if (!fromNode || !toNode) return 0;
 
-    return axis === 'x' ? (fromNode.x + toNode.x) / 2 : (fromNode.y + toNode.y) / 2;
+    return axis === 'x'
+      ? ((fromNode.x ?? 0) + (toNode.x ?? 0)) / 2
+      : ((fromNode.y ?? 0) + (toNode.y ?? 0)) / 2;
   }
 
   getNodeX(nodeId: string): number {
     const node = this.nodes().find((n) => n.id === nodeId);
-    return node ? node.x : 0;
+    return node?.x ?? 0;
   }
 
   getNodeY(nodeId: string): number {
     const node = this.nodes().find((n) => n.id === nodeId);
-    return node ? node.y : 0;
+    return node?.y ?? 0;
   }
 }

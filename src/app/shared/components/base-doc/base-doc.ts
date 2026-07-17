@@ -2,7 +2,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { ProjectsService } from '../../../core/services/projects.service';
+import { ProjectsService } from '../../../features/portfolio/projects.service';
 
 interface LoadError {
   status?: number;

@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { catchError, map, of } from 'rxjs';
 import { ProjectsGrid } from '../../../../../shared/components/projects-grid/projects-grid';
-import { ProjectsService } from '../../../../../core/services/projects.service';
+import { ProjectsService } from '../../../../portfolio/projects.service';
 import { Project } from '../../../../../core/models/project';
 
 @Component({

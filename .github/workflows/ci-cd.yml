@@ -142,8 +142,6 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          CF_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
-          CF_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
         run: |
           set -euo pipefail
           mkdir -p ~/.ssh
@@ -153,16 +151,17 @@ jobs:
           printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
-          # Alias "deploy-host" = your Cloudflare Access SSH hostname + Service Token.
-          # Locally you use: ProxyCommand cloudflared access ssh --hostname %h
-          # In CI we also pass --id / --secret so Access allows the runner non-interactively.
+          # Alias "deploy-host" = Cloudflare Access SSH hostname.
+          # Service Token auth must NOT go in ProxyCommand as --id/--secret:
+          # cloudflared treats those positionals as a listen address ("missing port").
+          # Pass CF_ACCESS_CLIENT_ID / CF_ACCESS_CLIENT_SECRET via env on the ssh step.
           {
             echo "Host deploy-host"
             echo "  HostName ${SSH_HOST}"
             echo "  User ${SSH_USER}"
             echo "  IdentityFile ~/.ssh/id_ed25519"
             echo "  IdentitiesOnly yes"
-            echo "  ProxyCommand cloudflared access ssh --hostname %h --id ${CF_CLIENT_ID} --secret ${CF_CLIENT_SECRET}"
+            echo "  ProxyCommand cloudflared access ssh --hostname %h"
             echo "  StrictHostKeyChecking accept-new"
           } > ~/.ssh/config
           chmod 600 ~/.ssh/config
@@ -172,6 +171,9 @@ jobs:
           GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
           GHCR_USER: ${{ github.actor }}
           IMAGE: ghcr.io/${{ github.repository }}
+          # cloudflared picks these up for non-interactive Access (Service Token).
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
         run: |
           set -euo pipefail
 

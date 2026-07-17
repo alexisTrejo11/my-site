@@ -4,7 +4,7 @@ import { DataFlow } from './data-flow/data-flow';
 import { ArchitectureDiagram } from './architecture-diagram/architecture-diagram';
 import { TechDecisions } from './tech-decisions/tech-decisions';
 import { CommonModule } from '@angular/common';
-import { ProjectsService } from '../../../../../core/services/projects.service';
+import { ProjectsService } from '../../../projects.service';
 import { ErrorLoading } from '../../../../../shared/components/errors/error-loading/error-loading';
 import { ProjectArchitectureModel } from '../../../../../core/models/project-docs.models';
 

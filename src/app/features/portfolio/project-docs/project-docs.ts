@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Project, ProjectNavItem } from '../../../core/models/project';
-import { ProjectsService } from '../../../core/services/projects.service';
+import { ProjectsService } from '../projects.service';
 
 @Component({
   selector: 'app-project-docs',

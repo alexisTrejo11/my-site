@@ -61,11 +61,13 @@
         <app-endpoint-detail [endpoint]="selectedEndpoint" />
 
         <!-- Schema Visualizer (if has request body) -->
-        @if (selectedEndpoint.requestBody) {
+        @if (selectedEndpoint.requestBody; as requestBody) {
+        @if (requestBody.schema) {
         <app-schema-visualizer
-          [schema]="selectedEndpoint.requestBody.schema"
+          [schema]="requestBody.schema"
           [title]="'Request Body Schema'"
         />
+        }
         }
 
         <!-- Request Builder -->

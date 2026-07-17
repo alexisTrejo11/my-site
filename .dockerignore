@@ -11,7 +11,9 @@ coverage
 tmp
 out-tsc
 __screenshots__
+# Exclude docs at repo root, but keep published learning notes in the image.
 *.md
+!public/notes/**/*.md
 docker-compose*.yml
 .dockerignore
 npm-debug.log

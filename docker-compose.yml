@@ -10,6 +10,11 @@ services:
   web:
     # Must match the image pushed by .github/workflows/ci-cd.yml (lowercase).
     image: ghcr.io/alexistrejo11/my-site:latest
+    # Local: docker compose up --build  (builds for your CPU: arm64 on Apple Silicon).
+    # Server: docker compose pull && up  (uses the GHCR amd64 image).
+    build: .
+    # Uncomment on Apple Silicon ONLY if you pull the GHCR image instead of building:
+    # platform: linux/amd64
     container_name: my-site-web
     ports:
       # host:container — change host port if 4000 is already taken on the VPS
